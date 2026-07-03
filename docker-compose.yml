@@ -9,13 +9,11 @@ services:
     environment:
       # These environment variables will override .env inside the container if set
       - CI_ENVIRONMENT=${CI_ENVIRONMENT:-production}
-      - database.default.hostname=db
-      - database.default.database=${DB_DATABASE:-nama_database}
-      - database.default.username=${DB_USERNAME:-username_db}
-      - database.default.password=${DB_PASSWORD:-password_db}
-      - database.default.port=3306
-      - database.default.DBDriver=MySQLi
-      - app.baseURL=${APP_BASEURL:-http://localhost}
+      - DB_HOSTNAME=db
+      - DB_DATABASE=${DB_DATABASE:-nama_database}
+      - DB_USERNAME=${DB_USERNAME:-username_db}
+      - DB_PASSWORD=${DB_PASSWORD:-password_db}
+      - APP_BASEURL=${APP_BASEURL:-http://localhost}
     depends_on:
       - db
     volumes:
