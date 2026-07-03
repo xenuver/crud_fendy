@@ -12,7 +12,7 @@ class MainSeeder extends Seeder
         if ($this->db->table('kreator')->countAllResults() == 0) {
             $data = [
                 [
-                    'kreator_id' => 1,
+                    'id' => 1,
                     'nama' => 'MiminBS',
                     'alamat' => 'Indonesia',
                     'id_game' => 44423,
@@ -26,7 +26,7 @@ class MainSeeder extends Seeder
                     'deleted_at' => null,
                 ],
                 [
-                    'kreator_id' => 2,
+                    'id' => 2,
                     'nama' => 'Elva',
                     'alamat' => 'Indonesia',
                     'id_game' => 100007,
@@ -40,7 +40,7 @@ class MainSeeder extends Seeder
                     'deleted_at' => null,
                 ],
                 [
-                    'kreator_id' => 3,
+                    'id' => 3,
                     'nama' => 'Errmentok',
                     'alamat' => 'Indonesia',
                     'id_game' => 100008,
@@ -54,7 +54,7 @@ class MainSeeder extends Seeder
                     'deleted_at' => null,
                 ],
                 [
-                    'kreator_id' => 4,
+                    'id' => 4,
                     'nama' => 'Xval',
                     'alamat' => 'Indonesia',
                     'id_game' => 100029,
@@ -68,7 +68,7 @@ class MainSeeder extends Seeder
                     'deleted_at' => null,
                 ],
                 [
-                    'kreator_id' => 5,
+                    'id' => 5,
                     'nama' => 'Aurest',
                     'alamat' => 'Indonesia',
                     'id_game' => 100001,
@@ -82,7 +82,7 @@ class MainSeeder extends Seeder
                     'deleted_at' => null,
                 ],
                 [
-                    'kreator_id' => 6,
+                    'id' => 6,
                     'nama' => 'Benjamin 889',
                     'alamat' => 'Indonesia',
                     'id_game' => 8888888327,
@@ -96,7 +96,7 @@ class MainSeeder extends Seeder
                     'deleted_at' => null,
                 ],
                 [
-                    'kreator_id' => 7,
+                    'id' => 7,
                     'nama' => 'Hans7',
                     'alamat' => 'Indonesia',
                     'id_game' => 100012,
@@ -110,7 +110,7 @@ class MainSeeder extends Seeder
                     'deleted_at' => null,
                 ],
                 [
-                    'kreator_id' => 8,
+                    'id' => 8,
                     'nama' => 'Batman',
                     'alamat' => 'Indonesia',
                     'id_game' => 8888888106,
@@ -124,7 +124,7 @@ class MainSeeder extends Seeder
                     'deleted_at' => null,
                 ],
                 [
-                    'kreator_id' => 9,
+                    'id' => 9,
                     'nama' => 'Fenzy',
                     'alamat' => 'Indonesia',
                     'id_game' => 100015,
@@ -138,7 +138,7 @@ class MainSeeder extends Seeder
                     'deleted_at' => null,
                 ],
                 [
-                    'kreator_id' => 10,
+                    'id' => 10,
                     'nama' => 'WerdotG',
                     'alamat' => 'Indonesia',
                     'id_game' => 8888888150,
@@ -152,7 +152,7 @@ class MainSeeder extends Seeder
                     'deleted_at' => null,
                 ],
                 [
-                    'kreator_id' => 11,
+                    'id' => 11,
                     'nama' => 'KaiserG',
                     'alamat' => 'Indonesia',
                     'id_game' => 12345,
@@ -166,7 +166,7 @@ class MainSeeder extends Seeder
                     'deleted_at' => null,
                 ],
                 [
-                    'kreator_id' => 12,
+                    'id' => 12,
                     'nama' => 'Tokies',
                     'alamat' => 'Indonesia',
                     'id_game' => 18239124123,
@@ -180,7 +180,7 @@ class MainSeeder extends Seeder
                     'deleted_at' => null,
                 ],
                 [
-                    'kreator_id' => 13,
+                    'id' => 13,
                     'nama' => 'Jerry Tiktok',
                     'alamat' => 'Indonesia',
                     'id_game' => 100010,
@@ -194,7 +194,7 @@ class MainSeeder extends Seeder
                     'deleted_at' => null,
                 ],
                 [
-                    'kreator_id' => 14,
+                    'id' => 14,
                     'nama' => 'Nael',
                     'alamat' => 'Indonesia',
                     'id_game' => 100039,
@@ -208,7 +208,7 @@ class MainSeeder extends Seeder
                     'deleted_at' => null,
                 ],
                 [
-                    'kreator_id' => 15,
+                    'id' => 15,
                     'nama' => 'Feels Gaming',
                     'alamat' => 'Indonesia',
                     'id_game' => 100006,
@@ -222,7 +222,7 @@ class MainSeeder extends Seeder
                     'deleted_at' => null,
                 ],
                 [
-                    'kreator_id' => 16,
+                    'id' => 16,
                     'nama' => 'Kaolla',
                     'alamat' => 'Indonesia',
                     'id_game' => 100018,
@@ -236,7 +236,7 @@ class MainSeeder extends Seeder
                     'deleted_at' => null,
                 ],
                 [
-                    'kreator_id' => 17,
+                    'id' => 17,
                     'nama' => 'Benjamin 889',
                     'alamat' => 'Indonesia',
                     'id_game' => 100003,
@@ -250,7 +250,7 @@ class MainSeeder extends Seeder
                     'deleted_at' => null,
                 ],
                 [
-                    'kreator_id' => 18,
+                    'id' => 18,
                     'nama' => 'Lynch',
                     'alamat' => 'Indonesia',
                     'id_game' => 100035,
@@ -264,7 +264,7 @@ class MainSeeder extends Seeder
                     'deleted_at' => null,
                 ],
                 [
-                    'kreator_id' => 19,
+                    'id' => 19,
                     'nama' => 'Paat',
                     'alamat' => 'Indonesia',
                     'id_game' => 100013,
@@ -278,7 +278,7 @@ class MainSeeder extends Seeder
                     'deleted_at' => null,
                 ],
                 [
-                    'kreator_id' => 21,
+                    'id' => 21,
                     'nama' => 'Valtz',
                     'alamat' => 'Indonesia',
                     'id_game' => 100031,
@@ -292,7 +292,7 @@ class MainSeeder extends Seeder
                     'deleted_at' => null,
                 ],
                 [
-                    'kreator_id' => 22,
+                    'id' => 22,
                     'nama' => 'Cukup Tampan',
                     'alamat' => 'Indonesia',
                     'id_game' => 100004,
@@ -306,7 +306,7 @@ class MainSeeder extends Seeder
                     'deleted_at' => null,
                 ],
                 [
-                    'kreator_id' => 23,
+                    'id' => 23,
                     'nama' => 'Aisyah',
                     'alamat' => 'Indonesia',
                     'id_game' => 100016,
@@ -320,7 +320,7 @@ class MainSeeder extends Seeder
                     'deleted_at' => null,
                 ],
                 [
-                    'kreator_id' => 24,
+                    'id' => 24,
                     'nama' => 'Tearyu',
                     'alamat' => 'Indonesia',
                     'id_game' => 100023,
@@ -334,7 +334,7 @@ class MainSeeder extends Seeder
                     'deleted_at' => null,
                 ],
                 [
-                    'kreator_id' => 25,
+                    'id' => 25,
                     'nama' => 'Vindragon',
                     'alamat' => 'Indonesia',
                     'id_game' => 100025,
@@ -348,7 +348,7 @@ class MainSeeder extends Seeder
                     'deleted_at' => null,
                 ],
                 [
-                    'kreator_id' => 27,
+                    'id' => 27,
                     'nama' => 'Mijay',
                     'alamat' => 'Indonesia',
                     'id_game' => 444531234,
@@ -369,7 +369,7 @@ class MainSeeder extends Seeder
         if ($this->db->table('laporan_mingguan')->countAllResults() == 0) {
             $data = [
                 [
-                    'laporan_id' => 200,
+                    'id' => 200,
                     'user_id' => 15,
                     'nama_lengkap' => 'Jerry Tiktok',
                     'kreator_id' => 13,
@@ -392,7 +392,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 201,
+                    'id' => 201,
                     'user_id' => 15,
                     'nama_lengkap' => 'Jerry Tiktok',
                     'kreator_id' => 13,
@@ -415,7 +415,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 202,
+                    'id' => 202,
                     'user_id' => 15,
                     'nama_lengkap' => 'Jerry Tiktok',
                     'kreator_id' => 13,
@@ -438,7 +438,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 203,
+                    'id' => 203,
                     'user_id' => 15,
                     'nama_lengkap' => 'Jerry Tiktok',
                     'kreator_id' => 13,
@@ -461,7 +461,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 204,
+                    'id' => 204,
                     'user_id' => 7,
                     'nama_lengkap' => 'Xval',
                     'kreator_id' => 4,
@@ -484,7 +484,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 205,
+                    'id' => 205,
                     'user_id' => 7,
                     'nama_lengkap' => 'Xval',
                     'kreator_id' => 4,
@@ -507,7 +507,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 206,
+                    'id' => 206,
                     'user_id' => 7,
                     'nama_lengkap' => 'Xval',
                     'kreator_id' => 4,
@@ -530,7 +530,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 207,
+                    'id' => 207,
                     'user_id' => 7,
                     'nama_lengkap' => 'Xval',
                     'kreator_id' => 4,
@@ -553,7 +553,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 208,
+                    'id' => 208,
                     'user_id' => 5,
                     'nama_lengkap' => 'Elva',
                     'kreator_id' => 2,
@@ -576,7 +576,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 209,
+                    'id' => 209,
                     'user_id' => 5,
                     'nama_lengkap' => 'Elva',
                     'kreator_id' => 2,
@@ -599,7 +599,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 210,
+                    'id' => 210,
                     'user_id' => 5,
                     'nama_lengkap' => 'Elva',
                     'kreator_id' => 2,
@@ -622,7 +622,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 211,
+                    'id' => 211,
                     'user_id' => 6,
                     'nama_lengkap' => 'Errmentok',
                     'kreator_id' => 3,
@@ -645,7 +645,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 212,
+                    'id' => 212,
                     'user_id' => 6,
                     'nama_lengkap' => 'Errmentok',
                     'kreator_id' => 3,
@@ -668,7 +668,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 213,
+                    'id' => 213,
                     'user_id' => 6,
                     'nama_lengkap' => 'Errmentok',
                     'kreator_id' => 3,
@@ -691,7 +691,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 214,
+                    'id' => 214,
                     'user_id' => 6,
                     'nama_lengkap' => 'Errmentok',
                     'kreator_id' => 3,
@@ -714,7 +714,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 215,
+                    'id' => 215,
                     'user_id' => 16,
                     'nama_lengkap' => 'Nael',
                     'kreator_id' => 14,
@@ -737,7 +737,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 216,
+                    'id' => 216,
                     'user_id' => 16,
                     'nama_lengkap' => 'Nael',
                     'kreator_id' => 14,
@@ -760,7 +760,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 217,
+                    'id' => 217,
                     'user_id' => 16,
                     'nama_lengkap' => 'Nael',
                     'kreator_id' => 14,
@@ -783,7 +783,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 218,
+                    'id' => 218,
                     'user_id' => 16,
                     'nama_lengkap' => 'Nael',
                     'kreator_id' => 14,
@@ -806,7 +806,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 219,
+                    'id' => 219,
                     'user_id' => 17,
                     'nama_lengkap' => 'Feels Gaming',
                     'kreator_id' => 15,
@@ -829,7 +829,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 220,
+                    'id' => 220,
                     'user_id' => 17,
                     'nama_lengkap' => 'Feels Gaming',
                     'kreator_id' => 15,
@@ -852,7 +852,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 221,
+                    'id' => 221,
                     'user_id' => 17,
                     'nama_lengkap' => 'Feels Gaming',
                     'kreator_id' => 15,
@@ -875,7 +875,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 222,
+                    'id' => 222,
                     'user_id' => 8,
                     'nama_lengkap' => 'Aurest',
                     'kreator_id' => 5,
@@ -898,7 +898,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 223,
+                    'id' => 223,
                     'user_id' => 10,
                     'nama_lengkap' => 'Hans7',
                     'kreator_id' => 7,
@@ -921,7 +921,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 224,
+                    'id' => 224,
                     'user_id' => 10,
                     'nama_lengkap' => 'Hans7',
                     'kreator_id' => 7,
@@ -944,7 +944,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 225,
+                    'id' => 225,
                     'user_id' => 10,
                     'nama_lengkap' => 'Hans7',
                     'kreator_id' => 7,
@@ -967,7 +967,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 226,
+                    'id' => 226,
                     'user_id' => 10,
                     'nama_lengkap' => 'Hans7',
                     'kreator_id' => 7,
@@ -990,7 +990,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 227,
+                    'id' => 227,
                     'user_id' => 18,
                     'nama_lengkap' => 'Kaolla',
                     'kreator_id' => 16,
@@ -1013,7 +1013,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 228,
+                    'id' => 228,
                     'user_id' => 18,
                     'nama_lengkap' => 'Kaolla',
                     'kreator_id' => 16,
@@ -1036,7 +1036,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 229,
+                    'id' => 229,
                     'user_id' => 18,
                     'nama_lengkap' => 'Kaolla',
                     'kreator_id' => 16,
@@ -1059,7 +1059,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 230,
+                    'id' => 230,
                     'user_id' => 18,
                     'nama_lengkap' => 'Kaolla',
                     'kreator_id' => 16,
@@ -1082,7 +1082,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 231,
+                    'id' => 231,
                     'user_id' => 19,
                     'nama_lengkap' => 'Benjamin 889',
                     'kreator_id' => 17,
@@ -1105,7 +1105,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 232,
+                    'id' => 232,
                     'user_id' => 19,
                     'nama_lengkap' => 'Benjamin 889',
                     'kreator_id' => 17,
@@ -1128,7 +1128,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 233,
+                    'id' => 233,
                     'user_id' => 20,
                     'nama_lengkap' => 'Lynch',
                     'kreator_id' => 18,
@@ -1151,7 +1151,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 234,
+                    'id' => 234,
                     'user_id' => 20,
                     'nama_lengkap' => 'Lynch',
                     'kreator_id' => 18,
@@ -1174,7 +1174,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 235,
+                    'id' => 235,
                     'user_id' => 20,
                     'nama_lengkap' => 'Lynch',
                     'kreator_id' => 18,
@@ -1197,7 +1197,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 236,
+                    'id' => 236,
                     'user_id' => 20,
                     'nama_lengkap' => 'Lynch',
                     'kreator_id' => 18,
@@ -1220,7 +1220,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 237,
+                    'id' => 237,
                     'user_id' => 21,
                     'nama_lengkap' => 'Paat',
                     'kreator_id' => 19,
@@ -1243,7 +1243,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 238,
+                    'id' => 238,
                     'user_id' => 21,
                     'nama_lengkap' => 'Paat',
                     'kreator_id' => 19,
@@ -1266,7 +1266,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 239,
+                    'id' => 239,
                     'user_id' => 21,
                     'nama_lengkap' => 'Paat',
                     'kreator_id' => 19,
@@ -1289,7 +1289,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 240,
+                    'id' => 240,
                     'user_id' => 21,
                     'nama_lengkap' => 'Paat',
                     'kreator_id' => 19,
@@ -1312,7 +1312,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 245,
+                    'id' => 245,
                     'user_id' => 23,
                     'nama_lengkap' => 'Valtz',
                     'kreator_id' => 21,
@@ -1335,7 +1335,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 246,
+                    'id' => 246,
                     'user_id' => 23,
                     'nama_lengkap' => 'Valtz',
                     'kreator_id' => 21,
@@ -1358,7 +1358,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 247,
+                    'id' => 247,
                     'user_id' => 23,
                     'nama_lengkap' => 'Valtz',
                     'kreator_id' => 21,
@@ -1381,7 +1381,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 248,
+                    'id' => 248,
                     'user_id' => 23,
                     'nama_lengkap' => 'Valtz',
                     'kreator_id' => 21,
@@ -1404,7 +1404,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 249,
+                    'id' => 249,
                     'user_id' => 12,
                     'nama_lengkap' => 'Fenzy',
                     'kreator_id' => 9,
@@ -1427,7 +1427,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 250,
+                    'id' => 250,
                     'user_id' => 12,
                     'nama_lengkap' => 'Fenzy',
                     'kreator_id' => 9,
@@ -1450,7 +1450,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 251,
+                    'id' => 251,
                     'user_id' => 12,
                     'nama_lengkap' => 'Fenzy',
                     'kreator_id' => 9,
@@ -1473,7 +1473,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 252,
+                    'id' => 252,
                     'user_id' => 12,
                     'nama_lengkap' => 'Fenzy',
                     'kreator_id' => 9,
@@ -1496,7 +1496,7 @@ class MainSeeder extends Seeder
                     'is_read' => 1,
                 ],
                 [
-                    'laporan_id' => 253,
+                    'id' => 253,
                     'user_id' => 3,
                     'nama_lengkap' => 'KaiserGaming',
                     'kreator_id' => 11,
@@ -1519,7 +1519,7 @@ class MainSeeder extends Seeder
                     'is_read' => 0,
                 ],
                 [
-                    'laporan_id' => 257,
+                    'id' => 257,
                     'user_id' => 5,
                     'nama_lengkap' => 'Elva',
                     'kreator_id' => 2,
@@ -1542,7 +1542,7 @@ class MainSeeder extends Seeder
                     'is_read' => 0,
                 ],
                 [
-                    'laporan_id' => 258,
+                    'id' => 258,
                     'user_id' => 3,
                     'nama_lengkap' => 'KaiserG',
                     'kreator_id' => 11,
@@ -1572,7 +1572,7 @@ class MainSeeder extends Seeder
         if ($this->db->table('redeem_codes')->countAllResults() == 0) {
             $data = [
                 [
-                    'redeem_id' => 1,
+                    'id' => 1,
                     'code' => 'BS-88CRTN',
                     'is_used' => 0,
                     'used_by' => null,
@@ -1582,7 +1582,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-05 16:26:23',
                 ],
                 [
-                    'redeem_id' => 2,
+                    'id' => 2,
                     'code' => 'BS-FRSRR2',
                     'is_used' => 1,
                     'used_by' => 4,
@@ -1592,7 +1592,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-05 16:36:44',
                 ],
                 [
-                    'redeem_id' => 3,
+                    'id' => 3,
                     'code' => 'BS-RQ94K7',
                     'is_used' => 0,
                     'used_by' => null,
@@ -1602,7 +1602,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-05 16:29:44',
                 ],
                 [
-                    'redeem_id' => 4,
+                    'id' => 4,
                     'code' => 'BS-UJFVM9',
                     'is_used' => 0,
                     'used_by' => null,
@@ -1612,7 +1612,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-05 16:29:44',
                 ],
                 [
-                    'redeem_id' => 5,
+                    'id' => 5,
                     'code' => 'BS-NBVMR8',
                     'is_used' => 0,
                     'used_by' => null,
@@ -1622,7 +1622,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-05 16:29:44',
                 ],
                 [
-                    'redeem_id' => 6,
+                    'id' => 6,
                     'code' => 'BS-B68X4P',
                     'is_used' => 0,
                     'used_by' => null,
@@ -1632,7 +1632,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-05 16:29:44',
                 ],
                 [
-                    'redeem_id' => 7,
+                    'id' => 7,
                     'code' => 'BS-W5DGGJ',
                     'is_used' => 0,
                     'used_by' => null,
@@ -1642,7 +1642,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-05 16:29:44',
                 ],
                 [
-                    'redeem_id' => 8,
+                    'id' => 8,
                     'code' => 'BS-J8TCKU',
                     'is_used' => 0,
                     'used_by' => null,
@@ -1652,7 +1652,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-05 16:29:44',
                 ],
                 [
-                    'redeem_id' => 9,
+                    'id' => 9,
                     'code' => 'BS-4S5VJF',
                     'is_used' => 0,
                     'used_by' => null,
@@ -1662,7 +1662,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-05 16:29:44',
                 ],
                 [
-                    'redeem_id' => 10,
+                    'id' => 10,
                     'code' => 'BS-JQGNGX',
                     'is_used' => 0,
                     'used_by' => null,
@@ -1672,7 +1672,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-05 16:29:44',
                 ],
                 [
-                    'redeem_id' => 11,
+                    'id' => 11,
                     'code' => 'BS-ACV2MT',
                     'is_used' => 0,
                     'used_by' => null,
@@ -1682,7 +1682,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-05 16:29:44',
                 ],
                 [
-                    'redeem_id' => 12,
+                    'id' => 12,
                     'code' => 'BS-H6YSQ5',
                     'is_used' => 0,
                     'used_by' => null,
@@ -1692,7 +1692,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-05 16:29:44',
                 ],
                 [
-                    'redeem_id' => 13,
+                    'id' => 13,
                     'code' => 'BS-VDAMZ7',
                     'is_used' => 0,
                     'used_by' => null,
@@ -1702,7 +1702,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-05 16:29:44',
                 ],
                 [
-                    'redeem_id' => 14,
+                    'id' => 14,
                     'code' => 'BS-9P23ZD',
                     'is_used' => 0,
                     'used_by' => null,
@@ -1712,7 +1712,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-05 16:29:44',
                 ],
                 [
-                    'redeem_id' => 15,
+                    'id' => 15,
                     'code' => 'BS-HBDSY8',
                     'is_used' => 0,
                     'used_by' => null,
@@ -1722,7 +1722,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-05 16:29:44',
                 ],
                 [
-                    'redeem_id' => 16,
+                    'id' => 16,
                     'code' => 'BS-R8XERC',
                     'is_used' => 0,
                     'used_by' => null,
@@ -1732,7 +1732,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-05 16:29:44',
                 ],
                 [
-                    'redeem_id' => 17,
+                    'id' => 17,
                     'code' => 'BS-7YY8V9',
                     'is_used' => 0,
                     'used_by' => null,
@@ -1742,7 +1742,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-05 16:29:44',
                 ],
                 [
-                    'redeem_id' => 18,
+                    'id' => 18,
                     'code' => 'BS-F9T75F',
                     'is_used' => 0,
                     'used_by' => null,
@@ -1752,7 +1752,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-05 16:29:44',
                 ],
                 [
-                    'redeem_id' => 19,
+                    'id' => 19,
                     'code' => 'BS-JYC2EX',
                     'is_used' => 0,
                     'used_by' => null,
@@ -1762,7 +1762,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-05 16:29:44',
                 ],
                 [
-                    'redeem_id' => 20,
+                    'id' => 20,
                     'code' => 'BS-WD2DD3',
                     'is_used' => 0,
                     'used_by' => null,
@@ -1772,7 +1772,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-05 16:29:44',
                 ],
                 [
-                    'redeem_id' => 21,
+                    'id' => 21,
                     'code' => 'BS-YFQUHD',
                     'is_used' => 0,
                     'used_by' => null,
@@ -1782,7 +1782,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-05 16:29:44',
                 ],
                 [
-                    'redeem_id' => 22,
+                    'id' => 22,
                     'code' => 'BS-WQ3Z8S',
                     'is_used' => 0,
                     'used_by' => null,
@@ -1792,7 +1792,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-15 12:30:43',
                 ],
                 [
-                    'redeem_id' => 23,
+                    'id' => 23,
                     'code' => 'BS-NMNQCR',
                     'is_used' => 0,
                     'used_by' => null,
@@ -1802,7 +1802,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-15 12:30:43',
                 ],
                 [
-                    'redeem_id' => 24,
+                    'id' => 24,
                     'code' => 'BS-QQJMKF',
                     'is_used' => 0,
                     'used_by' => null,
@@ -1812,7 +1812,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-15 12:30:43',
                 ],
                 [
-                    'redeem_id' => 25,
+                    'id' => 25,
                     'code' => 'BS-SHPEQF',
                     'is_used' => 0,
                     'used_by' => null,
@@ -1822,7 +1822,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-15 12:30:43',
                 ],
                 [
-                    'redeem_id' => 26,
+                    'id' => 26,
                     'code' => 'BS-BFQRYB',
                     'is_used' => 0,
                     'used_by' => null,
@@ -1832,7 +1832,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-15 12:30:43',
                 ],
                 [
-                    'redeem_id' => 27,
+                    'id' => 27,
                     'code' => 'BS-RBDSRJ',
                     'is_used' => 0,
                     'used_by' => null,
@@ -1842,7 +1842,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-15 12:30:43',
                 ],
                 [
-                    'redeem_id' => 28,
+                    'id' => 28,
                     'code' => 'BS-BFCN6Z',
                     'is_used' => 1,
                     'used_by' => 29,
@@ -1852,7 +1852,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-07-03 11:27:52',
                 ],
                 [
-                    'redeem_id' => 29,
+                    'id' => 29,
                     'code' => 'BS-KGA26S',
                     'is_used' => 0,
                     'used_by' => null,
@@ -1862,7 +1862,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-15 12:30:44',
                 ],
                 [
-                    'redeem_id' => 31,
+                    'id' => 31,
                     'code' => 'BS-HFEHA2',
                     'is_used' => 1,
                     'used_by' => 5,
@@ -1872,7 +1872,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-15 12:44:15',
                 ],
                 [
-                    'redeem_id' => 32,
+                    'id' => 32,
                     'code' => 'BS-EX877E',
                     'is_used' => 1,
                     'used_by' => 6,
@@ -1882,7 +1882,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-15 12:44:15',
                 ],
                 [
-                    'redeem_id' => 33,
+                    'id' => 33,
                     'code' => 'BS-FSN69S',
                     'is_used' => 1,
                     'used_by' => 7,
@@ -1892,7 +1892,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-15 12:44:15',
                 ],
                 [
-                    'redeem_id' => 34,
+                    'id' => 34,
                     'code' => 'BS-MCDHSD',
                     'is_used' => 1,
                     'used_by' => 8,
@@ -1902,7 +1902,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-15 12:44:15',
                 ],
                 [
-                    'redeem_id' => 36,
+                    'id' => 36,
                     'code' => 'BS-JUBRDS',
                     'is_used' => 1,
                     'used_by' => 10,
@@ -1912,7 +1912,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-15 12:44:15',
                 ],
                 [
-                    'redeem_id' => 37,
+                    'id' => 37,
                     'code' => 'BS-KTEYF7',
                     'is_used' => 1,
                     'used_by' => 11,
@@ -1922,7 +1922,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-15 12:44:15',
                 ],
                 [
-                    'redeem_id' => 38,
+                    'id' => 38,
                     'code' => 'BS-R4YJ5D',
                     'is_used' => 1,
                     'used_by' => 2,
@@ -1932,7 +1932,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-15 12:44:15',
                 ],
                 [
-                    'redeem_id' => 39,
+                    'id' => 39,
                     'code' => 'BS-C9K38F',
                     'is_used' => 1,
                     'used_by' => 3,
@@ -1942,7 +1942,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-15 12:44:15',
                 ],
                 [
-                    'redeem_id' => 40,
+                    'id' => 40,
                     'code' => 'BS-38D91302',
                     'is_used' => 1,
                     'used_by' => 15,
@@ -1952,7 +1952,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-05-01 08:30:00',
                 ],
                 [
-                    'redeem_id' => 41,
+                    'id' => 41,
                     'code' => 'BS-7CA5DCDA',
                     'is_used' => 1,
                     'used_by' => 16,
@@ -1962,7 +1962,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-05-01 08:30:00',
                 ],
                 [
-                    'redeem_id' => 42,
+                    'id' => 42,
                     'code' => 'BS-5F01FB1B',
                     'is_used' => 1,
                     'used_by' => 17,
@@ -1972,7 +1972,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-05-01 08:30:00',
                 ],
                 [
-                    'redeem_id' => 43,
+                    'id' => 43,
                     'code' => 'BS-DB191373',
                     'is_used' => 1,
                     'used_by' => 18,
@@ -1982,7 +1982,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-05-01 08:30:00',
                 ],
                 [
-                    'redeem_id' => 44,
+                    'id' => 44,
                     'code' => 'BS-1B880756',
                     'is_used' => 1,
                     'used_by' => 19,
@@ -1992,7 +1992,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-05-01 08:30:00',
                 ],
                 [
-                    'redeem_id' => 45,
+                    'id' => 45,
                     'code' => 'BS-B7C83058',
                     'is_used' => 1,
                     'used_by' => 20,
@@ -2002,7 +2002,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-05-01 08:30:00',
                 ],
                 [
-                    'redeem_id' => 46,
+                    'id' => 46,
                     'code' => 'BS-063E922A',
                     'is_used' => 1,
                     'used_by' => 21,
@@ -2012,7 +2012,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-05-01 08:30:00',
                 ],
                 [
-                    'redeem_id' => 47,
+                    'id' => 47,
                     'code' => 'BS-44594607',
                     'is_used' => 1,
                     'used_by' => null,
@@ -2022,7 +2022,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-05-01 08:30:00',
                 ],
                 [
-                    'redeem_id' => 48,
+                    'id' => 48,
                     'code' => 'BS-EF0DB5C6',
                     'is_used' => 1,
                     'used_by' => 23,
@@ -2032,7 +2032,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-05-01 08:30:00',
                 ],
                 [
-                    'redeem_id' => 49,
+                    'id' => 49,
                     'code' => 'BS-999AA927',
                     'is_used' => 1,
                     'used_by' => 12,
@@ -2042,7 +2042,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-05-01 08:30:00',
                 ],
                 [
-                    'redeem_id' => 50,
+                    'id' => 50,
                     'code' => 'BS-248B5E4D',
                     'is_used' => 1,
                     'used_by' => 24,
@@ -2052,7 +2052,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-05-01 08:30:00',
                 ],
                 [
-                    'redeem_id' => 51,
+                    'id' => 51,
                     'code' => 'BS-0DBE2540',
                     'is_used' => 1,
                     'used_by' => 25,
@@ -2062,7 +2062,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-05-01 08:30:00',
                 ],
                 [
-                    'redeem_id' => 52,
+                    'id' => 52,
                     'code' => 'BS-49EDC248',
                     'is_used' => 1,
                     'used_by' => 26,
@@ -2072,7 +2072,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-05-01 08:30:00',
                 ],
                 [
-                    'redeem_id' => 53,
+                    'id' => 53,
                     'code' => 'BS-081A5A2E',
                     'is_used' => 1,
                     'used_by' => 27,
@@ -2082,7 +2082,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-05-01 08:30:00',
                 ],
                 [
-                    'redeem_id' => 54,
+                    'id' => 54,
                     'code' => 'BS-2C6C9646',
                     'is_used' => 1,
                     'used_by' => null,
@@ -2099,70 +2099,70 @@ class MainSeeder extends Seeder
         if ($this->db->table('settings')->countAllResults() == 0) {
             $data = [
                 [
-                    'setting_id' => 1,
+                    'id' => 1,
                     'sys_key' => 'tier1_ccv',
                     'sys_value' => 900,
                     'created_at' => '2026-04-13 19:44:53',
                     'updated_at' => '2026-06-16 21:33:53',
                 ],
                 [
-                    'setting_id' => 2,
+                    'id' => 2,
                     'sys_key' => 'tier1_yt',
                     'sys_value' => 40000,
                     'created_at' => '2026-04-13 19:44:53',
                     'updated_at' => '2026-06-16 21:33:53',
                 ],
                 [
-                    'setting_id' => 3,
+                    'id' => 3,
                     'sys_key' => 'tier1_tt',
                     'sys_value' => 80000,
                     'created_at' => '2026-04-13 19:44:53',
                     'updated_at' => '2026-06-16 21:33:53',
                 ],
                 [
-                    'setting_id' => 4,
+                    'id' => 4,
                     'sys_key' => 'tier2_ccv',
                     'sys_value' => 300,
                     'created_at' => '2026-04-13 19:44:53',
                     'updated_at' => '2026-06-16 21:33:53',
                 ],
                 [
-                    'setting_id' => 5,
+                    'id' => 5,
                     'sys_key' => 'tier2_yt',
                     'sys_value' => 20000,
                     'created_at' => '2026-04-13 19:44:53',
                     'updated_at' => '2026-06-16 21:33:53',
                 ],
                 [
-                    'setting_id' => 6,
+                    'id' => 6,
                     'sys_key' => 'tier2_tt',
                     'sys_value' => 50000,
                     'created_at' => '2026-04-13 19:44:53',
                     'updated_at' => '2026-06-16 21:33:53',
                 ],
                 [
-                    'setting_id' => 7,
+                    'id' => 7,
                     'sys_key' => 'tier3_ccv',
                     'sys_value' => 100,
                     'created_at' => '2026-04-13 19:44:53',
                     'updated_at' => '2026-06-16 21:33:53',
                 ],
                 [
-                    'setting_id' => 8,
+                    'id' => 8,
                     'sys_key' => 'tier3_yt',
                     'sys_value' => 10000,
                     'created_at' => '2026-04-13 19:44:53',
                     'updated_at' => '2026-06-16 21:33:53',
                 ],
                 [
-                    'setting_id' => 9,
+                    'id' => 9,
                     'sys_key' => 'tier3_tt',
                     'sys_value' => 30000,
                     'created_at' => '2026-04-13 19:44:53',
                     'updated_at' => '2026-06-16 21:33:53',
                 ],
                 [
-                    'setting_id' => 10,
+                    'id' => 10,
                     'sys_key' => 'form_submission_override',
                     'sys_value' => 1,
                     'created_at' => '2026-04-20 12:57:21',
@@ -2176,7 +2176,7 @@ class MainSeeder extends Seeder
         if ($this->db->table('users')->countAllResults() == 0) {
             $data = [
                 [
-                    'user_id' => 1,
+                    'id' => 1,
                     'username' => 'admin_bs',
                     'no_telp' => '081111111111',
                     'id_game' => 44423,
@@ -2186,7 +2186,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-27 15:11:57',
                 ],
                 [
-                    'user_id' => 2,
+                    'id' => 2,
                     'username' => 'agent_strike',
                     'no_telp' => '082222222222',
                     'id_game' => 8888888777,
@@ -2196,7 +2196,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-05 15:40:10',
                 ],
                 [
-                    'user_id' => 3,
+                    'id' => 3,
                     'username' => 'kaiser',
                     'no_telp' => '08123142134123',
                     'id_game' => 12345,
@@ -2206,7 +2206,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-27 14:35:23',
                 ],
                 [
-                    'user_id' => 4,
+                    'id' => 4,
                     'username' => 'Budi',
                     'no_telp' => '0812312351243',
                     'id_game' => 31212353342,
@@ -2216,7 +2216,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-05 16:36:44',
                 ],
                 [
-                    'user_id' => 5,
+                    'id' => 5,
                     'username' => 'elva',
                     'no_telp' => '081287654321',
                     'id_game' => 100007,
@@ -2226,7 +2226,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-15 12:44:15',
                 ],
                 [
-                    'user_id' => 6,
+                    'id' => 6,
                     'username' => 'errmentok',
                     'no_telp' => '081398765432',
                     'id_game' => 100008,
@@ -2236,7 +2236,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-15 12:44:15',
                 ],
                 [
-                    'user_id' => 7,
+                    'id' => 7,
                     'username' => 'xval',
                     'no_telp' => '081712345678',
                     'id_game' => 100029,
@@ -2246,7 +2246,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-15 12:44:15',
                 ],
                 [
-                    'user_id' => 8,
+                    'id' => 8,
                     'username' => 'aurest',
                     'no_telp' => '081987654321',
                     'id_game' => 100001,
@@ -2256,7 +2256,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-15 12:44:15',
                 ],
                 [
-                    'user_id' => 9,
+                    'id' => 9,
                     'username' => 'benjamin889',
                     'no_telp' => '085212345678',
                     'id_game' => 8888888327,
@@ -2266,7 +2266,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-15 12:44:15',
                 ],
                 [
-                    'user_id' => 10,
+                    'id' => 10,
                     'username' => 'hans7',
                     'no_telp' => '085787654321',
                     'id_game' => 100012,
@@ -2276,7 +2276,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-15 12:44:15',
                 ],
                 [
-                    'user_id' => 11,
+                    'id' => 11,
                     'username' => 'batman',
                     'no_telp' => '089612345678',
                     'id_game' => 8888888106,
@@ -2286,7 +2286,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-15 12:44:15',
                 ],
                 [
-                    'user_id' => 12,
+                    'id' => 12,
                     'username' => 'fenzy',
                     'no_telp' => '089787654321',
                     'id_game' => 100015,
@@ -2296,7 +2296,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-15 12:44:15',
                 ],
                 [
-                    'user_id' => 13,
+                    'id' => 13,
                     'username' => 'werdotg',
                     'no_telp' => '089912345678',
                     'id_game' => 8888888150,
@@ -2306,7 +2306,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-15 12:44:15',
                 ],
                 [
-                    'user_id' => 14,
+                    'id' => 14,
                     'username' => 'Tokies',
                     'no_telp' => '0812315213223',
                     'id_game' => 18239124123,
@@ -2316,7 +2316,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-06-16 21:53:04',
                 ],
                 [
-                    'user_id' => 15,
+                    'id' => 15,
                     'username' => 'jerry_tiktok',
                     'no_telp' => '081234560100010',
                     'id_game' => 100010,
@@ -2326,7 +2326,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-05-01 08:00:00',
                 ],
                 [
-                    'user_id' => 16,
+                    'id' => 16,
                     'username' => 'nael',
                     'no_telp' => '081234560100039',
                     'id_game' => 100039,
@@ -2336,7 +2336,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-05-01 08:00:00',
                 ],
                 [
-                    'user_id' => 17,
+                    'id' => 17,
                     'username' => 'feels_gaming',
                     'no_telp' => '081234560100006',
                     'id_game' => 100006,
@@ -2346,7 +2346,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-05-01 08:00:00',
                 ],
                 [
-                    'user_id' => 18,
+                    'id' => 18,
                     'username' => 'kaolla',
                     'no_telp' => '081234560100018',
                     'id_game' => 100018,
@@ -2356,7 +2356,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-05-01 08:00:00',
                 ],
                 [
-                    'user_id' => 19,
+                    'id' => 19,
                     'username' => 'benjamin_889',
                     'no_telp' => '081234560100003',
                     'id_game' => 100003,
@@ -2366,7 +2366,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-05-01 08:00:00',
                 ],
                 [
-                    'user_id' => 20,
+                    'id' => 20,
                     'username' => 'lynch',
                     'no_telp' => '081234560100035',
                     'id_game' => 100035,
@@ -2376,7 +2376,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-05-01 08:00:00',
                 ],
                 [
-                    'user_id' => 21,
+                    'id' => 21,
                     'username' => 'paat',
                     'no_telp' => '081234560100013',
                     'id_game' => 100013,
@@ -2386,7 +2386,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-05-01 08:00:00',
                 ],
                 [
-                    'user_id' => 23,
+                    'id' => 23,
                     'username' => 'valtz',
                     'no_telp' => '081234560100031',
                     'id_game' => 100031,
@@ -2396,7 +2396,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-05-01 08:00:00',
                 ],
                 [
-                    'user_id' => 24,
+                    'id' => 24,
                     'username' => 'cukup_tampan',
                     'no_telp' => '081234560100004',
                     'id_game' => 100004,
@@ -2406,7 +2406,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-05-01 08:00:00',
                 ],
                 [
-                    'user_id' => 25,
+                    'id' => 25,
                     'username' => 'aisyah',
                     'no_telp' => '081234560100016',
                     'id_game' => 100016,
@@ -2416,7 +2416,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-05-01 08:00:00',
                 ],
                 [
-                    'user_id' => 26,
+                    'id' => 26,
                     'username' => 'tearyu',
                     'no_telp' => '081234560100023',
                     'id_game' => 100023,
@@ -2426,7 +2426,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-05-01 08:00:00',
                 ],
                 [
-                    'user_id' => 27,
+                    'id' => 27,
                     'username' => 'vindragon',
                     'no_telp' => '081234560100025',
                     'id_game' => 100025,
@@ -2436,7 +2436,7 @@ class MainSeeder extends Seeder
                     'updated_at' => '2026-05-01 08:00:00',
                 ],
                 [
-                    'user_id' => 29,
+                    'id' => 29,
                     'username' => 'Mijay',
                     'no_telp' => '081235321134',
                     'id_game' => 444531234,
