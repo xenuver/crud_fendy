@@ -13,7 +13,7 @@ services:
       - DB_DATABASE=${DB_DATABASE:-nama_database}
       - DB_USERNAME=${DB_USERNAME:-username_db}
       - DB_PASSWORD=${DB_PASSWORD:-password_db}
-      - APP_BASEURL=${APP_BASEURL:-http://localhost}
+
     depends_on:
       - db
     volumes:
