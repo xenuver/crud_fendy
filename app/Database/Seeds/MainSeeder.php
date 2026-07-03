@@ -2178,7 +2178,7 @@ class MainSeeder extends Seeder
                 [
                     'user_id' => 1,
                     'username' => 'admin_bs',
-                    'no_telp' => 081111111111,
+                    'no_telp' => '081111111111',
                     'id_game' => 44423,
                     'password' => '$2y$10$r2rktflbHdznRi4hu5Szi.rJ/3ryxR.nVC2ee.h7t.rBtXAB41YU2',
                     'role' => 'admin',
@@ -2188,7 +2188,7 @@ class MainSeeder extends Seeder
                 [
                     'user_id' => 2,
                     'username' => 'agent_strike',
-                    'no_telp' => 082222222222,
+                    'no_telp' => '082222222222',
                     'id_game' => 8888888777,
                     'password' => '$2y$10$eVL31JGVpEvLiX7nKkRJP.ujOYznoJrpUbpj2BTRnZ/dafmHrt4Wa',
                     'role' => 'admin',
@@ -2198,7 +2198,7 @@ class MainSeeder extends Seeder
                 [
                     'user_id' => 3,
                     'username' => 'kaiser',
-                    'no_telp' => 08123142134123,
+                    'no_telp' => '08123142134123',
                     'id_game' => 12345,
                     'password' => '$2y$10$51WLLE8wPUjxrXI/uy43uun/CKkFvSSA/fP83OW4o/VJ8ut0jpcvC',
                     'role' => 'user',
@@ -2208,7 +2208,7 @@ class MainSeeder extends Seeder
                 [
                     'user_id' => 4,
                     'username' => 'Budi',
-                    'no_telp' => 0812312351243,
+                    'no_telp' => '0812312351243',
                     'id_game' => 31212353342,
                     'password' => '$2y$10$4ttxEOm5Qjjd4I2anmee8.2QD3nowa7aYB1oMTQ16zYFpncFPZUoW',
                     'role' => 'user',
@@ -2218,7 +2218,7 @@ class MainSeeder extends Seeder
                 [
                     'user_id' => 5,
                     'username' => 'elva',
-                    'no_telp' => 081287654321,
+                    'no_telp' => '081287654321',
                     'id_game' => 100007,
                     'password' => '$2y$10$MUT5aTijKNPvDGchIcBXauqbvY2uK7Q0IOi6RvfPqDacBjOZO4KHO',
                     'role' => 'user',
@@ -2228,7 +2228,7 @@ class MainSeeder extends Seeder
                 [
                     'user_id' => 6,
                     'username' => 'errmentok',
-                    'no_telp' => 081398765432,
+                    'no_telp' => '081398765432',
                     'id_game' => 100008,
                     'password' => '$2y$10$rLmjhv7JwfHNfOPd53BQB.tSQnf/LR2Kv0hfz.wtnWHWJBKJKkE/y',
                     'role' => 'user',
@@ -2238,7 +2238,7 @@ class MainSeeder extends Seeder
                 [
                     'user_id' => 7,
                     'username' => 'xval',
-                    'no_telp' => 081712345678,
+                    'no_telp' => '081712345678',
                     'id_game' => 100029,
                     'password' => '$2y$10$C1IpN99pcMFOGi8okgXal.lxeXl/BP/Ve2U6olLgFdkf3lvX1K95S',
                     'role' => 'user',
@@ -2248,7 +2248,7 @@ class MainSeeder extends Seeder
                 [
                     'user_id' => 8,
                     'username' => 'aurest',
-                    'no_telp' => 081987654321,
+                    'no_telp' => '081987654321',
                     'id_game' => 100001,
                     'password' => '$2y$10$xVsL1OKvixunsvYG9IQQ7eiUC5ZZIPh6yP8bXiItH42aSZng.xXgK',
                     'role' => 'user',
@@ -2258,7 +2258,7 @@ class MainSeeder extends Seeder
                 [
                     'user_id' => 9,
                     'username' => 'benjamin889',
-                    'no_telp' => 085212345678,
+                    'no_telp' => '085212345678',
                     'id_game' => 8888888327,
                     'password' => '$2y$10$jL/DzQ.qlCCrP.NTXOKQWuE8Q4YrGNkZYoXdVLeGCDqSZwfi4vXje',
                     'role' => 'user',
@@ -2268,7 +2268,7 @@ class MainSeeder extends Seeder
                 [
                     'user_id' => 10,
                     'username' => 'hans7',
-                    'no_telp' => 085787654321,
+                    'no_telp' => '085787654321',
                     'id_game' => 100012,
                     'password' => '$2y$10$9zUb27se0L21NK3PyG0SH.56hNSfsCboD5U3jtl0mLmkqNzh74eWy',
                     'role' => 'user',
@@ -2278,7 +2278,7 @@ class MainSeeder extends Seeder
                 [
                     'user_id' => 11,
                     'username' => 'batman',
-                    'no_telp' => 089612345678,
+                    'no_telp' => '089612345678',
                     'id_game' => 8888888106,
                     'password' => '$2y$10$dnBPdi.719Nixz5K2CXaZO.Y22h.e6aeRRWk73L.BhChSTgSt0032',
                     'role' => 'user',
@@ -2288,7 +2288,7 @@ class MainSeeder extends Seeder
                 [
                     'user_id' => 12,
                     'username' => 'fenzy',
-                    'no_telp' => 089787654321,
+                    'no_telp' => '089787654321',
                     'id_game' => 100015,
                     'password' => '$2y$10$pmtgvyjWgarN3ryYgzmBneb2jIglRDfzbEc8Uew6fW1OErN75JAU.',
                     'role' => 'user',
@@ -2298,7 +2298,7 @@ class MainSeeder extends Seeder
                 [
                     'user_id' => 13,
                     'username' => 'werdotg',
-                    'no_telp' => 089912345678,
+                    'no_telp' => '089912345678',
                     'id_game' => 8888888150,
                     'password' => '$2y$10$.kisrOt8eQz3OPjoxDwuaeNXGJDwciM/6ibI8ichEoprSc.F.q65y',
                     'role' => 'user',
@@ -2308,7 +2308,7 @@ class MainSeeder extends Seeder
                 [
                     'user_id' => 14,
                     'username' => 'Tokies',
-                    'no_telp' => 0812315213223,
+                    'no_telp' => '0812315213223',
                     'id_game' => 18239124123,
                     'password' => '$2y$10$ua8EhcB65mTkcae2EL668.n5kwLM912guflOAOTXrPjXqA3M4PK7W',
                     'role' => 'user',
@@ -2318,7 +2318,7 @@ class MainSeeder extends Seeder
                 [
                     'user_id' => 15,
                     'username' => 'jerry_tiktok',
-                    'no_telp' => 081234560100010,
+                    'no_telp' => '081234560100010',
                     'id_game' => 100010,
                     'password' => '$2y$10$FddjPSS6B/k0ehJvVq/MQOp7BYu13VLXgZAuXNRmCU44Mz3tB4xli',
                     'role' => 'user',
@@ -2328,7 +2328,7 @@ class MainSeeder extends Seeder
                 [
                     'user_id' => 16,
                     'username' => 'nael',
-                    'no_telp' => 081234560100039,
+                    'no_telp' => '081234560100039',
                     'id_game' => 100039,
                     'password' => '$2y$10$FddjPSS6B/k0ehJvVq/MQOp7BYu13VLXgZAuXNRmCU44Mz3tB4xli',
                     'role' => 'user',
@@ -2338,7 +2338,7 @@ class MainSeeder extends Seeder
                 [
                     'user_id' => 17,
                     'username' => 'feels_gaming',
-                    'no_telp' => 081234560100006,
+                    'no_telp' => '081234560100006',
                     'id_game' => 100006,
                     'password' => '$2y$10$FddjPSS6B/k0ehJvVq/MQOp7BYu13VLXgZAuXNRmCU44Mz3tB4xli',
                     'role' => 'user',
@@ -2348,7 +2348,7 @@ class MainSeeder extends Seeder
                 [
                     'user_id' => 18,
                     'username' => 'kaolla',
-                    'no_telp' => 081234560100018,
+                    'no_telp' => '081234560100018',
                     'id_game' => 100018,
                     'password' => '$2y$10$FddjPSS6B/k0ehJvVq/MQOp7BYu13VLXgZAuXNRmCU44Mz3tB4xli',
                     'role' => 'user',
@@ -2358,7 +2358,7 @@ class MainSeeder extends Seeder
                 [
                     'user_id' => 19,
                     'username' => 'benjamin_889',
-                    'no_telp' => 081234560100003,
+                    'no_telp' => '081234560100003',
                     'id_game' => 100003,
                     'password' => '$2y$10$FddjPSS6B/k0ehJvVq/MQOp7BYu13VLXgZAuXNRmCU44Mz3tB4xli',
                     'role' => 'user',
@@ -2368,7 +2368,7 @@ class MainSeeder extends Seeder
                 [
                     'user_id' => 20,
                     'username' => 'lynch',
-                    'no_telp' => 081234560100035,
+                    'no_telp' => '081234560100035',
                     'id_game' => 100035,
                     'password' => '$2y$10$FddjPSS6B/k0ehJvVq/MQOp7BYu13VLXgZAuXNRmCU44Mz3tB4xli',
                     'role' => 'user',
@@ -2378,7 +2378,7 @@ class MainSeeder extends Seeder
                 [
                     'user_id' => 21,
                     'username' => 'paat',
-                    'no_telp' => 081234560100013,
+                    'no_telp' => '081234560100013',
                     'id_game' => 100013,
                     'password' => '$2y$10$FddjPSS6B/k0ehJvVq/MQOp7BYu13VLXgZAuXNRmCU44Mz3tB4xli',
                     'role' => 'user',
@@ -2388,7 +2388,7 @@ class MainSeeder extends Seeder
                 [
                     'user_id' => 23,
                     'username' => 'valtz',
-                    'no_telp' => 081234560100031,
+                    'no_telp' => '081234560100031',
                     'id_game' => 100031,
                     'password' => '$2y$10$FddjPSS6B/k0ehJvVq/MQOp7BYu13VLXgZAuXNRmCU44Mz3tB4xli',
                     'role' => 'user',
@@ -2398,7 +2398,7 @@ class MainSeeder extends Seeder
                 [
                     'user_id' => 24,
                     'username' => 'cukup_tampan',
-                    'no_telp' => 081234560100004,
+                    'no_telp' => '081234560100004',
                     'id_game' => 100004,
                     'password' => '$2y$10$FddjPSS6B/k0ehJvVq/MQOp7BYu13VLXgZAuXNRmCU44Mz3tB4xli',
                     'role' => 'user',
@@ -2408,7 +2408,7 @@ class MainSeeder extends Seeder
                 [
                     'user_id' => 25,
                     'username' => 'aisyah',
-                    'no_telp' => 081234560100016,
+                    'no_telp' => '081234560100016',
                     'id_game' => 100016,
                     'password' => '$2y$10$FddjPSS6B/k0ehJvVq/MQOp7BYu13VLXgZAuXNRmCU44Mz3tB4xli',
                     'role' => 'user',
@@ -2418,7 +2418,7 @@ class MainSeeder extends Seeder
                 [
                     'user_id' => 26,
                     'username' => 'tearyu',
-                    'no_telp' => 081234560100023,
+                    'no_telp' => '081234560100023',
                     'id_game' => 100023,
                     'password' => '$2y$10$FddjPSS6B/k0ehJvVq/MQOp7BYu13VLXgZAuXNRmCU44Mz3tB4xli',
                     'role' => 'user',
@@ -2428,7 +2428,7 @@ class MainSeeder extends Seeder
                 [
                     'user_id' => 27,
                     'username' => 'vindragon',
-                    'no_telp' => 081234560100025,
+                    'no_telp' => '081234560100025',
                     'id_game' => 100025,
                     'password' => '$2y$10$FddjPSS6B/k0ehJvVq/MQOp7BYu13VLXgZAuXNRmCU44Mz3tB4xli',
                     'role' => 'user',
@@ -2438,7 +2438,7 @@ class MainSeeder extends Seeder
                 [
                     'user_id' => 29,
                     'username' => 'Mijay',
-                    'no_telp' => 081235321134,
+                    'no_telp' => '081235321134',
                     'id_game' => 444531234,
                     'password' => '$2y$10$IhOqGIkEN1l/VnBn/cPXWeWGTPXr8sTlqOkksD3N4K75btHqT9zui',
                     'role' => 'user',
