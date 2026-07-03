@@ -49,6 +49,7 @@ RUN ln -s /var/www/html/writable/uploads /var/www/html/public/uploads
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Install dependencies via composer
-RUN composer install --no-dev --optimize-autoloader
+ENV COMPOSER_ALLOW_SUPERUSER=1
+RUN composer install --no-interaction --no-dev --optimize-autoloader --ignore-platform-reqs
 
 EXPOSE 80
