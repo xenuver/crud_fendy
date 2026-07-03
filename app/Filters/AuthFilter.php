@@ -16,7 +16,7 @@ class AuthFilter implements FilterInterface
 
         // Cek secara real-time apakah akun user masih ada di database
         $db = \Config\Database::connect();
-        $userExists = $db->table('users')->where('id', session()->get('id'))->get()->getRow();
+        $userExists = $db->table('users')->where('user_id', session()->get('id'))->get()->getRow();
         if (!$userExists) {
             session()->destroy();
             return redirect()->to('/login')->with('error', 'Akun Anda telah dihapus oleh administrator.');

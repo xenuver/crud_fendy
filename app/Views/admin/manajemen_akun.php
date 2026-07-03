@@ -78,10 +78,10 @@
                                 </td>
                                 <td class="align-middle px-4 text-center">
                                     <div class="d-flex justify-content-center gap-2">
-                                        <button class="btn btn-outline-warning btn-sm p-1 border-0" data-toggle="modal" data-target="#editUserModal<?= $user['id'] ?>" title="Ubah Data">
+                                        <button class="btn btn-outline-warning btn-sm p-1 border-0" data-toggle="modal" data-target="#editUserModal<?= $user['user_id'] ?>" title="Ubah Data">
                                             <i class="fas fa-pen-nib"></i>
                                         </button>
-                                        <form method="POST" action="<?= base_url('admin/users/delete/' . $user['id']) ?>" style="display:inline-block; margin:0;">
+                                        <form method="POST" action="<?= base_url('admin/users/delete/' . $user['user_id']) ?>" style="display:inline-block; margin:0;">
                                             <?= csrf_field() ?>
                                             <button type="button" class="btn btn-outline-danger btn-sm p-1 border-0 btn-delete-user" title="Hapus Akun">
                                                 <i class="fas fa-trash"></i>
@@ -363,7 +363,7 @@
 
 <?php foreach ($users as $user) : ?>
 <!-- Modal Edit User -->
-<div class="modal fade" id="editUserModal<?= $user['id'] ?>" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="editUserModal<?= $user['user_id'] ?>" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content" style="background: #1e293b; border: 1px solid rgba(234, 25, 23, 0.5); border-radius: 0; clip-path: polygon(0 0, 100% 0, 100% 95%, 95% 100%, 0% 100%);">
             <div class="modal-header border-secondary">
@@ -375,7 +375,7 @@
             <form action="<?= base_url('admin/users/update') ?>" method="post">
                 <?= csrf_field() ?>
                 <div class="modal-body text-white">
-                    <input type="hidden" name="id" value="<?= $user['id'] ?>">
+                    <input type="hidden" name="id" value="<?= $user['user_id'] ?>">
                     
                     <!-- Fields Wrapper -->
                     <div class="form-fields-wrapper">

@@ -79,7 +79,7 @@ class Auth extends BaseController
             session()->regenerate(true);
 
             $session->set([
-                'id'         => $user['id'],
+                'id'         => $user['user_id'],
                 'username'   => $user['username'],
                 'no_telp'    => $user['no_telp'],
                 'id_game'    => $user['id_game'],
