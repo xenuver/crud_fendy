@@ -14,7 +14,7 @@ class FixLaporanColumnTypes extends Migration
             ALTER TABLE `laporan_mingguan`
             MODIFY COLUMN `total_views_video`    BIGINT NOT NULL DEFAULT 0,
             MODIFY COLUMN `total_views_live`     BIGINT NOT NULL DEFAULT 0,
-            MODIFY COLUMN `penonton_puncak_live` BIGINT NULL DEFAULT 0,
+            MODIFY COLUMN `jumlah_penonton_puncak` BIGINT NULL DEFAULT 0,
             MODIFY COLUMN `jumlah_shorts`        INT NULL DEFAULT 0,
             MODIFY COLUMN `views_shorts`         BIGINT NULL DEFAULT 0
         ");
@@ -41,7 +41,7 @@ class FixLaporanColumnTypes extends Migration
             ALTER TABLE `laporan_mingguan`
             MODIFY COLUMN `total_views_video`    INT NOT NULL DEFAULT 0,
             MODIFY COLUMN `total_views_live`     INT NOT NULL DEFAULT 0,
-            MODIFY COLUMN `penonton_puncak_live` INT NULL DEFAULT 0,
+            MODIFY COLUMN `jumlah_penonton_puncak` INT NULL DEFAULT 0,
             MODIFY COLUMN `status_validasi`      VARCHAR(50) NULL DEFAULT 'pending'
         ");
     }
