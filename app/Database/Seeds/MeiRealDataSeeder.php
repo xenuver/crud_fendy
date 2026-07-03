@@ -181,9 +181,9 @@ class MeiRealDataSeeder extends Seeder
             // 1. Cek / Buat Akun Pengguna
             $existingUser = $db->table('users')->where('username', $username)->get()->getRowArray();
             if ($existingUser) {
-                $userId = $existingUser['user_id'];
+                $userId = $existingUser['id'];
                 // Update game id & role jika berbeda
-                $db->table('users')->where('user_id', $userId)->update([
+                $db->table('users')->where('id', $userId)->update([
                     'id_game' => $creator['id_game'],
                     'role'    => 'user'
                 ]);
