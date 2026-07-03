@@ -8,6 +8,8 @@ class MainSeeder extends Seeder
 {
     public function run()
     {
+        $this->db->query('SET FOREIGN_KEY_CHECKS = 0');
+
         // Table: kreator
         if ($this->db->table('kreator')->countAllResults() == 0) {
             $data = [
@@ -2449,5 +2451,6 @@ class MainSeeder extends Seeder
             $this->db->table('users')->insertBatch($data);
         }
 
+        $this->db->query('SET FOREIGN_KEY_CHECKS = 1');
     }
 }
