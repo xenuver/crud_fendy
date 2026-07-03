@@ -9,13 +9,13 @@ class AddCcvToLaporanMingguan extends Migration
     public function up()
     {
         $fields = [
-            'jumlah_penonton_puncak' => [
+            'penonton_puncak_live' => [
                 'type'       => 'INT',
                 'constraint' => 11,
                 'null'       => true,
                 'default'    => 0,
             ],
-            'foto_bukti_ccv' => [
+            'foto_penonton_puncak_live' => [
                 'type'       => 'VARCHAR',
                 'constraint' => '255',
                 'null'       => true,
@@ -26,7 +26,7 @@ class AddCcvToLaporanMingguan extends Migration
 
     public function down()
     {
-        $this->forge->dropColumn('laporan_mingguan', 'jumlah_penonton_puncak');
-        $this->forge->dropColumn('laporan_mingguan', 'foto_bukti_ccv');
+        $this->forge->dropColumn('laporan_mingguan', 'penonton_puncak_live');
+        $this->forge->dropColumn('laporan_mingguan', 'foto_penonton_puncak_live');
     }
 }
