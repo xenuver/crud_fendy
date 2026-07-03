@@ -12,7 +12,7 @@ Pastikan semua file terbaru sudah di-commit dan di-push ke repositori Git Anda (
 File penting yang **wajib ada** di repositori:
 - `Dockerfile`
 - `docker-compose.yml`
-- `rw_ci4.sql` (File database awal)
+- Folder `app/Database/` (memuat Migrations & Seeds)
 
 > **Catatan:** File `.env` biasanya diabaikan oleh `.gitignore`. Kita akan memasukkan konfigurasi variabel environment langsung melalui Dashboard Coolify nantinya.
 
@@ -57,21 +57,26 @@ R2_SECRET_ACCESS_KEY=masukkan_secret_access_key_disini
 
 ---
 
-## 4. Mekanisme Database Auto-Import & Skip Overwrite
+## 4. Inisialisasi Database (Migrate & Seed)
 
-Anda merequest agar database `rw_ci4.sql` diimport secara otomatis **HANYA JIKA** database masih kosong, dan di-skip jika sudah ada datanya agar tidak tertimpa. 
+Karena kita menggunakan metode Seeder bawaan CodeIgniter 4 (bukan file `.sql` mentah), kita perlu melakukan migrate & seed setelah aplikasi berhasil berjalan.
 
 **Bagaimana ini bekerja?**
-Di `docker-compose.yml`, kita memetakan file SQL ke folder inisialisasi MariaDB:
-```yaml
-volumes:
-  - db_data:/var/lib/mysql
-  - ./rw_ci4.sql:/docker-entrypoint-initdb.d/init.sql
-```
-Image resmi Docker untuk MySQL/MariaDB memiliki sistem pintar: ia **hanya** akan mengeksekusi script di folder `/docker-entrypoint-initdb.d/` apabila volume database (`/var/lib/mysql`) **masih kosong sama sekali** (yakni saat pertama kali container dibuat).
+Seeder yang saya buatkan (`MainSeeder.php`) sudah dilengkapi dengan kondisi pintar: ia **hanya** akan memasukkan data ke tabel jika tabel tersebut masih kosong (jumlah data = 0). Jika data sudah ada, ia akan men-skip tabel tersebut agar tidak terjadi overwrite/duplikasi data.
 
-- **Deploy Pertama**: Database kosong -> Script `rw_ci4.sql` dieksekusi -> Data awal masuk.
-- **Redeploy / Restart Berikutnya**: Volume `db_data` sudah terisi -> Script **diabaikan** (skip) -> Data Anda aman dan tidak ter-overwrite.
+**Cara Eksekusi (Setelah Deploy Selesai):**
+1. Di Dashboard Coolify, masuk ke aplikasi/container Anda.
+2. Buka tab **Terminal** (atau Execute Command).
+3. Jalankan perintah berikut untuk membuat struktur tabel:
+   ```bash
+   php spark migrate
+   ```
+4. Jalankan perintah berikut untuk memasukkan data awal:
+   ```bash
+   php spark db:seed MainSeeder
+   ```
+   
+> **Tips:** Anda juga bisa menjalankan ini berulang kali saat redeploy. Data lama akan tetap aman dan tidak terhapus.
 
 ---
 
@@ -96,8 +101,9 @@ Jadi, Anda bisa menyimpan file upload di CodeIgniter ke folder `writable/uploads
    - Membangun (Build) image Docker berdasarkan `Dockerfile`.
    - Menginstal library via Composer.
    - Mengatur Symlink storage.
-   - Menyalakan service `db` (MariaDB) dan mengeksekusi `rw_ci4.sql` karena DB masih kosong.
+   - Menyalakan service `db` (MariaDB).
    - Menyalakan service `app` (CodeIgniter).
 4. Tunggu hingga proses deploy berstatus **Healthy / Success**.
+5. **PENTING**: Jangan lupa jalankan instruksi di **Langkah 4** (Migrate & Seed) lewat terminal Coolify!
 
 Aplikasi Anda kini sudah mengudara dengan aman!

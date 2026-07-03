@@ -1,14 +1,19 @@
 FROM php:8.2-apache
 
-# Install required packages and PHP extensions for CodeIgniter 4
+# Install required packages and PHP extensions for CodeIgniter 4 & PhpSpreadsheet
 RUN apt-get update && apt-get install -y \
     libicu-dev \
     libzip-dev \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev \
+    libonig-dev \
     zip \
     unzip \
     git \
     && docker-php-ext-configure intl \
-    && docker-php-ext-install intl pdo pdo_mysql mysqli zip \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install intl pdo pdo_mysql mysqli zip gd mbstring \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

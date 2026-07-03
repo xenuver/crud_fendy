@@ -35,8 +35,6 @@ services:
     volumes:
       # Persist database data
       - db_data:/var/lib/mysql
-      # Map the SQL file to init directory so it runs automatically ON FIRST STARTUP ONLY
-      - ./rw_ci4.sql:/docker-entrypoint-initdb.d/init.sql
 
 volumes:
   app_writable:
