@@ -738,6 +738,10 @@
 <script>
     // FUNGSI KONFIRMASI GLOBAL
     window.validateAndConfirm = function (formElement) {
+        if (!formElement.checkValidity()) {
+            formElement.reportValidity();
+            return;
+        }
         if (typeof Swal !== 'undefined') {
             Swal.fire({
                 title: 'Konfirmasi',
