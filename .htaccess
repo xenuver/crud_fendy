@@ -1,0 +1,33 @@
+# ----------------------------------------------------------------------
+# CodeIgniter 4 Root Directory Redirect and Security
+# ----------------------------------------------------------------------
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Redirect traffic to the public/ folder
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+# ----------------------------------------------------------------------
+# Block Direct Access to Sensitive Files and Directories
+# ----------------------------------------------------------------------
+
+# Block access to environment, git, and configuration files
+<FilesMatch "^\.(env|git|gitignore|dockerignore|editorconfig)">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# Block access to application, system, writable, and tests directories
+<IfModule mod_rewrite.c>
+    RewriteRule ^(app|system|writable|tests|scratch|vendor)/ - [F,L]
+</IfModule>
+
+# Disable directory browsing
+Options -Indexes

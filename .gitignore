@@ -1,0 +1,44 @@
+# CodeIgniter 4 .gitignore
+# ------------------------
+
+# Composer
+/vendor/
+
+# User-specific Environment
+.env
+.phpunit.result.cache
+
+# CodeIgniter 4 Writable directory
+# We ignore everything inside but keep the directory (standard CI4)
+/writable/*
+!/writable/index.html
+!/writable/.htaccess
+
+# Public uploads (if you want to keep them on local only)
+# /public/uploads/*
+# !/public/uploads/index.html
+
+# IDE Specific
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+fix_db.php
+hard_reset_db.php
+public/uploads/
+
+# Scratch / Temporary Scripts (Testing Only)
+scratch/
+project.zip
+/build/
+/docs/
