@@ -6,8 +6,6 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
-    ports:
-      - "80:80"
     environment:
       # These environment variables will override .env inside the container if set
       - CI_ENVIRONMENT=${CI_ENVIRONMENT:-production}
