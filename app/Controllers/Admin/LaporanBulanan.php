@@ -227,7 +227,7 @@ class LaporanBulanan extends BaseController
         foreach ($results as $r) {
             $sheet->setCellValue('A' . $row, $rank++);
             $sheet->setCellValue('B' . $row, $r['nama']);
-            $sheet->setCellValue('C' . $row, $r['id_game']);
+            $sheet->setCellValueExplicit('C' . $row, $r['id_game'], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
             $sheet->setCellValue('D' . $row, $r['yt_views']);
             $sheet->setCellValue('E' . $row, $r['yt_shorts_views']);
             $sheet->setCellValue('F' . $row, $r['yt_live_views']);

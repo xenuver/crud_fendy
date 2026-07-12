@@ -398,7 +398,7 @@ class LaporanMingguan extends BaseController
             $sheet->setCellValue('A' . $row, $no++);
             $sheet->setCellValue('B' . $row, date('d-m-Y H:i', strtotime($lap['created_at'])));
             $sheet->setCellValue('C' . $row, $lap['nama_lengkap']);
-            $sheet->setCellValue('D' . $row, $lap['uid']);
+            $sheet->setCellValueExplicit('D' . $row, $lap['uid'], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
             $sheet->setCellValue('E' . $row, strtoupper($lap['platform']));
             $sheet->setCellValue('F' . $row, $lap['total_views_video']);
             $sheet->setCellValue('G' . $row, ($lap['platform'] == 'youtube') ? $lap['views_shorts'] : 0);
