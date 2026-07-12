@@ -162,23 +162,66 @@ class LaporanBulanan extends BaseController
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
+        // 1. Title Styling
         $sheet->setCellValue('A1', 'LAPORAN BULANAN KREATOR - BLOODSTRIKE');
         $sheet->mergeCells('A1:J1');
-        $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
+        $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16)->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color('FFC00000'));
+        $sheet->getStyle('A1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
 
-        $sheet->setCellValue('A2', 'Periode: ' . date('F', mktime(0, 0, 0, $bulan, 10)) . ' ' . $tahun);
+        $monthName = date('F', mktime(0, 0, 0, $bulan, 10));
+        // Translate month name to Indonesian
+        $monthsId = [
+            'January' => 'Januari', 'February' => 'Februari', 'March' => 'Maret', 'April' => 'April',
+            'May' => 'Mei', 'June' => 'Juni', 'July' => 'Juli', 'August' => 'Agustus',
+            'September' => 'September', 'October' => 'Oktober', 'November' => 'November', 'December' => 'Desember'
+        ];
+        $bulanIndo = $monthsId[$monthName] ?? $monthName;
+
+        $sheet->setCellValue('A2', 'Periode: ' . $bulanIndo . ' ' . $tahun);
         $sheet->mergeCells('A2:J2');
+        $sheet->getStyle('A2')->getFont()->setItalic(true)->setSize(11);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
 
-        $headers = ['RANK', 'NAMA KREATOR', 'GAME ID (UID)', 'YT REG VIEWS', 'YT SHORTS VIEWS', 'YT LIVE VIEWS', 'TT CONTEN VIEWS', 'TT LIVE VIEWS', 'MAX CCV', 'PANGKAT AKHIR'];
+        // 2. Header Row Styling
+        $headers = [
+            'PERINGKAT', 
+            'NAMA KREATOR', 
+            'UID / GAME ID', 
+            'VIEWS VIDEO YT', 
+            'VIEWS SHORTS YT', 
+            'VIEWS LIVE YT', 
+            'VIEWS VIDEO TIKTOK', 
+            'VIEWS LIVE TIKTOK', 
+            'MAX CCV (PUNCAK)', 
+            'PANGKAT / TIER AKHIR'
+        ];
+
         $column = 'A';
         foreach ($headers as $h) {
             $sheet->setCellValue($column . '4', $h);
-            $sheet->getStyle($column . '4')->getFont()->setBold(true);
-            $sheet->getStyle($column . '4')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFEA1917');
-            $sheet->getStyle($column . '4')->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
             $column++;
         }
 
+        $headerStyle = [
+            'font' => [
+                'bold' => true,
+                'color' => ['argb' => 'FFFFFFFF'],
+                'size' => 10,
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                'wrapText' => true,
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['argb' => 'FFC00000'], // Dark Red
+            ],
+        ];
+        $sheet->getStyle('A4:J4')->applyFromArray($headerStyle);
+        $sheet->getRowDimension('4')->setRowHeight(30);
+
+        // 3. Populate Data Rows
         $row = 5;
         $rank = 1;
         foreach ($results as $r) {
@@ -192,7 +235,42 @@ class LaporanBulanan extends BaseController
             $sheet->setCellValue('H' . $row, $r['tt_live_views']);
             $sheet->setCellValue('I' . $row, $r['max_ccv'] ?: 0);
             $sheet->setCellValue('J' . $row, $r['tier_label']);
+
+            // Zebra striping
+            $rowColor = ($row % 2 == 0) ? 'FFF9F9F9' : 'FFFFFFFF';
+            $rowStyle = [
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'startColor' => ['argb' => $rowColor],
+                ],
+            ];
+            $sheet->getStyle("A$row:J$row")->applyFromArray($rowStyle);
+            $sheet->getRowDimension($row)->setRowHeight(20);
             $row++;
+        }
+
+        // 4. Alignments & Formatting
+        $lastRow = $row - 1;
+        if ($lastRow >= 5) {
+            $sheet->getStyle("A5:A$lastRow")->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle("C5:C$lastRow")->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle("J5:J$lastRow")->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle("B5:B$lastRow")->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+
+            // Format numbers with thousands separator and align right
+            $sheet->getStyle("D5:I$lastRow")->getNumberFormat()->setFormatCode('#,##0');
+            $sheet->getStyle("D5:I$lastRow")->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+            // Apply grid borders
+            $borderStyle = [
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'color' => ['argb' => 'FFDDDDDD'],
+                    ],
+                ],
+            ];
+            $sheet->getStyle("A4:J$lastRow")->applyFromArray($borderStyle);
         }
 
         foreach (range('A', 'J') as $col) {
@@ -210,3 +288,4 @@ class LaporanBulanan extends BaseController
         exit;
     }
 }
+
