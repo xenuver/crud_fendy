@@ -127,11 +127,11 @@ class LaporanMingguanModel extends Model
         // TIKTOK STATS
         $ttMonth = $this->selectSum('total_views_video')->selectSum('total_views_live')
                         ->where('platform', 'tiktok')->where('status_validasi', 'valid')
-                        ->where('DATE_SUB(created_at, INTERVAL 1 DAY) >=', $startBulanIni)->where('DATE_SUB(created_at, INTERVAL 1 DAY) <=', $endBulanIni)
+                        ->where('DATE_SUB(created_at, INTERVAL WEEKDAY(created_at) + 1 DAY) >=', $startBulanIni)->where('DATE_SUB(created_at, INTERVAL WEEKDAY(created_at) + 1 DAY) <=', $endBulanIni)
                         ->first();
         $ttLast = $this->selectSum('total_views_video')->selectSum('total_views_live')
                        ->where('platform', 'tiktok')->where('status_validasi', 'valid')
-                       ->where('DATE_SUB(created_at, INTERVAL 1 DAY) >=', $startBulanLalu)->where('DATE_SUB(created_at, INTERVAL 1 DAY) <=', $endBulanLalu)
+                       ->where('DATE_SUB(created_at, INTERVAL WEEKDAY(created_at) + 1 DAY) >=', $startBulanLalu)->where('DATE_SUB(created_at, INTERVAL WEEKDAY(created_at) + 1 DAY) <=', $endBulanLalu)
                        ->first();
         $ttTotal = ($ttMonth['total_views_video'] ?? 0) + ($ttMonth['total_views_live'] ?? 0);
         $ttPrev  = ($ttLast['total_views_video'] ?? 0) + ($ttLast['total_views_live'] ?? 0);
@@ -140,11 +140,11 @@ class LaporanMingguanModel extends Model
         // YOUTUBE STATS
         $ytMonth = $this->selectSum('total_views_video')->selectSum('views_shorts')->selectSum('total_views_live')
                         ->where('platform', 'youtube')->where('status_validasi', 'valid')
-                        ->where('DATE_SUB(created_at, INTERVAL 1 DAY) >=', $startBulanIni)->where('DATE_SUB(created_at, INTERVAL 1 DAY) <=', $endBulanIni)
+                        ->where('DATE_SUB(created_at, INTERVAL WEEKDAY(created_at) + 1 DAY) >=', $startBulanIni)->where('DATE_SUB(created_at, INTERVAL WEEKDAY(created_at) + 1 DAY) <=', $endBulanIni)
                         ->first();
         $ytLast = $this->selectSum('total_views_video')->selectSum('views_shorts')->selectSum('total_views_live')
                        ->where('platform', 'youtube')->where('status_validasi', 'valid')
-                       ->where('DATE_SUB(created_at, INTERVAL 1 DAY) >=', $startBulanLalu)->where('DATE_SUB(created_at, INTERVAL 1 DAY) <=', $endBulanLalu)
+                       ->where('DATE_SUB(created_at, INTERVAL WEEKDAY(created_at) + 1 DAY) >=', $startBulanLalu)->where('DATE_SUB(created_at, INTERVAL WEEKDAY(created_at) + 1 DAY) <=', $endBulanLalu)
                        ->first();
         $ytTotal = ($ytMonth['total_views_video'] ?? 0) + ($ytMonth['views_shorts'] ?? 0) + ($ytMonth['total_views_live'] ?? 0);
         $ytPrev  = ($ytLast['total_views_video'] ?? 0) + ($ytLast['views_shorts'] ?? 0) + ($ytLast['total_views_live'] ?? 0);
@@ -178,21 +178,21 @@ class LaporanMingguanModel extends Model
             // TikTok Monthly
             $tt_data = $this->selectSum('total_views_video')->selectSum('total_views_live')
                             ->where('platform', 'tiktok')->where('status_validasi', 'valid')
-                            ->where('DATE_SUB(created_at, INTERVAL 1 DAY) >=', $start)->where('DATE_SUB(created_at, INTERVAL 1 DAY) <=', $end)
+                            ->where('DATE_SUB(created_at, INTERVAL WEEKDAY(created_at) + 1 DAY) >=', $start)->where('DATE_SUB(created_at, INTERVAL WEEKDAY(created_at) + 1 DAY) <=', $end)
                             ->first();
             $chart_tt[] = ($tt_data['total_views_video'] ?? 0) + ($tt_data['total_views_live'] ?? 0);
 
             // YouTube Monthly
             $yt_data = $this->selectSum('total_views_video')->selectSum('views_shorts')->selectSum('total_views_live')
                             ->where('platform', 'youtube')->where('status_validasi', 'valid')
-                            ->where('DATE_SUB(created_at, INTERVAL 1 DAY) >=', $start)->where('DATE_SUB(created_at, INTERVAL 1 DAY) <=', $end)
+                            ->where('DATE_SUB(created_at, INTERVAL WEEKDAY(created_at) + 1 DAY) >=', $start)->where('DATE_SUB(created_at, INTERVAL WEEKDAY(created_at) + 1 DAY) <=', $end)
                             ->first();
             $chart_yt[] = ($yt_data['total_views_video'] ?? 0) + ($yt_data['views_shorts'] ?? 0) + ($yt_data['total_views_live'] ?? 0);
 
             // CCV Monthly (Max CCV)
             $ccv_data = $this->selectMax('penonton_puncak_live')
                              ->where('status_validasi', 'valid')
-                             ->where('DATE_SUB(created_at, INTERVAL 1 DAY) >=', $start)->where('DATE_SUB(created_at, INTERVAL 1 DAY) <=', $end)
+                             ->where('DATE_SUB(created_at, INTERVAL WEEKDAY(created_at) + 1 DAY) >=', $start)->where('DATE_SUB(created_at, INTERVAL WEEKDAY(created_at) + 1 DAY) <=', $end)
                              ->first();
             $chart_ccv[] = (int)($ccv_data['penonton_puncak_live'] ?? 0);
         }
@@ -248,7 +248,8 @@ class LaporanMingguanModel extends Model
 
         foreach($metricsData as $m) {
             $mDate = strtotime($m['created_at']);
-            $perfSunday = strtotime('-1 day', $mDate);
+            $dayOfWeek = (int) date('N', $mDate);
+            $perfSunday = strtotime('-' . $dayOfWeek . ' days', $mDate);
             $isThisMonth = (date('m', $perfSunday) == $currentMonth && date('Y', $perfSunday) == $currentYear);
 
             // All Time Stats (for fallback)
@@ -281,7 +282,7 @@ class LaporanMingguanModel extends Model
             }
 
             // Chart Data
-            $dateLabel = date('d M', $mDate);
+            $dateLabel = date('d M', $perfSunday);
             if (!isset($aggregated[$dateLabel])) {
                 $aggregated[$dateLabel] = ['yt' => 0, 'tt' => 0, 'ccv' => 0];
             }
@@ -309,11 +310,11 @@ class LaporanMingguanModel extends Model
         $stats['prev_month_tier'] = self::calculateTierForPeriod($kreatorId, $startOfPrevMonth, $endOfPrevMonth);
         $stats['curr_month_tier'] = self::calculateTierForPeriod($kreatorId, $startOfCurrMonth, $endOfCurrMonth);
 
-        // Map recent_metrics to current month's metrics for target progress calculations
+        // Petakan recent_metrics ke metrik bulan berjalan untuk kalkulasi progres target tier
         $currReports = $this->where('kreator_id', $kreatorId)
                             ->where('status_validasi', 'valid')
-                            ->where('DATE_SUB(created_at, INTERVAL 1 DAY) >=', $startOfCurrMonth)
-                            ->where('DATE_SUB(created_at, INTERVAL 1 DAY) <=', $endOfCurrMonth)
+                            ->where('DATE_SUB(created_at, INTERVAL WEEKDAY(created_at) + 1 DAY) >=', $startOfCurrMonth)
+                            ->where('DATE_SUB(created_at, INTERVAL WEEKDAY(created_at) + 1 DAY) <=', $endOfCurrMonth)
                             ->orderBy('created_at', 'DESC')
                             ->limit(4)
                             ->findAll();
@@ -348,8 +349,8 @@ class LaporanMingguanModel extends Model
         $lModel = new self();
         $reports = $lModel->where('kreator_id', $kreatorId)
                           ->where('status_validasi', 'valid')
-                          ->where('DATE_SUB(created_at, INTERVAL 1 DAY) >=', $startDate)
-                          ->where('DATE_SUB(created_at, INTERVAL 1 DAY) <=', $endDate)
+                          ->where('DATE_SUB(created_at, INTERVAL WEEKDAY(created_at) + 1 DAY) >=', $startDate)
+                          ->where('DATE_SUB(created_at, INTERVAL WEEKDAY(created_at) + 1 DAY) <=', $endDate)
                           ->orderBy('created_at', 'DESC')
                           ->limit(4)
                           ->findAll();

@@ -55,8 +55,8 @@ class LaporanBulanan extends BaseController
 
         $builder->join('laporan_mingguan', 'laporan_mingguan.kreator_id = kreator.kreator_id', 'left');
         $builder->where('laporan_mingguan.status_validasi', 'valid');
-        $builder->where('DATE_SUB(laporan_mingguan.created_at, INTERVAL 1 DAY) >=', $startDate);
-        $builder->where('DATE_SUB(laporan_mingguan.created_at, INTERVAL 1 DAY) <=', $endDate);
+        $builder->where('DATE_SUB(laporan_mingguan.created_at, INTERVAL WEEKDAY(laporan_mingguan.created_at) + 1 DAY) >=', $startDate);
+        $builder->where('DATE_SUB(laporan_mingguan.created_at, INTERVAL WEEKDAY(laporan_mingguan.created_at) + 1 DAY) <=', $endDate);
         $builder->groupBy('kreator.kreator_id');
         $results = $builder->get()->getResultArray();
 
@@ -133,8 +133,8 @@ class LaporanBulanan extends BaseController
 
         $builder->join('laporan_mingguan', 'laporan_mingguan.kreator_id = kreator.kreator_id', 'left');
         $builder->where('laporan_mingguan.status_validasi', 'valid');
-        $builder->where('DATE_SUB(laporan_mingguan.created_at, INTERVAL 1 DAY) >=', $startDate);
-        $builder->where('DATE_SUB(laporan_mingguan.created_at, INTERVAL 1 DAY) <=', $endDate);
+        $builder->where('DATE_SUB(laporan_mingguan.created_at, INTERVAL WEEKDAY(laporan_mingguan.created_at) + 1 DAY) >=', $startDate);
+        $builder->where('DATE_SUB(laporan_mingguan.created_at, INTERVAL WEEKDAY(laporan_mingguan.created_at) + 1 DAY) <=', $endDate);
         $builder->groupBy('kreator.kreator_id');
 
         $results = $builder->get()->getResultArray();
