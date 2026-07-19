@@ -145,7 +145,69 @@ class LaporanKreator extends BaseController
             $rules['foto_views_shorts'] = 'uploaded[foto_views_shorts]|max_size[foto_views_shorts,2048]|is_image[foto_views_shorts]';
         }
 
-        if (!$this->validate($rules)) {
+        $messages = [
+            'nama_lengkap' => [
+                'required' => 'Nama lengkap wajib diisi.',
+                'min_length' => 'Nama lengkap minimal harus 3 karakter.'
+            ],
+            'jumlah_video' => [
+                'required' => 'Jumlah video reguler wajib diisi.',
+                'is_natural' => 'Jumlah video reguler harus berupa angka bulat positif.',
+                'less_than_equal_to' => 'Jumlah video reguler tidak boleh melebihi 1.000 video per minggu.'
+            ],
+            'total_views_video' => [
+                'required' => 'Total views video reguler wajib diisi.',
+                'is_natural' => 'Total views video reguler harus berupa angka bulat positif.',
+                'less_than_equal_to' => 'Total views video reguler tidak boleh melebihi 1.000.000.000.'
+            ],
+            'jumlah_live' => [
+                'required' => 'Jumlah livestream wajib diisi.',
+                'is_natural' => 'Jumlah livestream harus berupa angka bulat positif.',
+                'less_than_equal_to' => 'Jumlah livestream tidak boleh melebihi 1.000 livestream per minggu.'
+            ],
+            'total_views_live' => [
+                'required' => 'Total views livestream wajib diisi.',
+                'is_natural' => 'Total views livestream harus berupa angka bulat positif.',
+                'less_than_equal_to' => 'Total views livestream tidak boleh melebihi 1.000.000.000.'
+            ],
+            'penonton_puncak_live' => [
+                'required' => 'Jumlah penonton puncak (CCV) wajib diisi.',
+                'is_natural' => 'Jumlah penonton puncak (CCV) harus berupa angka bulat positif.',
+                'less_than_equal_to' => 'Jumlah penonton puncak (CCV) tidak boleh melebihi 500.000.'
+            ],
+            'jumlah_shorts' => [
+                'required' => 'Jumlah video shorts wajib diisi.',
+                'is_natural' => 'Jumlah video shorts harus berupa angka bulat positif.',
+                'less_than_equal_to' => 'Jumlah video shorts tidak boleh melebihi 1.000 shorts per minggu.'
+            ],
+            'views_shorts' => [
+                'required' => 'Total views shorts wajib diisi.',
+                'is_natural' => 'Total views shorts harus berupa angka bulat positif.',
+                'less_than_equal_to' => 'Total views shorts tidak boleh melebihi 1.000.000.000.'
+            ],
+            'foto_views_konten' => [
+                'uploaded' => 'Bukti foto views konten wajib diunggah.',
+                'max_size' => 'Ukuran foto views konten maksimal 2MB.',
+                'is_image' => 'File bukti views konten harus berupa gambar (format png, jpg, jpeg, webp).'
+            ],
+            'foto_views_livestream' => [
+                'uploaded' => 'Bukti foto views livestream wajib diunggah.',
+                'max_size' => 'Ukuran foto views livestream maksimal 2MB.',
+                'is_image' => 'File bukti views livestream harus berupa gambar (format png, jpg, jpeg, webp).'
+            ],
+            'foto_penonton_puncak_live' => [
+                'uploaded' => 'Bukti foto penonton puncak (CCV) wajib diunggah.',
+                'max_size' => 'Ukuran foto penonton puncak (CCV) maksimal 2MB.',
+                'is_image' => 'File bukti penonton puncak (CCV) harus berupa gambar (format png, jpg, jpeg, webp).'
+            ],
+            'foto_views_shorts' => [
+                'uploaded' => 'Bukti foto views shorts wajib diunggah.',
+                'max_size' => 'Ukuran foto views shorts maksimal 2MB.',
+                'is_image' => 'File bukti views shorts harus berupa gambar (format png, jpg, jpeg, webp).'
+            ]
+        ];
+
+        if (!$this->validate($rules, $messages)) {
             $errors = $this->validator->getErrors();
             $errorMessage = !empty($errors) ? implode(' ', $errors) : 'Seluruh data operasional dan bukti tangkapan layar wajib diisi dengan benar.';
             return redirect()->back()->withInput()->with('error', $errorMessage);
