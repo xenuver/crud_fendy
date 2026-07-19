@@ -305,9 +305,8 @@ class LaporanMingguan extends BaseController
         return redirect()->back();
     }
 
-    /**
-     * Mengekspor data laporan mingguan ke format Excel.
-     */
+    //Mengekspor data laporan mingguan ke format Excel.
+
     public function exportWeekly()
     {
         $rangeTanggal = $this->request->getGet('range_tanggal');
@@ -354,18 +353,18 @@ class LaporanMingguan extends BaseController
 
         // 2. Header Row Styling
         $headers = [
-            'NO', 
-            'TANGGAL SUBMIT', 
-            'NAMA KREATOR', 
-            'UID / GAME ID', 
-            'PLATFORM', 
-            'VIEWS VIDEO REGULER', 
-            'VIEWS SHORTS (YT)', 
-            'VIEWS LIVE STREAMING', 
-            'PUNCAK PENONTON (CCV)', 
+            'NO',
+            'TANGGAL SUBMIT',
+            'NAMA KREATOR',
+            'UID / GAME ID',
+            'PLATFORM',
+            'VIEWS VIDEO REGULER',
+            'VIEWS SHORTS (YT)',
+            'VIEWS LIVE STREAMING',
+            'PUNCAK PENONTON (CCV)',
             'STATUS VALIDASI'
         ];
-        
+
         $column = 'A';
         foreach ($headers as $h) {
             $sheet->setCellValue($column . '4', $h);

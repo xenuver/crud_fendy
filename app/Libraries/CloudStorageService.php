@@ -18,13 +18,13 @@ use CodeIgniter\HTTP\Files\UploadedFile;
  *   $storage = new \App\Libraries\CloudStorageService();
  *   $url = $storage->upload($uploadedFile, 'profil');
  *   // $url = "https://[project-id].supabase.co/storage/v1/object/public/[bucket]/profil/abc123.jpg"
- */
-class CloudStorageService
+ */class CloudStorageService
 {
     private S3Client $client;
     private string $bucket;
     private string $publicUrl;
     private bool $enabled;
+    private bool $useAcl;
 
     public function __construct()
     {
@@ -41,6 +41,13 @@ class CloudStorageService
 
         // Jika .env belum diisi, storage dianggap tidak aktif (fallback ke lokal)
         $this->enabled = !empty($accessKeyId) && !empty($secretAccessKey) && (!empty($accountId) || !empty($customEndpoint));
+
+        $useAclVal = env('CLOUD_USE_ACL', env('R2_USE_ACL', null));
+        if ($useAclVal === null) {
+            $this->useAcl = !str_contains($customEndpoint, 'supabase.co');
+        } else {
+            $this->useAcl = filter_var($useAclVal, FILTER_VALIDATE_BOOLEAN);
+        }
 
         if ($this->enabled) {
             /**
@@ -108,17 +115,21 @@ class CloudStorageService
              * 'ACL'    → 'public-read' agar file bisa diakses publik via URL
              * 'ContentType' → MIME type file agar browser tahu cara membukanya
              */
-            $this->client->putObject([
+            $params = [
                 'Bucket' => $this->bucket,
                 'Key' => $fileName,
                 'Body' => fopen($file->getTempName(), 'rb'),
-                'ACL' => 'public-read',
                 'ContentType' => $file->getMimeType(),
-            ]);
+            ];
+
+            if ($this->useAcl) {
+                $params['ACL'] = 'public-read';
+            }
+
+            $this->client->putObject($params);
 
             // Kembalikan URL publik lengkap
             return $this->publicUrl . '/' . $fileName;
-
         } catch (AwsException $e) {
             // Log error detail untuk debugging, tapi tidak crash aplikasi
             log_message('error', '[CloudStorageService] Upload gagal: ' . $e->getMessage());
