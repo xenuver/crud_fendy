@@ -742,6 +742,33 @@
             formElement.reportValidity();
             return;
         }
+
+        // Cek total ukuran file sebelum disubmit (Maksimal 8MB agar tidak melampaui post_max_size PHP)
+        var fileInputs = formElement.querySelectorAll('input[type="file"]');
+        var totalSize = 0;
+        var limitSize = 8 * 1024 * 1024; // 8MB
+        for (var i = 0; i < fileInputs.length; i++) {
+            if (fileInputs[i].files && fileInputs[i].files.length > 0) {
+                totalSize += fileInputs[i].files[0].size;
+            }
+        }
+
+        if (totalSize > limitSize) {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: 'TOTAL FILE TERLALU BESAR',
+                    html: 'Total ukuran seluruh screenshot yang Anda unggah melebihi batas **8 MB**.<br>Silakan perkecil (kompres) screenshot Anda terlebih dahulu agar dapat dikirim.',
+                    icon: 'error',
+                    background: '#0f172a',
+                    color: '#fff',
+                    confirmButtonColor: '#ea1917'
+                });
+            } else {
+                alert('Total ukuran file melebihi batas 8 MB. Silakan perkecil ukuran screenshot Anda.');
+            }
+            return;
+        }
+
         if (typeof Swal !== 'undefined') {
             Swal.fire({
                 title: 'Konfirmasi',
