@@ -14,17 +14,13 @@ class DaftarPangkat extends BaseController
         $this->kModel = new KreatorModel();
     }
 
-    /**
-     * Menampilkan Halaman Penjenjangan (Tiering) Kreator.
-     */
+    // Menampilkan Halaman Penjenjangan (Tiering) Kreator.
     public function index()
     {
         $tierFilter = $this->request->getGet('tier');
         $kreators   = $this->kModel->getKreatorsWithMetrics();
 
-        foreach ($kreators as $key => &$k) {
-            $k = $this->kModel->analyzeActivity($k);
-            
+        foreach ($kreators as $key => $k) {
             // Terapkan filter jika dipilih
             if ($tierFilter && $k['tier_label'] !== $tierFilter) {
                 unset($kreators[$key]);

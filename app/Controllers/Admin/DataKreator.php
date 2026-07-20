@@ -6,9 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\KreatorModel;
 use CodeIgniter\HTTP\ResponseInterface;
 
-/**
- * Controller untuk mengelola halaman publik dan manajemen kreator.
- */
+// Controller untuk mengelola halaman publik dan manajemen kreator.
 class DataKreator extends BaseController
 {
     protected KreatorModel $kModel;
@@ -28,9 +26,7 @@ class DataKreator extends BaseController
         $this->kModel = new KreatorModel();
     }
 
-    /**
-     * Menampilkan Leaderboard Kreator di halaman utama.
-     */
+    // Menampilkan Leaderboard Kreator di halaman utama.
     public function index(): string
     {
         $db = \Config\Database::connect();
@@ -58,9 +54,7 @@ class DataKreator extends BaseController
         return $this->renderView("admin/data_kreator", $data);
     }
 
-    /**
-     * Menyimpan data kreator baru.
-     */
+    // Menyimpan data kreator baru.
     public function save(): ResponseInterface
     {
         $id_g = $this->request->getPost('id_game');
@@ -112,9 +106,7 @@ class DataKreator extends BaseController
         return redirect()->back()->with('error', 'Gagal menambahkan kreator baru.');
     }
 
-    /**
-     * Memperbarui data kreator.
-     */
+    // Memperbarui data kreator.
     public function update(): ResponseInterface
     {
         $id = $this->request->getPost('id');
@@ -173,9 +165,7 @@ class DataKreator extends BaseController
         }
     }
 
-    /**
-     * Menghapus data kreator.
-     */
+    // Menghapus data kreator.
     public function delete(int $id): ResponseInterface
     {
         $kreator = $this->kModel->find($id);
@@ -236,9 +226,7 @@ class DataKreator extends BaseController
         return redirect()->back();
     }
 
-    /**
-     * Mengubah status aktif/tangguh kreator.
-     */
+    // Mengubah status aktif/tangguh kreator.
     public function toggle_status(int $id): ResponseInterface
     {
         $kreator = $this->kModel->find($id);

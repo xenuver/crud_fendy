@@ -361,28 +361,17 @@
                             </div>
 
                             <?php if(($kreator['platform'] ?? '') == 'youtube'): ?>
-                                <!-- YouTube: Video vs Shorts -->
-                                <div class="col-md-4 mb-3">
+                                <!-- YouTube -->
+                                <div class="col-md-8 mb-3">
                                     <div class="d-flex justify-content-between mb-1">
-                                        <span>AVG VIDEO VIEWS</span>
+                                        <span>TARGET AVG VIEWS (YOUTUBE)</span>
                                         <span><?= number_format($currentMetrics['yt_avg']) ?> / <?= number_format($nextTier['threshold_yt']) ?></span>
                                     </div>
                                     <div class="progress bg-dark" style="height: 6px;">
-                                        <?php $ytPerc = min(100, ($currentMetrics['yt_avg'] / $nextTier['threshold_yt']) * 100); ?>
-                                        <div class="progress-bar <?= $ytPerc >= 100 ? 'bg-success' : 'bg-info' ?>" style="width: <?= $ytPerc ?>%"></div>
+                                        <?php $bestAvg = min(100, ($currentMetrics['yt_avg'] / $nextTier['threshold_yt']) * 100); ?>
+                                        <div class="progress-bar <?= $bestAvg >= 100 ? 'bg-success' : 'bg-info' ?>" style="width: <?= $bestAvg ?>%"></div>
                                     </div>
                                 </div>
-                                <div class="col-md-4 mb-3">
-                                    <div class="d-flex justify-content-between mb-1">
-                                        <span class="text-danger">AVG SHORTS VIEWS</span>
-                                        <span><?= number_format($currentMetrics['yt_shorts_avg']) ?> / <?= number_format($nextTier['threshold_yt']) ?></span>
-                                    </div>
-                                    <div class="progress bg-dark" style="height: 6px;">
-                                        <?php $shortsPerc = min(100, ($currentMetrics['yt_shorts_avg'] / $nextTier['threshold_yt']) * 100); ?>
-                                        <div class="progress-bar <?= $shortsPerc >= 100 ? 'bg-success' : 'bg-danger' ?>" style="width: <?= $shortsPerc ?>%"></div>
-                                    </div>
-                                </div>
-                                <?php $bestAvg = max($ytPerc, $shortsPerc); ?>
                             <?php else: ?>
                                 <!-- TikTok/Other -->
                                 <div class="col-md-8 mb-3">

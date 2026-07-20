@@ -4,9 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-/**
- * Model untuk mengelola pengaturan sistem (tabel settings).
- */
+// Model untuk mengelola pengaturan sistem (tabel settings).
 class SettingModel extends Model
 {
     protected $table            = 'settings';
@@ -15,19 +13,15 @@ class SettingModel extends Model
     protected $useTimestamps    = true;
     protected $updatedField     = 'updated_at';
 
-    /**
-     * Cache internal untuk menyimpan pengaturan yang telah diambil dari database
-     * guna menghindari query berulang dalam satu siklus request.
-     */
+    // Cache internal untuk menyimpan pengaturan yang telah diambil dari database
+    // guna menghindari query berulang dalam satu siklus request.
     private static $cache = null;
 
-    /**
-     * Mendapatkan nilai pengaturan berdasarkan key.
-     * 
-     * @param string $key Kunci pengaturan
-     * @param mixed $default Nilai default jika tidak ditemukan
-     * @return mixed
-     */
+    // Mendapatkan nilai pengaturan berdasarkan key.
+    //
+    // @param string $key Kunci pengaturan
+    // @param mixed $default Nilai default jika tidak ditemukan
+    // @return mixed
     public function getSetting(string $key, $default = null)
     {
         // Jika cache belum terisi, muat semua setting sekaligus dalam satu query
@@ -42,18 +36,14 @@ class SettingModel extends Model
         return array_key_key_exists_custom($key, self::$cache) ? self::$cache[$key] : $default;
     }
 
-    /**
-     * Mendapatkan status override pengiriman laporan.
-     * 0 = Auto, 1 = Force Open, 2 = Force Close
-     */
+    // Mendapatkan status override pengiriman laporan.
+    // 0 = Auto, 1 = Force Open, 2 = Force Close
     public function getSubmissionOverride()
     {
         return (int) $this->getSetting('form_submission_override', 0);
     }
 
-    /**
-     * Memperbarui nilai pengaturan.
-     */
+    // Memperbarui nilai pengaturan.
     public function updateSetting(string $key, $value)
     {
         $updated = $this->where('sys_key', $key)->set(['sys_value' => $value])->update();

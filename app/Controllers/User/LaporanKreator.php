@@ -21,9 +21,7 @@ class LaporanKreator extends BaseController
         $this->db = \Config\Database::connect();
     }
 
-    /**
-     * Menampilkan daftar laporan pribadi milik kreator yang sedang login.
-     */
+    // Menampilkan daftar laporan pribadi milik kreator yang sedang login.
     public function index(): string|ResponseInterface
     {
         $rangeTanggal = $this->request->getGet('range_tanggal');
@@ -39,7 +37,7 @@ class LaporanKreator extends BaseController
         $platform = $this->request->getGet('platform');
         $status = $this->request->getGet('status');
 
-        // Filter ketat: hanya data milik user yang bersangkutan
+        // Filter: hanya data milik user yang bersangkutan
         $builder = $this->lModel->where('user_id', session()->get('id'));
 
         if ($platform && in_array($platform, ['youtube', 'tiktok'])) {
@@ -106,9 +104,7 @@ class LaporanKreator extends BaseController
         return $this->renderView("laporan/mingguan", $data);
     }
 
-    /**
-     * Menyimpan laporan mingguan baru yang dikirim oleh kreator.
-     */
+    // Menyimpan laporan mingguan baru yang dikirim oleh kreator.
     public function save(): ResponseInterface
     {
         $debugInfo = [
@@ -380,9 +376,7 @@ class LaporanKreator extends BaseController
         }
     }
 
-    /**
-     * Menandai notifikasi laporan sebagai sudah dibaca oleh user.
-     */
+    // Menandai notifikasi laporan sebagai sudah dibaca oleh user.
     public function markAsRead(int $id): ResponseInterface
     {
         $kreator = $this->kModel->where('id_game', session()->get('id_game'))->first();

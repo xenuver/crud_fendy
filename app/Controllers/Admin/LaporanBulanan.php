@@ -22,9 +22,7 @@ class LaporanBulanan extends BaseController
         $this->db = \Config\Database::connect();
     }
 
-    /**
-     * Menampilkan rekap laporan bulanan untuk kepentingan audit dan leaderboard.
-     */
+    // Menampilkan rekap laporan bulanan untuk kepentingan audit dan leaderboard.
     public function index(): string|ResponseInterface
     {
         $bulanInput = $this->request->getGet('bulan') ?: date('m');
@@ -100,9 +98,7 @@ class LaporanBulanan extends BaseController
         return $this->renderView("laporan/bulanan", $data);
     }
 
-    /**
-     * Mengekspor data rekap bulanan ke format file Excel (.xlsx).
-     */
+    // Mengekspor data rekap bulanan ke format file Excel (.xlsx).
     public function export(): ResponseInterface
     {
         $bulanInput = $this->request->getGet('bulan') ?: date('m');
@@ -143,9 +139,8 @@ class LaporanBulanan extends BaseController
             $r['total_views'] = $r['yt_views'] + $r['yt_shorts_views'] + $r['yt_live_views'] + $r['tt_views'] + $r['tt_live_views'];
             $metrics = [
                 'peak_ccv' => $r['max_ccv'],
-                'yt_avg' => $r['yt_vids'] > 0 ? ($r['yt_views'] / $r['yt_vids']) : 0,
-                'yt_shorts_avg' => $r['yt_shorts_count'] > 0 ? ($r['yt_shorts_views'] / $r['yt_shorts_count']) : 0,
-                'tt_avg' => $r['tt_vids'] > 0 ? ($r['tt_views'] / $r['tt_vids']) : 0
+                'yt_avg'   => ($r['yt_views'] + $r['yt_shorts_views'] + $r['yt_live_views']) / 4,
+                'tt_avg'   => ($r['tt_views'] + $r['tt_live_views']) / 4
             ];
             $tierData = LaporanMingguanModel::calculateTier($metrics);
             $r['tier_level'] = (int) filter_var($tierData['name'], FILTER_SANITIZE_NUMBER_INT);

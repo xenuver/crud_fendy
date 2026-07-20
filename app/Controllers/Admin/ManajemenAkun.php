@@ -272,9 +272,7 @@ class ManajemenAkun extends BaseController
         return redirect()->back();
     }
 
-    /**
-     * Generate kode redeem baru untuk pendaftaran kreator (bisa batch).
-     */
+    // Generate kode redeem baru untuk pendaftaran kreator (bisa batch).
     public function generate_code()
     {
         $redeemModel = new RedeemCodeModel();
@@ -302,9 +300,7 @@ class ManajemenAkun extends BaseController
         return redirect()->to(base_url('admin/users'));
     }
 
-    /**
-     * Hapus/revoke kode redeem yang belum terpakai.
-     */
+    // Hapus/revoke kode redeem yang belum terpakai.
     public function delete_code($id)
     {
         $redeemModel = new RedeemCodeModel();

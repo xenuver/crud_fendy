@@ -19,11 +19,9 @@ class RedeemCodeModel extends Model
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
 
-    /**
-     * Generate kode redeem unik baru dengan format BS-XXXXX.
-     * Karakter yang digunakan sengaja menghindari 0, O, I, l agar tidak
-     * membingungkan kreator saat mengetiknya.
-     */
+    // Generate kode redeem unik baru dengan format BS-XXXXX.
+    // Karakter yang digunakan sengaja menghindari 0, O, I, l agar tidak
+    // membingungkan kreator saat mengetiknya.
     public function generateUniqueCode(): string
     {
         $chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
@@ -38,18 +36,14 @@ class RedeemCodeModel extends Model
         return $code;
     }
 
-    /**
-     * Validasi apakah kode redeem valid dan belum dipakai.
-     */
+    // Validasi apakah kode redeem valid dan belum dipakai.
     public function isValid(string $code): bool
     {
         $record = $this->where('code', $code)->where('is_used', 0)->first();
         return $record !== null;
     }
 
-    /**
-     * Tandai kode sebagai sudah terpakai.
-     */
+    // Tandai kode sebagai sudah terpakai.
     public function markAsUsed(string $code, int $userId): bool
     {
         return $this->where('code', $code)->set([

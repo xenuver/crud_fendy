@@ -7,29 +7,23 @@ use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * BaseController provides a convenient place for loading components
- * and performing functions that are needed by all your controllers.
- *
- * Extend this class in any new controllers:
- * ```
- *     class Home extends BaseController
- * ```
- *
- * For security, be sure to declare any new methods as protected or private.
- */
+// BaseController provides a convenient place for loading components
+// and performing functions that are needed by all your controllers.
+//
+// Extend this class in any new controllers:
+// ```
+//     class Home extends BaseController
+// ```
+//
+// For security, be sure to declare any new methods as protected or private.
 abstract class BaseController extends Controller
 {
-    /**
-     * Be sure to declare properties for any property fetch you initialized.
-     * The creation of dynamic property is deprecated in PHP 8.2.
-     */
+    // Be sure to declare properties for any property fetch you initialized.
+    // The creation of dynamic property is deprecated in PHP 8.2.
 
     // protected $session;
 
-    /**
-     * @return void
-     */
+    // @return void
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
         // Load here all helpers you want to be available in your controllers that extend BaseController.
@@ -44,9 +38,7 @@ abstract class BaseController extends Controller
         // $this->session = service('session');
     }
 
-    /**
-     * Helper untu mengarahkan user ke dashboard sesuai role
-     */
+    // Helper untu mengarahkan user ke dashboard sesuai role
     protected function redirectDashboard()
     {
         if (session()->get('role') == 'admin') {
@@ -56,9 +48,7 @@ abstract class BaseController extends Controller
         }
     }
 
-    /**
-     * Helper untuk mengecek kepemilikan data (Ownership)
-     */
+    // Helper untuk mengecek kepemilikan data (Ownership)
     protected function checkOwnership($record, $userIdField = 'user_id')
     {
         if (!$record) return false;
@@ -70,18 +60,14 @@ abstract class BaseController extends Controller
         return session()->get('id') == $record[$userIdField];
     }
 
-    /**
-     * Helper untuk mengecek apakah periode input laporan sedang dibuka
-     * Window: Senin 00:00 - Rabu 15:00
-     */
+    // Helper untuk mengecek apakah periode input laporan sedang dibuka
+    // Window: Senin 00:00 - Rabu 15:00
     protected function isSubmissionOpen()
     {
         return is_submission_open();
     }
 
-    /**
-     * Helper untuk merender view dengan template standar.
-     */
+    // Helper untuk merender view dengan template standar.
     protected function renderView(string $view, array $data = [])
     {
         return view('templates/v_header', $data)

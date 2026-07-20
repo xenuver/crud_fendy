@@ -16,9 +16,7 @@ class PengaturanProfil extends BaseController
         $this->kModel = new KreatorModel();
     }
 
-    /**
-     * Menampilkan halaman profil dan pengaturan akun admin.
-     */
+    // Menampilkan halaman profil dan pengaturan akun admin.
     public function index()
     {
         $id_game = session()->get('id_game');
@@ -34,9 +32,7 @@ class PengaturanProfil extends BaseController
         return $this->renderView("user/pengaturan_profil", $data);
     }
 
-    /**
-     * Memproses pembaruan profil admin.
-     */
+    // Memproses pembaruan profil admin.
     public function update()
     {
         $session = session();
@@ -116,9 +112,7 @@ class PengaturanProfil extends BaseController
         }
     }
 
-    /**
-     * Memproses pembaruan kata sandi admin.
-     */
+    // Memproses pembaruan kata sandi admin.
     public function update_password()
     {
         $session = session();

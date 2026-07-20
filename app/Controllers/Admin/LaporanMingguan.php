@@ -23,9 +23,7 @@ class LaporanMingguan extends BaseController
         $this->db = \Config\Database::connect();
     }
 
-    /**
-     * Menampilkan daftar seluruh laporan masuk untuk Admin.
-     */
+    // Menampilkan daftar seluruh laporan masuk untuk Admin.
     public function index(): string|ResponseInterface
     {
         $rangeTanggal = $this->request->getGet('range_tanggal');
@@ -84,9 +82,7 @@ class LaporanMingguan extends BaseController
         return $this->renderView("laporan/mingguan", $data);
     }
 
-    /**
-     * Memperbarui data laporan mingguan (Edit Laporan oleh Admin).
-     */
+    // Memperbarui data laporan mingguan (Edit Laporan oleh Admin).
     public function update(): ResponseInterface
     {
         $id = $this->request->getPost('id');
@@ -289,9 +285,7 @@ class LaporanMingguan extends BaseController
         return redirect()->back();
     }
 
-    /**
-     * Menghapus data laporan mingguan beserta file fisiknya.
-     */
+    // Menghapus data laporan mingguan beserta file fisiknya.
     public function delete(int $id): ResponseInterface
     {
         $laporan = $this->lModel->find($id);
@@ -339,9 +333,7 @@ class LaporanMingguan extends BaseController
         return redirect()->back();
     }
 
-    /**
-     * Memverifikasi (Validasi) status laporan mingguan (Valid/Tidak Valid) oleh Admin.
-     */
+    // Memverifikasi (Validasi) status laporan mingguan (Valid/Tidak Valid) oleh Admin.
     public function verify(int $id): ResponseInterface
     {
         $status = $this->request->getPost('status');

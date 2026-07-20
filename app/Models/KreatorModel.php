@@ -44,10 +44,8 @@ class KreatorModel extends Model
     protected $skipValidation = false;
     protected $cleanValidationRules = true;
 
-    /**
-     * Mengambil semua kreator beserta akumulasi metrik dan data tier.
-     * Logika dipindahkan dari controller ke model untuk pemisahan tugas yang lebih baik.
-     */
+    // Mengambil semua kreator beserta akumulasi metrik dan data tier.
+    // Logika dipindahkan dari controller ke model untuk pemisahan tugas yang lebih baik.
     public function getKreatorsWithMetrics()
     {
         // 1. Ambil semua data kreator dasar (kecuali yang merupakan Admin)
@@ -84,18 +82,18 @@ class KreatorModel extends Model
             $rTtC = 0;
             $rTtLV = 0;
             if (!empty($recentLaps)) {
-                foreach ($recentLaps as $rl) {
-                    $rPeak = max($rPeak, $rl['penonton_puncak_live']);
-                    if ($rl['platform'] == 'youtube') {
-                        $rYtV += $rl['total_views_video'];
-                        $rYtC += $rl['jumlah_video'];
-                        $rYtSV += $rl['views_shorts'];
-                        $rYtSC += $rl['jumlah_shorts'];
-                        $rYtLV += $rl['total_views_live'];
+                foreach ($recentLaps as $laporan) {
+                    $rPeak = max($rPeak, $laporan['penonton_puncak_live']);
+                    if ($laporan['platform'] == 'youtube') {
+                        $rYtV += $laporan['total_views_video'];
+                        $rYtC += $laporan['jumlah_video'];
+                        $rYtSV += $laporan['views_shorts'];
+                        $rYtSC += $laporan['jumlah_shorts'];
+                        $rYtLV += $laporan['total_views_live'];
                     } else {
-                        $rTtV += $rl['total_views_video'];
-                        $rTtC += $rl['jumlah_video'];
-                        $rTtLV += $rl['total_views_live'];
+                        $rTtV += $laporan['total_views_video'];
+                        $rTtC += $laporan['jumlah_video'];
+                        $rTtLV += $laporan['total_views_live'];
                     }
                 }
             }
@@ -145,16 +143,12 @@ class KreatorModel extends Model
         return $kreators;
     }
 
-    /**
-     * Memproses penentuan tier dan metrik untuk satu data kreator.
-     */
     public function processTiering(array $k): array
     {
         $metrics = [
             'peak_ccv' => $k['peak_ccv'] ?? 0,
-            'yt_avg' => ($k['yt_vids'] ?? 0) > 0 ? ($k['yt_views'] / $k['yt_vids']) : 0,
-            'yt_shorts_avg' => ($k['yt_shorts_vids'] ?? 0) > 0 ? ($k['yt_shorts_views'] / $k['yt_shorts_vids']) : 0,
-            'tt_avg' => ($k['tt_vids'] ?? 0) > 0 ? ($k['tt_views'] / $k['tt_vids']) : 0
+            'yt_avg'   => (($k['yt_views'] ?? 0) + ($k['yt_shorts_views'] ?? 0) + ($k['yt_live_views'] ?? 0)) / 4,
+            'tt_avg'   => (($k['tt_views'] ?? 0) + ($k['tt_live_views'] ?? 0)) / 4
         ];
 
         $tierData = LaporanMingguanModel::calculateTier($metrics);
@@ -173,9 +167,7 @@ class KreatorModel extends Model
         return $k;
     }
 
-    /**
-     * Mengambil distribusi jumlah kreator berdasarkan tier mereka.
-     */
+    // Mengambil distribusi jumlah kreator berdasarkan tier mereka.
     public function getTierDistribution(array $kreators): array
     {
         $distribution = [
@@ -197,9 +189,7 @@ class KreatorModel extends Model
         return $distribution;
     }
 
-    /**
-     * Menganalisis aktivitas kreator dan tren pertumbuhan views.
-     */
+    // Menganalisis aktivitas kreator dan tren pertumbuhan views.
     public function analyzeActivity(array $k): array
     {
         $lModel = new LaporanMingguanModel();
@@ -237,9 +227,7 @@ class KreatorModel extends Model
         return $k;
     }
 
-    /**
-     * Mendapatkan profil kreator atau membuatnya secara otomatis jika belum ada (misal untuk Admin).
-     */
+    // Mendapatkan profil kreator atau membuatnya secara otomatis jika belum ada (misal untuk Admin).
     public function getOrCreateProfile(string $id_game, string $defaultName = 'Kreator'): array
     {
         $kreator = $this->where('id_game', $id_game)->first();
@@ -256,9 +244,7 @@ class KreatorModel extends Model
         return $kreator ?? ['id_game' => $id_game, 'nama' => $defaultName, 'foto_profil' => null];
     }
 
-    /**
-     * Memeriksa status cooldown perubahan UID (limit 30 hari).
-     */
+    // Memeriksa status cooldown perubahan UID (limit 30 hari).
     public function getUidCooldown(?array $kreator): array
     {
         if (!$kreator || empty($kreator['last_uid_update'])) {
@@ -274,9 +260,7 @@ class KreatorModel extends Model
         return ['can' => $canUpdateUid, 'days' => $daysRemaining];
     }
 
-    /**
-     * Menghitung progres menuju tier berikutnya.
-     */
+    // Menghitung progres menuju tier berikutnya.
     public function calculateNextTier(array $currentMetrics): array
     {
         $sModel = new \App\Models\SettingModel();
@@ -303,7 +287,6 @@ class KreatorModel extends Model
         foreach ($allTiers as $t) {
             $ccvMet = ($currentMetrics['peak_ccv'] ?? 0) >= $t['threshold_ccv'];
             $avgMet = (($currentMetrics['yt_avg'] ?? 0) >= $t['threshold_yt'] ||
-                ($currentMetrics['yt_shorts_avg'] ?? 0) >= $t['threshold_yt'] ||
                 ($currentMetrics['tt_avg'] ?? 0) >= $t['threshold_tt']);
 
             if (!$ccvMet || !$avgMet) {

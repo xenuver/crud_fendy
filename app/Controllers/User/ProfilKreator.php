@@ -15,9 +15,7 @@ class ProfilKreator extends BaseController
         $this->kModel = new KreatorModel();
     }
 
-    /**
-     * Menampilkan halaman profil dan pengaturan akun kreator.
-     */
+    // Menampilkan halaman profil dan pengaturan akun kreator.
     public function profile()
     {
         $id_game = session()->get('id_game');
@@ -25,19 +23,17 @@ class ProfilKreator extends BaseController
         $cooldown = $this->kModel->getUidCooldown($kreator);
 
         $data = [
-            'judul'         => 'Pengaturan Profil',
-            'kreator'       => $kreator,
-            'canUpdateUid'  => $cooldown['can'],
+            'judul' => 'Pengaturan Profil',
+            'kreator' => $kreator,
+            'canUpdateUid' => $cooldown['can'],
             'daysRemaining' => $cooldown['days'],
         ];
 
         return $this->renderView("user/pengaturan_profil", $data);
     }
 
-    /**
-     * Memproses pembaruan profil kreator.
-     * Termasuk validasi cooldown perubahan UID Game.
-     */
+    // Memproses pembaruan profil kreator.
+    // Termasuk validasi cooldown perubahan UID Game.
     public function update_profile()
     {
         $session = session();
@@ -59,7 +55,7 @@ class ProfilKreator extends BaseController
                 return redirect()->back()->withInput()->with('error', 'UID Game harus berupa angka saja (tanpa huruf, titik, spasi, atau karakter lain) dengan panjang minimal 5 karakter.');
             }
 
-            // Validasi cooldown menggunakan model agar logika terpusat
+            // Validasi cooldown
             $cooldown = $this->kModel->getUidCooldown($kreator);
             if (!$cooldown['can']) {
                 return redirect()->back()->withInput()->with('error', 'UID Game hanya bisa diubah 1x per 30 hari. Tersisa ' . $cooldown['days'] . ' hari lagi.');
@@ -74,9 +70,9 @@ class ProfilKreator extends BaseController
         }
 
         $rules = [
-            'nama'         => 'required|min_length[3]',
-            'alamat'       => 'required',
-            'tiktok_link'  => 'permit_empty|valid_url',
+            'nama' => 'required|min_length[3]',
+            'alamat' => 'required',
+            'tiktok_link' => 'permit_empty|valid_url',
             'youtube_link' => 'permit_empty|valid_url',
         ];
 
@@ -85,9 +81,9 @@ class ProfilKreator extends BaseController
         }
 
         $data = [
-            'nama'         => $this->request->getPost('nama'),
-            'alamat'       => $this->request->getPost('alamat'),
-            'tiktok_link'  => $this->request->getPost('tiktok_link'),
+            'nama' => $this->request->getPost('nama'),
+            'alamat' => $this->request->getPost('alamat'),
+            'tiktok_link' => $this->request->getPost('tiktok_link'),
             'youtube_link' => $this->request->getPost('youtube_link'),
         ];
 

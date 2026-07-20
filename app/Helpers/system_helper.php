@@ -1,10 +1,8 @@
 <?php
 
 if (!function_exists('is_submission_open')) {
-    /**
-     * Helper untuk mengecek apakah periode input laporan sedang dibuka
-     * Window: Senin 00:00 - Rabu 15:00
-     */
+    // Helper untuk mengecek apakah periode input laporan sedang dibuka
+    // Window: Senin 00:00 - Rabu 15:00
     function is_submission_open()
     {
         $db = \Config\Database::connect();

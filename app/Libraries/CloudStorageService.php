@@ -6,19 +6,18 @@ use Aws\S3\S3Client;
 use Aws\Exception\AwsException;
 use CodeIgniter\HTTP\Files\UploadedFile;
 
-/**
- * CloudStorageService — Jembatan antara CodeIgniter dan Supabase Storage / S3-Compatible Cloud Storage.
- *
- * Cara kerja singkat:
- * - Supabase Storage kompatibel dengan Amazon S3 API.
- * - Kita menggunakan AWS SDK for PHP dengan mengarahkan endpoint ke Supabase.
- * - File diunggah ke bucket Supabase, lalu URL publik dikembalikan untuk disimpan di database.
- *
- * Cara pakai:
- *   $storage = new \App\Libraries\CloudStorageService();
- *   $url = $storage->upload($uploadedFile, 'profil');
- *   // $url = "https://[project-id].supabase.co/storage/v1/object/public/[bucket]/profil/abc123.jpg"
- */class CloudStorageService
+// CloudStorageService — Jembatan antara CodeIgniter dan Supabase Storage / S3-Compatible Cloud Storage.
+//
+// Cara kerja singkat:
+// - Supabase Storage kompatibel dengan Amazon S3 API.
+// - Kita menggunakan AWS SDK for PHP dengan mengarahkan endpoint ke Supabase.
+// - File diunggah ke bucket Supabase, lalu URL publik dikembalikan untuk disimpan di database.
+//
+// Cara pakai:
+//   $storage = new \App\Libraries\CloudStorageService();
+//   $url = $storage->upload($uploadedFile, 'profil');
+//   // $url = "https://[project-id].supabase.co/storage/v1/object/public/[bucket]/profil/abc123.jpg"
+class CloudStorageService
 {
     private S3Client $client;
     private string $bucket;
@@ -50,14 +49,12 @@ use CodeIgniter\HTTP\Files\UploadedFile;
         }
 
         if ($this->enabled) {
-            /**
-             * Inisialisasi S3Client dengan endpoint Supabase.
-             *
-             * Kenapa 'version' => 'latest'? → Pakai versi API S3 terbaru secara otomatis.
-             * Kenapa 'region' => 'auto'?    → Supabase/S3 menggunakan region spesifik (misal ap-northeast-2).
-             * 'endpoint'                    → Endpoint kustom Supabase
-             * 'use_path_style_endpoint'     → Diperlukan agar SDK tidak membuat subdomain bucket sendiri.
-             */
+            // Inisialisasi S3Client dengan endpoint Supabase.
+            //
+            // Kenapa 'version' => 'latest'? → Pakai versi API S3 terbaru secara otomatis.
+            // Kenapa 'region' => 'auto'?    → Supabase/S3 menggunakan region spesifik (misal ap-northeast-2).
+            // 'endpoint'                    → Endpoint kustom Supabase
+            // 'use_path_style_endpoint'     → Diperlukan agar SDK tidak membuat subdomain bucket sendiri.
             $endpoint = !empty($customEndpoint) ? $customEndpoint : "https://{$accountId}.r2.cloudflarestorage.com";
 
             $clientConfig = [
@@ -82,14 +79,12 @@ use CodeIgniter\HTTP\Files\UploadedFile;
         }
     }
 
-    /**
-     * Upload file ke Cloud Storage (Supabase).
-     *
-     * @param UploadedFile $file      File yang diterima dari form upload
-     * @param string       $folder    Subfolder di dalam bucket (misal: 'profil', 'laporan')
-     * @param string|null  $customName Nama file kustom tanpa ekstensi
-     * @return string|null            URL publik file di cloud, atau null jika gagal/storage tidak aktif
-     */
+    // Upload file ke Cloud Storage (Supabase).
+    //
+    // @param UploadedFile $file      File yang diterima dari form upload
+    // @param string       $folder    Subfolder di dalam bucket (misal: 'profil', 'laporan')
+    // @param string|null  $customName Nama file kustom tanpa ekstensi
+    // @return string|null            URL publik file di cloud, atau null jika gagal/storage tidak aktif
     public function upload(UploadedFile $file, string $folder = 'uploads', ?string $customName = null): ?string
     {
         // Jika storage belum dikonfigurasi, kembalikan null (controller akan fallback ke lokal)
@@ -106,15 +101,13 @@ use CodeIgniter\HTTP\Files\UploadedFile;
         }
 
         try {
-            /**
-             * putObject → perintah S3 untuk mengupload satu file.
-             *
-             * 'Bucket' → nama bucket Supabase kamu
-             * 'Key'    → path file di dalam bucket (mirip nama file + folder)
-             * 'Body'   → isi file dalam bentuk stream (lebih efisien dari string)
-             * 'ACL'    → 'public-read' agar file bisa diakses publik via URL
-             * 'ContentType' → MIME type file agar browser tahu cara membukanya
-             */
+            // putObject → perintah S3 untuk mengupload satu file.
+            //
+            // 'Bucket' → nama bucket Supabase kamu
+            // 'Key'    → path file di dalam bucket (mirip nama file + folder)
+            // 'Body'   → isi file dalam bentuk stream (lebih efisien dari string)
+            // 'ACL'    → 'public-read' agar file bisa diakses publik via URL
+            // 'ContentType' → MIME type file agar browser tahu cara membukanya
             $params = [
                 'Bucket' => $this->bucket,
                 'Key' => $fileName,
@@ -137,12 +130,10 @@ use CodeIgniter\HTTP\Files\UploadedFile;
         }
     }
 
-    /**
-     * Hapus file dari Cloud Storage berdasarkan URL publiknya.
-     *
-     * @param string $publicUrl  URL publik file yang ingin dihapus
-     * @return bool
-     */
+    // Hapus file dari Cloud Storage berdasarkan URL publiknya.
+    //
+    // @param string $publicUrl  URL publik file yang ingin dihapus
+    // @return bool
     public function delete(string $publicUrl): bool
     {
         if (!$this->enabled || empty($publicUrl)) {
@@ -168,19 +159,15 @@ use CodeIgniter\HTTP\Files\UploadedFile;
         }
     }
 
-    /**
-     * Cek apakah Cloud Storage sudah dikonfigurasi dengan benar.
-     *
-     */
+    // Cek apakah Cloud Storage sudah dikonfigurasi dengan benar.
+    //
     public function isEnabled(): bool
     {
         return $this->enabled;
     }
 
-    /**
-     * Helper: cek apakah string adalah URL Cloud Storage (bukan nama file lokal).
-     *
-     */
+    // Helper: cek apakah string adalah URL Cloud Storage (bukan nama file lokal).
+    //
     public static function isCloudUrl(string $value): bool
     {
         return str_starts_with($value, 'http://') || str_starts_with($value, 'https://');

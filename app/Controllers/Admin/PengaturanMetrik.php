@@ -15,9 +15,7 @@ class PengaturanMetrik extends BaseController
         $this->sModel = new SettingModel();
     }
 
-    /**
-     * Menampilkan Halaman Pengaturan Metrik Penilaian.
-     */
+    // Menampilkan Halaman Pengaturan Metrik Penilaian.
     public function index()
     {
         $settings = [
@@ -41,9 +39,7 @@ class PengaturanMetrik extends BaseController
         return $this->renderView('admin/pengaturan_metrik', $data);
     }
 
-    /**
-     * Memproses pembaruan pengaturan metrik penilaian.
-     */
+    // Memproses pembaruan pengaturan metrik penilaian.
     public function update(): ResponseInterface
     {
         $rules = [

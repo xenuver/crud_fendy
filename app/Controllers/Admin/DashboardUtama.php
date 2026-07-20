@@ -20,10 +20,8 @@ class DashboardUtama extends BaseController
         $this->sModel = new SettingModel();
     }
 
-    /**
-     * Halaman index Dashboard Admin.
-     * Menyiapkan data statistik global, distribusi tier, dan metrik kreator.
-     */
+    // Halaman index Dashboard Admin.
+    // Menyiapkan data statistik global, distribusi tier, dan metrik kreator.
     public function index()
     {
         $kreators    = $this->kModel->getKreatorsWithMetrics();
@@ -58,9 +56,7 @@ class DashboardUtama extends BaseController
         return $this->renderView('admin/dashboard_utama', $data);
     }
 
-    /**
-     * Mengubah mode pengiriman laporan (Auto/Buka Paksa/Tutup Paksa).
-     */
+    // Mengubah mode pengiriman laporan (Auto/Buka Paksa/Tutup Paksa).
     public function toggle_submission()
     {
         $requestedMode = $this->request->getPost('mode');
