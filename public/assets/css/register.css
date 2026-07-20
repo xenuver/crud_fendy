@@ -1,0 +1,145 @@
+:root {
+    --bs-red: #ea1917;
+    --bs-dark: #0f172a;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    background-color: var(--bs-dark);
+    background-image: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.97)),
+                      url('../img/bloodstrike_actual.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+    color: #fff;
+    margin: 0;
+    padding: 30px 15px;
+}
+
+.register-card {
+    width: 100%;
+    max-width: 480px;
+    background: rgba(15, 17, 26, 0.97);
+    backdrop-filter: blur(20px);
+    padding: 45px 40px;
+    border-bottom: 5px solid var(--bs-red);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    clip-path: polygon(0% 0%, 95% 0%, 100% 5%, 100% 100%, 5% 100%, 0% 95%);
+}
+
+.brush-text {
+    font-family: 'Permanent Marker', cursive;
+    color: var(--bs-red);
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 0;
+    line-height: 1.2;
+}
+
+.orbitron-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.70rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.form-control {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid #334155;
+    color: white;
+    border-radius: 0;
+    padding: 12px 14px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--bs-red);
+    box-shadow: 0 0 15px rgba(234, 25, 23, 0.3);
+    color: white;
+}
+
+.form-control::placeholder { color: #475569; }
+
+.redeem-box {
+    background: rgba(234, 25, 23, 0.07);
+    border: 1px dashed rgba(234, 25, 23, 0.5);
+    padding: 16px;
+    margin-bottom: 24px;
+    position: relative;
+}
+
+.redeem-box .badge-label {
+    position: absolute;
+    top: -10px;
+    left: 14px;
+    background: var(--bs-red);
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.6rem;
+    padding: 2px 10px;
+    letter-spacing: 1px;
+}
+
+.redeem-box .form-control {
+    border-color: rgba(234, 25, 23, 0.4);
+    text-align: center;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.redeem-box .form-control:focus {
+    border-color: var(--bs-red);
+    box-shadow: 0 0 20px rgba(234, 25, 23, 0.4);
+}
+
+.divider-line {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    margin: 20px 0;
+}
+
+.btn-register {
+    background: var(--bs-red);
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    border: 2px solid #fff;
+    width: 100%;
+    padding: 14px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    transition: 0.3s;
+    clip-path: polygon(8% 0%, 100% 0%, 92% 100%, 0% 100%);
+    margin-top: 24px;
+}
+
+.btn-register:hover {
+    background: #fff;
+    color: var(--bs-red);
+    transform: scale(1.02);
+}
+
+.hover-red { transition: color 0.3s ease; }
+.hover-red:hover { color: var(--bs-red) !important; }
+
+.info-badge {
+    background: rgba(234, 25, 23, 0.1);
+    border: 1px solid rgba(234, 25, 23, 0.3);
+    border-radius: 4px;
+    padding: 10px 14px;
+    font-size: 0.78rem;
+    color: #94a3b8;
+    margin-bottom: 20px;
+}

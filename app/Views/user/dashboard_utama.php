@@ -261,7 +261,11 @@
                 </div>
                 <div class="hud-body p-4">
                     <div style="height: 300px;">
-                        <canvas id="kreatorChart"></canvas>
+                        <canvas id="kreatorChart"
+                                data-labels='<?= $chartLabels ?>'
+                                data-yt='<?= $chartYtViews ?>'
+                                data-tt='<?= $chartTtViews ?>'
+                                data-ccv='<?= $chartCcv ?>'></canvas>
                     </div>
                 </div>
             </div>
@@ -412,109 +416,4 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const ctx = document.getElementById('kreatorChart').getContext('2d');
-        
-        // Data dari Controller PHP
-        const labels = <?= $chartLabels ?>;
-        const ytData = <?= $chartYtViews ?>;
-        const ttData = <?= $chartTtViews ?>;
-        const ccvData = <?= $chartCcv ?>;
-
-        const dataHasValue = labels.length > 0;
-
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        type: 'line',
-                        label: 'Total Views YouTube',
-                        data: ytData,
-                        borderColor: '#ea1917',
-                        backgroundColor: 'rgba(234, 25, 23, 0.1)',
-                        borderWidth: 2,
-                        pointStyle: 'circle',
-                        pointRadius: 5,
-                        pointHoverRadius: 7,
-                        pointBackgroundColor: '#1e293b',
-                        tension: 0,
-                        yAxisID: 'y'
-                    },
-                    {
-                        type: 'line',
-                        label: 'Total Views TikTok',
-                        data: ttData,
-                        borderColor: '#0dcaf0',
-                        backgroundColor: 'rgba(13, 202, 240, 0.1)',
-                        borderWidth: 2,
-                        pointStyle: 'circle',
-                        pointRadius: 5,
-                        pointHoverRadius: 7,
-                        pointBackgroundColor: '#1e293b',
-                        tension: 0,
-                        yAxisID: 'y'
-                    },
-                    {
-                        type: 'line',
-                        label: 'Peak CCV (Live)',
-                        data: ccvData,
-                        borderColor: '#ffc107',
-                        backgroundColor: 'rgba(255, 193, 7, 0.1)',
-                        borderWidth: 2,
-                        borderDash: [5, 5],
-                        pointStyle: 'circle',
-                        pointRadius: 5,
-                        pointHoverRadius: 7,
-                        pointBackgroundColor: '#1e293b',
-                        tension: 0,
-                        yAxisID: 'y1'
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                plugins: {
-                    legend: {
-                        labels: { color: '#cbd5e1', font: { family: 'Inter' } }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
-                        titleFont: { family: 'Orbitron', size: 13 },
-                        bodyFont: { family: 'Inter', size: 12 },
-                        padding: 12,
-                        borderColor: '#ea1917',
-                        borderWidth: 1
-                    }
-                },
-                scales: {
-                    x: {
-                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                        ticks: { color: '#94a3b8' }
-                    },
-                    y: {
-                        type: 'linear',
-                        display: true,
-                        position: 'left',
-                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                        ticks: { color: '#94a3b8' }
-                    },
-                    y1: {
-                        type: 'linear',
-                        display: true,
-                        position: 'right',
-                        grid: { drawOnChartArea: false },
-                        ticks: { color: '#ffc107' }
-                    }
-                }
-            }
-        });
-    });
-</script>
+<script src="<?= base_url('assets/js/dashboard-chart.js') ?>"></script>
