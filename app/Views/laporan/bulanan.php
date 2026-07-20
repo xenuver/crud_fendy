@@ -10,26 +10,7 @@
             <?= date('F', mktime(0, 0, 0, $bulan, 10)) ?> <?= $tahun ?>
         </div>
     </div>
-    <style>
-        /* Sticky Header */
-        .table-responsive {
-            max-height: 75vh;
-            overflow-y: auto;
-        }
-
-        #bulananTable thead th {
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            background: #1a1a1a !important;
-            box-shadow: inset 0 -1px 0 rgba(234, 25, 23, 0.3);
-        }
-
-        .table-tactical td {
-            padding-top: 0.6rem !important;
-            padding-bottom: 0.6rem !important;
-        }
-    </style>
+    <link rel="stylesheet" href="<?= base_url('assets/css/bulanan.css') ?>">
 
     <!-- FILTER BAR TERUNIFIKASI -->
     <div class="hud-card mb-4" style="border-left: 3px solid var(--bs-red);">
@@ -172,17 +153,4 @@
     </div>
 </div>
 
-<script>
-    $(document).ready(function () {
-        $('#bulananTable').DataTable({
-            "pageLength": 25,
-            "ordering": false,
-            "language": {
-                "search": "FILTER KREATOR:",
-                "zeroRecords": "DATA TIDAK DITEMUKAN",
-                "info": "MENAMPILKAN _PAGE_ DARI _PAGES_ OPERASI",
-                "infoEmpty": "ARSIP KOSONG"
-            }
-        });
-    });
-</script>
+<script src="<?= base_url('assets/js/bulanan.js') ?>"></script>

@@ -238,3 +238,55 @@ window.previewFeedback = function (btn) {
 
     $('#feedbackPreviewModal').modal('show');
 };
+
+// 5. FLATPICKR INITIALIZATION
+document.addEventListener('DOMContentLoaded', function() {
+    if (document.getElementById('datepicker-range')) {
+        flatpickr("#datepicker-range", {
+            mode: "range",
+            dateFormat: "Y-m-d",
+            altInput: true,
+            altFormat: "d M Y",
+            theme: "dark",
+            onClose: function (selectedDates, dateStr, instance) {
+                if (dateStr.includes(" to ")) {
+                    instance.element.form.submit();
+                }
+            }
+        });
+    }
+
+    // 6. DELETE CONFIRMATION
+    document.addEventListener('click', function (e) {
+        var button = e.target.closest('.btn-delete-laporan');
+        if (button) {
+            e.preventDefault();
+            var form = button.closest('form');
+            Swal.fire({
+                title: 'KONFIRMASI HAPUS',
+                text: 'Apakah Anda yakin ingin menghapus laporan mingguan ini secara permanen?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ea1917',
+                cancelButtonColor: '#1e293b',
+                confirmButtonText: 'YA, HAPUS',
+                cancelButtonText: 'BATAL',
+                background: '#0f172a',
+                color: '#fff',
+                customClass: {
+                    popup: 'swal-tactical',
+                    title: 'swal-tactical-title',
+                    htmlContainer: 'swal-tactical-text',
+                    confirmButton: 'swal-tactical-btn-confirm',
+                    cancelButton: 'swal-tactical-btn-cancel'
+                },
+                buttonsStyling: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        }
+    });
+});
+

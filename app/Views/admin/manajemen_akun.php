@@ -1,37 +1,4 @@
-<style>
-    /* Custom Pagination styling */
-    .pagination {
-        margin-bottom: 0;
-        gap: 5px;
-    }
-    .pagination .page-item .page-link {
-        background: rgba(15, 23, 42, 0.6) !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        color: #94a3b8 !important;
-        padding: 6px 12px;
-        font-family: 'Orbitron', sans-serif;
-        font-size: 0.75rem;
-        font-weight: bold;
-        transition: all 0.3s ease;
-        border-radius: 4px;
-    }
-    .pagination .page-item.active .page-link {
-        background: #ea1917 !important;
-        border-color: #ea1917 !important;
-        color: #fff !important;
-        box-shadow: 0 0 10px rgba(234, 25, 23, 0.5);
-    }
-    .pagination .page-item .page-link:hover {
-        background: rgba(234, 25, 23, 0.15) !important;
-        border-color: #ea1917 !important;
-        color: #fff !important;
-    }
-    .pagination .page-item.disabled .page-link {
-        background: rgba(15, 23, 42, 0.3) !important;
-        border-color: rgba(255, 255, 255, 0.05) !important;
-        color: #475569 !important;
-    }
-</style>
+<link rel="stylesheet" href="<?= base_url('assets/css/manajemen_akun.css') ?>">
 <div class="container-fluid">
 
     <h1 class="h3 mb-4 text-white orbitron"><?= $judul; ?></h1>
@@ -246,67 +213,7 @@
 </div>
 
 <!-- Tambahkan Script DataTables Tanpa Paging -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        if ($('#dataTable').length) {
-            $('#dataTable').DataTable({
-                "paging": false,
-                "info": false,
-                "language": {
-                    "search": "CARI AKUN:",
-                    "zeroRecords": "Akun tidak ditemukan."
-                }
-            });
-        }
-    });
 
-
-
-    // Copy link registrasi ke clipboard
-    function copyLink(url, btn) {
-        navigator.clipboard.writeText(url).then(function() {
-            if (btn) {
-                const icon = btn.querySelector('i');
-                const oldClass = icon.className;
-                icon.className = 'fas fa-check';
-                btn.style.color = '#4ade80';
-                setTimeout(function() {
-                    icon.className = oldClass;
-                    btn.style.color = '';
-                }, 2000);
-            } else {
-                const icon = document.getElementById('copyLinkIcon');
-                icon.classList.remove('fa-copy');
-                icon.classList.add('fa-check');
-                icon.style.color = '#4ade80';
-                setTimeout(function() {
-                    icon.classList.remove('fa-check');
-                    icon.classList.add('fa-copy');
-                    icon.style.color = '';
-                }, 2000);
-            }
-        });
-    }
-
-    // Copy text dari textarea tersembunyi ke clipboard
-    function copyFromTextarea(textareaId, btn, iconId, originalText) {
-        const textarea = document.getElementById(textareaId);
-        if (!textarea) return;
-
-        navigator.clipboard.writeText(textarea.value).then(function() {
-            btn.innerHTML = '<i class="fas fa-check text-success" id="' + iconId + '"></i> Berhasil Disalin!';
-            setTimeout(function() {
-                btn.innerHTML = '<i class="' + (iconId === 'bulkCopyIcon' ? 'fas fa-copy' : 'fas fa-link') + '" id="' + iconId + '"></i> ' + originalText;
-            }, 2000);
-        });
-    }
-
-    // Konfirmasi generate redeem code dengan jumlah yang dipilih
-    function confirmGenerate(form) {
-        const qty = document.getElementById('jumlahGenerate').value;
-        return confirm('Apakah Anda yakin ingin me-generate ' + qty + ' Redeem Code baru?');
-    }
-</script>
 
 <!-- Modal Tambah Akun -->
 <div class="modal fade" id="addUserModal" tabindex="-1" aria-hidden="true">
@@ -420,69 +327,4 @@
 <?php endforeach; ?>
 
 <!-- SweetAlert2 Delete Confirmation for Account & Redeem Code (Admin) - Vanilla JS -->
-<script>
-    document.addEventListener('click', function (e) {
-        // 1. Delete User Account
-        var deleteUserBtn = e.target.closest('.btn-delete-user');
-        if (deleteUserBtn) {
-            e.preventDefault();
-            var form = deleteUserBtn.closest('form');
-            Swal.fire({
-                title: 'HAPUS AKUN PENGGUNA',
-                text: 'Apakah Anda yakin ingin menghapus akun ini secara permanen?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ea1917',
-                cancelButtonColor: '#1e293b',
-                confirmButtonText: 'YA, HAPUS',
-                cancelButtonText: 'BATAL',
-                background: '#0f172a',
-                color: '#fff',
-                customClass: {
-                    popup: 'swal-tactical',
-                    title: 'swal-tactical-title',
-                    htmlContainer: 'swal-tactical-text',
-                    confirmButton: 'swal-tactical-btn-confirm',
-                    cancelButton: 'swal-tactical-btn-cancel'
-                },
-                buttonsStyling: false
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
-                }
-            });
-        }
-
-        // 2. Delete Redeem Code
-        var deleteCodeBtn = e.target.closest('.btn-delete-code');
-        if (deleteCodeBtn) {
-            e.preventDefault();
-            var form = deleteCodeBtn.closest('form');
-            var confirmText = deleteCodeBtn.getAttribute('data-confirm-text') || 'Yakin ingin menghapus kode ini?';
-            Swal.fire({
-                title: 'HAPUS REDEEM CODE',
-                text: confirmText,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ea1917',
-                cancelButtonColor: '#1e293b',
-                confirmButtonText: 'YA, HAPUS',
-                cancelButtonText: 'BATAL',
-                background: '#0f172a',
-                color: '#fff',
-                customClass: {
-                    popup: 'swal-tactical',
-                    title: 'swal-tactical-title',
-                    htmlContainer: 'swal-tactical-text',
-                    confirmButton: 'swal-tactical-btn-confirm',
-                    cancelButton: 'swal-tactical-btn-cancel'
-                },
-                buttonsStyling: false
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
-                }
-            });
-        }
-    });
-</script>
+<script src="<?= base_url('assets/js/manajemen_akun.js') ?>"></script>

@@ -121,21 +121,4 @@
 <script src="<?= base_url('assets/vendor/datatables/jquery.dataTables.min.js') ?>"></script>
 <script src="<?= base_url('assets/vendor/datatables/dataTables.bootstrap4.min.js') ?>"></script>
 
-<script>
-$(document).ready(function() {
-    $('#tieringTable').DataTable({
-        "pageLength": 25,
-        "language": {
-            "search": "Cari Kreator:",
-            "lengthMenu": "Tampilkan _MENU_ data",
-            "info": "Menampilkan _PAGE_ dari _PAGES_ peringkat",
-            "zeroRecords": "Kreator tidak ditemukan dalam peringkat",
-            "infoEmpty": "Papan peringkat kosong",
-            "paginate": {
-                "previous": "Sebelumnya",
-                "next": "Berikutnya"
-            }
-        }
-    });
-});
-</script>
+<script src="<?= base_url('assets/js/daftar_pangkat.js') ?>"></script>

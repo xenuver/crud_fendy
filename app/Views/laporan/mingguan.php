@@ -11,29 +11,7 @@
         </div>
     </div>
 
-    <style>
-        /* Sticky Header for Tactical Table */
-        .table-responsive {
-            max-height: 70vh;
-            /* Batasi tinggi tabel agar header menempel di container */
-            overflow-y: auto;
-        }
-
-        #laporanTable thead th {
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            background: #1a1a1a !important;
-            /* Warna solid agar tidak tembus pandang */
-            box-shadow: inset 0 -1px 0 rgba(234, 25, 23, 0.3);
-        }
-
-        /* Compact Rows */
-        .table-tactical td {
-            padding-top: 0.5rem !important;
-            padding-bottom: 0.5rem !important;
-        }
-    </style>
+    <link rel="stylesheet" href="<?= base_url('assets/css/mingguan.css') ?>">
 
 
 
@@ -734,58 +712,8 @@
     <?php endforeach; ?>
 <?php endif; ?>
 
+<!-- FLATPICKR JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <!-- SCRIPTS -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="<?= base_url('assets/js/laporan-mingguan.js') ?>"></script>
-
-<!-- FLATPICKR JS -->
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script>
-    flatpickr("#datepicker-range", {
-        mode: "range",
-        dateFormat: "Y-m-d",
-        altInput: true,
-        altFormat: "d M Y",
-        theme: "dark",
-        onClose: function (selectedDates, dateStr, instance) {
-            if (dateStr.includes(" to ")) {
-                instance.element.form.submit();
-            }
-        }
-    });
-</script>
-
-<!-- SweetAlert2 Delete Confirmation for Reports (Admin) - Vanilla JS -->
-<script>
-    document.addEventListener('click', function (e) {
-        var button = e.target.closest('.btn-delete-laporan');
-        if (button) {
-            e.preventDefault();
-            var form = button.closest('form');
-            Swal.fire({
-                title: 'KONFIRMASI HAPUS',
-                text: 'Apakah Anda yakin ingin menghapus laporan mingguan ini secara permanen?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ea1917',
-                cancelButtonColor: '#1e293b',
-                confirmButtonText: 'YA, HAPUS',
-                cancelButtonText: 'BATAL',
-                background: '#0f172a',
-                color: '#fff',
-                customClass: {
-                    popup: 'swal-tactical',
-                    title: 'swal-tactical-title',
-                    htmlContainer: 'swal-tactical-text',
-                    confirmButton: 'swal-tactical-btn-confirm',
-                    cancelButton: 'swal-tactical-btn-cancel'
-                },
-                buttonsStyling: false
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
-                }
-            });
-        }
-    });
-</script>
