@@ -124,11 +124,45 @@ class CloudStorageService
             // Kembalikan URL publik lengkap
             return $this->publicUrl . '/' . $fileName;
         } catch (AwsException $e) {
-            // Log error detail untuk debugging, tapi tidak crash aplikasi
             log_message('error', '[CloudStorageService] Upload gagal: ' . $e->getMessage());
             return null;
         }
     }
+
+    // Upload file dari path lokal server ke Cloud Storage (Supabase).
+    // Digunakan untuk migrasi berkas yang tersimpan secara lokal.
+    //
+    // @param string $localFilePath  Absolute path ke file lokal (misal FCPATH . 'uploads/laporan/nama.webp')
+    // @param string $fileName       Nama file tujuan di bucket
+    // @param string $folder         Subfolder di dalam bucket
+    // @return string|null           URL publik file di cloud, atau null jika gagal
+    public function uploadLocalFile(string $localFilePath, string $fileName, string $folder = 'uploads'): ?string
+    {
+        if (!$this->enabled || !file_exists($localFilePath)) {
+            return null;
+        }
+
+        try {
+            $params = [
+                'Bucket' => $this->bucket,
+                'Key' => $folder . '/' . $fileName,
+                'Body' => fopen($localFilePath, 'rb'),
+                'ContentType' => mime_content_type($localFilePath) ?: 'image/webp',
+            ];
+
+            if ($this->useAcl) {
+                $params['ACL'] = 'public-read';
+            }
+
+            $this->client->putObject($params);
+
+            return $this->publicUrl . '/' . $folder . '/' . $fileName;
+        } catch (AwsException $e) {
+            log_message('error', '[CloudStorageService] uploadLocalFile gagal: ' . $e->getMessage());
+            return null;
+        }
+    }
+
 
     // Hapus file dari Cloud Storage berdasarkan URL publiknya.
     //
