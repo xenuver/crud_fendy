@@ -52,3 +52,32 @@ scratch/
 project.zip
 /build/
 /docs/
+
+# ============================================================
+# SECURITY — Jangan pernah commit file-file ini ke Git!
+# ============================================================
+
+# Database dumps (BERBAHAYA — berisi data user nyata)
+*.sql
+*.sql.gz
+*.dump
+
+# File arsip project
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+
+# File backup
+*.bak
+*.backup
+*.old
+
+# File kunci dan sertifikat
+*.pem
+*.key
+*.p12
+*.pfx
+*.cer
+*.crt
