@@ -13,6 +13,16 @@
 /writable/*
 !/writable/index.html
 !/writable/.htaccess
+!/writable/cache/
+!/writable/cache/.gitkeep
+!/writable/logs/
+!/writable/logs/.gitkeep
+!/writable/session/
+!/writable/session/.gitkeep
+!/writable/uploads/
+!/writable/uploads/.gitkeep
+!/writable/debugbar/
+!/writable/debugbar/.gitkeep
 
 # Public uploads (if you want to keep them on local only)
 # /public/uploads/*
