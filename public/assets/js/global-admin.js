@@ -15,7 +15,7 @@ $(document).ready(function() {
             confirmButtonColor: '#ea1917',
             cancelButtonColor: '#1e293b',
             confirmButtonText: 'YA, KELUAR',
-            confirmButtonText: 'BATAL',
+            cancelButtonText: 'BATAL',
             background: '#0f172a',
             color: '#fff',
             customClass: {
