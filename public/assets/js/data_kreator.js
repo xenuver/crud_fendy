@@ -1,4 +1,4 @@
-$(document).ready(function() {
+document.addEventListener('DOMContentLoaded', function() {
     // Inisialisasi DataTable (Scripts sudah dimuat di footer)
     if ($.fn.DataTable) {
         $('#kreatorTable').DataTable({

@@ -1,4 +1,4 @@
-$(document).ready(function () {
+document.addEventListener('DOMContentLoaded', function() {
     $('#bulananTable').DataTable({
         "pageLength": 25,
         "ordering": false,
