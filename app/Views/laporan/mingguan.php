@@ -135,7 +135,7 @@
                                             </div>
                                             <div>
                                                 <label class="text-secondary small fw-bold mb-1">Bukti Tangkapan Layar
-                                                    (Video) <span class="text-danger">*</span></label>
+                                                    (Total Views) <span class="text-danger">*</span></label>
                                                 <input type="file" name="foto_views_konten" class="form-control"
                                                     accept="image/*" required
                                                     style="background: rgba(15, 23, 42, 0.8); color: white; border: 1px solid rgba(255,255,255,0.1); border-radius: 0; padding-bottom: 35px;"
@@ -210,7 +210,7 @@
                                                     value="<?= old('total_views_live') ?>" required <?= !$isOpen ? 'disabled' : '' ?>>
                                             </div>
                                             <div class="mb-3">
-                                                <label class="text-secondary small fw-bold mb-1">Jumlah Penonton Puncak
+                                                <label class="text-secondary small fw-bold mb-1">Penonton Puncak Tertinggi
                                                     (CCV) <span class="text-danger">*</span></label>
                                                 <input type="text" name="penonton_puncak_live"
                                                     class="form-control form-control-tactical" placeholder="0"
