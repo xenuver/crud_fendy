@@ -95,6 +95,47 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+
+    // Intercept form submit for Generate Redeem Code
+    var generateForm = document.getElementById('generateCodeForm');
+    if (generateForm) {
+        generateForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            var qty = document.getElementById('jumlahGenerate').value;
+            var actionText = 'Apakah Anda yakin ingin me-generate ' + qty + ' Redeem Code baru?';
+            
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: 'GENERATE REDEEM CODE',
+                    text: actionText,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#ea1917',
+                    cancelButtonColor: '#1e293b',
+                    confirmButtonText: 'YA, GENERATE',
+                    cancelButtonText: 'BATAL',
+                    background: '#0f172a',
+                    color: '#fff',
+                    customClass: {
+                        popup: 'swal-tactical',
+                        title: 'swal-tactical-title',
+                        htmlContainer: 'swal-tactical-text',
+                        confirmButton: 'swal-tactical-btn-confirm',
+                        cancelButton: 'swal-tactical-btn-cancel'
+                    },
+                    buttonsStyling: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        generateForm.submit();
+                    }
+                });
+            } else {
+                if (confirm(actionText)) {
+                    generateForm.submit();
+                }
+            }
+        });
+    }
 });
 
 // Copy link registrasi ke clipboard
@@ -136,8 +177,4 @@ function copyFromTextarea(textareaId, btn, iconId, originalText) {
     });
 }
 
-// Konfirmasi generate redeem code dengan jumlah yang dipilih
-function confirmGenerate(form) {
-    const qty = document.getElementById('jumlahGenerate').value;
-    return confirm('Apakah Anda yakin ingin me-generate ' + qty + ' Redeem Code baru?');
-}
+

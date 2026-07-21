@@ -90,7 +90,7 @@
                         <i class="fas fa-copy" id="copyLinkIcon"></i>
                     </button>
                 </span>
-                <form action="<?= base_url('admin/users/generate-code') ?>" method="POST" class="d-flex align-items-center gap-2 m-0" onsubmit="return confirmGenerate(this)">
+                <form action="<?= base_url('admin/users/generate-code') ?>" id="generateCodeForm" method="POST" class="d-flex align-items-center gap-2 m-0">
                     <?= csrf_field() ?>
                     <div class="input-group input-group-sm" style="width: 130px;">
                         <span class="input-group-text text-white border-secondary" style="background: rgba(30, 41, 59, 0.6); border-color: rgba(255,255,255,0.1) !important; font-size: 0.75rem;">Jumlah</span>
