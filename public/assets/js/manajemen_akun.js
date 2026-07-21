@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
+    console.log("manajemen_akun.js: DOMContentLoaded triggered");
+
     // 1. Inisialisasi DataTable
-    if ($('#dataTable').length) {
+    if ($('#dataTable').length && $.fn.DataTable) {
         $('#dataTable').DataTable({
             "paging": false,
             "info": false,
@@ -13,9 +15,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 2. Global Click Handler untuk Delete & Actions
     document.addEventListener('click', function (e) {
+        console.log("manajemen_akun.js: Document clicked, target:", e.target);
+
         // Delete User Account
         var deleteUserBtn = e.target.closest('.btn-delete-user');
         if (deleteUserBtn) {
+            console.log("manajemen_akun.js: Matches .btn-delete-user");
             e.preventDefault();
             var form = deleteUserBtn.closest('form');
             Swal.fire({
