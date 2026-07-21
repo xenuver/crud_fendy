@@ -173,4 +173,4 @@
 
 
 <!-- SweetAlert2 Delete Confirmation for Creator (Admin) - Vanilla JS -->
-<script src="<?= base_url('assets/js/data_kreator.js') ?>"></script>
+<script src="<?= base_url('assets/js/data_kreator.js?v=' . time()) ?>"></script>

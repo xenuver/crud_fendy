@@ -211,6 +211,7 @@
                                             </div>
                                             <div class="mb-3">
                                                 <label class="text-secondary small fw-bold mb-1">Penonton Puncak Tertinggi
+                                                    (CCV)
                                                     (CCV) <span class="text-danger">*</span></label>
                                                 <input type="text" name="penonton_puncak_live"
                                                     class="form-control form-control-tactical" placeholder="0"

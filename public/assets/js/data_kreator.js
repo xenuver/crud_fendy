@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
+    console.log("data_kreator.js: DOMContentLoaded triggered");
+
     // Inisialisasi DataTable (Scripts sudah dimuat di footer)
     if ($.fn.DataTable) {
         $('#kreatorTable').DataTable({
@@ -23,9 +25,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Global Click Handler untuk Delete & Status Toggle Kreator
     document.addEventListener('click', function (e) {
+        console.log("data_kreator.js: Document clicked, target:", e.target);
+        
         // 1. Hapus Data Kreator
         var button = e.target.closest('.btn-delete-kreator');
         if (button) {
+            console.log("data_kreator.js: Matches .btn-delete-kreator");
             e.preventDefault();
             var form = button.closest('form');
             Swal.fire({
@@ -57,6 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // 2. Toggle Status Suspend/Aktifkan Kreator
         var toggleBtn = e.target.closest('.btn-toggle-status-kreator');
         if (toggleBtn) {
+            console.log("data_kreator.js: Matches .btn-toggle-status-kreator");
             e.preventDefault();
             var form = toggleBtn.closest('form');
             var currentStatus = toggleBtn.getAttribute('data-status');
