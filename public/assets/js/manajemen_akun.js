@@ -23,30 +23,37 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log("manajemen_akun.js: Matches .btn-delete-user");
             e.preventDefault();
             var form = deleteUserBtn.closest('form');
-            Swal.fire({
-                title: 'HAPUS AKUN PENGGUNA',
-                text: 'Apakah Anda yakin ingin menghapus akun ini secara permanen?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ea1917',
-                cancelButtonColor: '#1e293b',
-                confirmButtonText: 'YA, HAPUS',
-                cancelButtonText: 'BATAL',
-                background: '#0f172a',
-                color: '#fff',
-                customClass: {
-                    popup: 'swal-tactical',
-                    title: 'swal-tactical-title',
-                    htmlContainer: 'swal-tactical-text',
-                    confirmButton: 'swal-tactical-btn-confirm',
-                    cancelButton: 'swal-tactical-btn-cancel'
-                },
-                buttonsStyling: false
-            }).then((result) => {
-                if (result.isConfirmed) {
+            
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: 'HAPUS AKUN PENGGUNA',
+                    text: 'Apakah Anda yakin ingin menghapus akun ini secara permanen?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#ea1917',
+                    cancelButtonColor: '#1e293b',
+                    confirmButtonText: 'YA, HAPUS',
+                    cancelButtonText: 'BATAL',
+                    background: '#0f172a',
+                    color: '#fff',
+                    customClass: {
+                        popup: 'swal-tactical',
+                        title: 'swal-tactical-title',
+                        htmlContainer: 'swal-tactical-text',
+                        confirmButton: 'swal-tactical-btn-confirm',
+                        cancelButton: 'swal-tactical-btn-cancel'
+                    },
+                    buttonsStyling: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            } else {
+                if (confirm('Apakah Anda yakin ingin menghapus akun ini secara permanen?')) {
                     form.submit();
                 }
-            });
+            }
         }
 
         // Delete Redeem Code
@@ -55,30 +62,37 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             var form = deleteCodeBtn.closest('form');
             var confirmText = deleteCodeBtn.getAttribute('data-confirm-text') || 'Yakin ingin menghapus kode ini?';
-            Swal.fire({
-                title: 'HAPUS REDEEM CODE',
-                text: confirmText,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ea1917',
-                cancelButtonColor: '#1e293b',
-                confirmButtonText: 'YA, HAPUS',
-                cancelButtonText: 'BATAL',
-                background: '#0f172a',
-                color: '#fff',
-                customClass: {
-                    popup: 'swal-tactical',
-                    title: 'swal-tactical-title',
-                    htmlContainer: 'swal-tactical-text',
-                    confirmButton: 'swal-tactical-btn-confirm',
-                    cancelButton: 'swal-tactical-btn-cancel'
-                },
-                buttonsStyling: false
-            }).then((result) => {
-                if (result.isConfirmed) {
+            
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: 'HAPUS REDEEM CODE',
+                    text: confirmText,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#ea1917',
+                    cancelButtonColor: '#1e293b',
+                    confirmButtonText: 'YA, HAPUS',
+                    cancelButtonText: 'BATAL',
+                    background: '#0f172a',
+                    color: '#fff',
+                    customClass: {
+                        popup: 'swal-tactical',
+                        title: 'swal-tactical-title',
+                        htmlContainer: 'swal-tactical-text',
+                        confirmButton: 'swal-tactical-btn-confirm',
+                        cancelButton: 'swal-tactical-btn-cancel'
+                    },
+                    buttonsStyling: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            } else {
+                if (confirm(confirmText)) {
                     form.submit();
                 }
-            });
+            }
         }
     });
 });

@@ -33,30 +33,37 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log("data_kreator.js: Matches .btn-delete-kreator");
             e.preventDefault();
             var form = button.closest('form');
-            Swal.fire({
-                title: 'HAPUS DATA KREATOR',
-                text: 'Apakah Anda yakin ingin menghapus data kreator ini secara permanen dari database?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ea1917',
-                cancelButtonColor: '#1e293b',
-                confirmButtonText: 'YA, HAPUS',
-                cancelButtonText: 'BATAL',
-                background: '#0f172a',
-                color: '#fff',
-                customClass: {
-                    popup: 'swal-tactical',
-                    title: 'swal-tactical-title',
-                    htmlContainer: 'swal-tactical-text',
-                    confirmButton: 'swal-tactical-btn-confirm',
-                    cancelButton: 'swal-tactical-btn-cancel'
-                },
-                buttonsStyling: false
-            }).then((result) => {
-                if (result.isConfirmed) {
+            
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: 'HAPUS DATA KREATOR',
+                    text: 'Apakah Anda yakin ingin menghapus data kreator ini secara permanen dari database?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#ea1917',
+                    cancelButtonColor: '#1e293b',
+                    confirmButtonText: 'YA, HAPUS',
+                    cancelButtonText: 'BATAL',
+                    background: '#0f172a',
+                    color: '#fff',
+                    customClass: {
+                        popup: 'swal-tactical',
+                        title: 'swal-tactical-title',
+                        htmlContainer: 'swal-tactical-text',
+                        confirmButton: 'swal-tactical-btn-confirm',
+                        cancelButton: 'swal-tactical-btn-cancel'
+                    },
+                    buttonsStyling: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            } else {
+                if (confirm('Apakah Anda yakin ingin menghapus data kreator ini secara permanen dari database?')) {
                     form.submit();
                 }
-            });
+            }
         }
 
         // 2. Toggle Status Suspend/Aktifkan Kreator
@@ -75,30 +82,36 @@ document.addEventListener('DOMContentLoaded', function() {
                 : 'Apakah Anda yakin ingin mengaktifkan kembali kreator "' + namaKreator + '"?';
             var actionConfirm = isSuspend ? 'YA, SUSPEND' : 'YA, AKTIFKAN';
             
-            Swal.fire({
-                title: actionTitle,
-                text: actionText,
-                icon: isSuspend ? 'warning' : 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#ea1917',
-                cancelButtonColor: '#1e293b',
-                confirmButtonText: actionConfirm,
-                cancelButtonText: 'BATAL',
-                background: '#0f172a',
-                color: '#fff',
-                customClass: {
-                    popup: 'swal-tactical',
-                    title: 'swal-tactical-title',
-                    htmlContainer: 'swal-tactical-text',
-                    confirmButton: 'swal-tactical-btn-confirm',
-                    cancelButton: 'swal-tactical-btn-cancel'
-                },
-                buttonsStyling: false
-            }).then((result) => {
-                if (result.isConfirmed) {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: actionTitle,
+                    text: actionText,
+                    icon: isSuspend ? 'warning' : 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#ea1917',
+                    cancelButtonColor: '#1e293b',
+                    confirmButtonText: actionConfirm,
+                    cancelButtonText: 'BATAL',
+                    background: '#0f172a',
+                    color: '#fff',
+                    customClass: {
+                        popup: 'swal-tactical',
+                        title: 'swal-tactical-title',
+                        htmlContainer: 'swal-tactical-text',
+                        confirmButton: 'swal-tactical-btn-confirm',
+                        cancelButton: 'swal-tactical-btn-cancel'
+                    },
+                    buttonsStyling: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            } else {
+                if (confirm(actionText)) {
                     form.submit();
                 }
-            });
+            }
         }
     });
 });
