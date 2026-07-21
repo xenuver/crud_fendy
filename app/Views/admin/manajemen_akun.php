@@ -327,4 +327,4 @@
 <?php endforeach; ?>
 
 <!-- SweetAlert2 Delete Confirmation for Account & Redeem Code (Admin) - Vanilla JS -->
-<script src="<?= base_url('assets/js/manajemen_akun.js') ?>"></script>
+<script src="<?= base_url('assets/js/manajemen_akun.js?v=' . time()) ?>"></script>
