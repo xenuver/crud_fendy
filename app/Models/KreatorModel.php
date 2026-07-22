@@ -147,8 +147,8 @@ class KreatorModel extends Model
     {
         $metrics = [
             'peak_ccv' => $k['peak_ccv'] ?? 0,
-            'yt_avg'   => (($k['yt_views'] ?? 0) + ($k['yt_shorts_views'] ?? 0) + ($k['yt_live_views'] ?? 0)) / 4,
-            'tt_avg'   => (($k['tt_views'] ?? 0) + ($k['tt_live_views'] ?? 0)) / 4
+            'yt_avg' => (($k['yt_views'] ?? 0) + ($k['yt_shorts_views'] ?? 0) + ($k['yt_live_views'] ?? 0)) / 4,
+            'tt_avg' => (($k['tt_views'] ?? 0) + ($k['tt_live_views'] ?? 0)) / 4
         ];
 
         $tierData = LaporanMingguanModel::calculateTier($metrics);
@@ -260,7 +260,7 @@ class KreatorModel extends Model
         return ['can' => $canUpdateUid, 'days' => $daysRemaining];
     }
 
-    // Menghitung progres menuju tier berikutnya.
+    // Menghitung/milestones progres menuju tier berikutnya.
     public function calculateNextTier(array $currentMetrics): array
     {
         $sModel = new \App\Models\SettingModel();

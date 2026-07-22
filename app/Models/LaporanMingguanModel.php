@@ -234,10 +234,14 @@ class LaporanMingguanModel extends Model
         $currentYear = date('Y');
         $aggregated = [];
 
+        // Normalisasi tanggal: Kreator mengirim laporan Senin-Rabu, namun views-nya adalah hasil kerja minggu lalu.
+        // Oleh karena itu, kita memundurkan tanggal laporan ke hari Minggu terdekat sebelumnya.
         foreach ($metricsData as $m) {
-            $mDate = strtotime($m['created_at']);
-            $dayOfWeek = (int) date('N', $mDate);
-            $perfSunday = strtotime('-' . $dayOfWeek . ' days', $mDate);
+            $mDate = strtotime($m['created_at']); // Ambil waktu kirim laporan
+            $dayOfWeek = (int) date('N', $mDate); // Cari hari (Senin=1 s/d Minggu=7)
+            $perfSunday = strtotime('-' . $dayOfWeek . ' days', $mDate); // Mundurkan tanggal ke hari Minggu terdekat
+            
+            // Cek apakah tanggal Minggu tersebut masuk di bulan berjalan ini
             $isThisMonth = (date('m', $perfSunday) == $currentMonth && date('Y', $perfSunday) == $currentYear);
 
             // All Time Stats (for fallback)
@@ -321,8 +325,8 @@ class LaporanMingguanModel extends Model
             }
             $stats['recent_metrics'] = [
                 'peak_ccv' => $rPeak,
-                'yt_avg'   => $rYtV / 4,
-                'tt_avg'   => $rTtV / 4
+                'yt_avg' => $rYtV / 4,
+                'tt_avg' => $rTtV / 4
             ];
         }
 
@@ -372,8 +376,8 @@ class LaporanMingguanModel extends Model
         // Rumus: Total Views dibagi 4 (Minggu)
         $metrics = [
             'peak_ccv' => $rPeak,
-            'yt_avg'   => $rYtV / 4,
-            'tt_avg'   => $rTtV / 4
+            'yt_avg' => $rYtV / 4,
+            'tt_avg' => $rTtV / 4
         ];
 
         return self::calculateTier($metrics);

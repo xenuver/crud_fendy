@@ -21,7 +21,7 @@ class LaporanKreator extends BaseController
         $this->db = \Config\Database::connect();
     }
 
-    // Menampilkan daftar laporan pribadi milik kreator yang sedang login.
+    // Menampilkan daftar laporan/history pribadi milik kreator yang sedang login.
     public function index(): string|ResponseInterface
     {
         $rangeTanggal = $this->request->getGet('range_tanggal');
