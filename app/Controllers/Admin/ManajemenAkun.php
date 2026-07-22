@@ -11,18 +11,18 @@ class ManajemenAkun extends BaseController
 {
     public function index()
     {
-        $userModel       = new UserModel();
-        $redeemModel     = new RedeemCodeModel();
+        $userModel = new UserModel();
+        $redeemModel = new RedeemCodeModel();
 
         // Ambil data redeem codes terpaginasi (server-side pagination)
         $redeemCodes = $redeemModel->select('redeem_codes.*, users.username as used_by_username')
-                                   ->join('users', 'users.user_id = redeem_codes.used_by', 'left')
-                                   ->orderBy('redeem_codes.created_at', 'DESC')
-                                   ->paginate(10, 'redeem');
+            ->join('users', 'users.user_id = redeem_codes.used_by', 'left')
+            ->orderBy('redeem_codes.created_at', 'DESC')
+            ->paginate(10, 'redeem');
 
         // Ambil semua kode redeem yang tersedia (untuk fitur salin semua)
         $allUnused = $redeemModel->where('is_used', 0)->orderBy('created_at', 'DESC')->findAll();
-        
+
         $unusedLinks = [];
         foreach ($allUnused as $au) {
             $unusedLinks[] = base_url('register?code=' . $au['code']);
@@ -30,36 +30,36 @@ class ManajemenAkun extends BaseController
         $unusedLinksList = implode("\n", $unusedLinks);
 
         $data = [
-            'judul'             => 'Manajemen Akun',
-            'users'             => $userModel->orderBy('role', 'ASC')->orderBy('username', 'ASC')->paginate(10, 'user'),
-            'pager'             => $userModel->pager, // Berisi pager untuk 'user' dan 'redeem'
-            'redeem_codes'      => $redeemCodes,
-            'unused_links_str'  => $unusedLinksList,
-            'unused_codes_count'=> count($allUnused),
-            'register_url'      => base_url('register'),
+            'judul' => 'Manajemen Akun',
+            'users' => $userModel->orderBy('role', 'ASC')->orderBy('username', 'ASC')->paginate(10, 'user'),
+            'pager' => $userModel->pager, // Berisi pager untuk 'user' dan 'redeem'
+            'redeem_codes' => $redeemCodes,
+            'unused_links_str' => $unusedLinksList,
+            'unused_codes_count' => count($allUnused),
+            'register_url' => base_url('register'),
         ];
 
         return view('templates/v_header', $data)
-             . view('templates/v_sidebar')
-             . view('templates/v_topbar')
-             . view('admin/manajemen_akun', $data)
-             . view('templates/v_footer');
+            . view('templates/v_sidebar')
+            . view('templates/v_topbar')
+            . view('admin/manajemen_akun', $data)
+            . view('templates/v_footer');
     }
 
     public function save()
     {
         $rules = [
             'username' => 'required|min_length[3]|max_length[20]|is_unique[users.username]',
-            'no_telp'  => 'required|min_length[8]|max_length[18]|is_unique[users.no_telp]',
-            'id_game'  => 'required|min_length[5]|is_natural|is_unique[users.id_game]',
+            'no_telp' => 'required|min_length[8]|max_length[18]|is_unique[users.no_telp]',
+            'id_game' => 'required|min_length[5]|is_natural|is_unique[users.id_game]',
             'password' => 'required|min_length[8]',
-            'role'     => 'required|in_list[admin,user]'
+            'role' => 'required|in_list[admin,user]'
         ];
 
         $messages = [
             'username' => ['is_unique' => 'Username sudah digunakan oleh akun lain.'],
-            'no_telp'  => ['is_unique' => 'Nomor telepon sudah terdaftar.'],
-            'id_game'  => [
+            'no_telp' => ['is_unique' => 'Nomor telepon sudah terdaftar.'],
+            'id_game' => [
                 'is_unique' => 'ID Game sudah digunakan oleh kreator lain.',
                 'is_natural' => 'ID Game hanya boleh berupa angka saja (tanpa huruf, titik, spasi, atau karakter lain).'
             ]
@@ -73,10 +73,10 @@ class ManajemenAkun extends BaseController
         $userModel = new UserModel();
         $data = [
             'username' => $this->request->getPost('username'),
-            'no_telp'  => $this->request->getPost('no_telp'),
-            'id_game'  => $this->request->getPost('id_game'),
+            'no_telp' => $this->request->getPost('no_telp'),
+            'id_game' => $this->request->getPost('id_game'),
             'password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
-            'role'     => $this->request->getPost('role')
+            'role' => $this->request->getPost('role')
         ];
 
         $db = \Config\Database::connect();
@@ -130,15 +130,15 @@ class ManajemenAkun extends BaseController
 
         $rules = [
             'username' => 'required|min_length[3]|max_length[20]' . $is_unique_username,
-            'no_telp'  => 'required|min_length[8]|max_length[18]' . $is_unique_no_telp,
-            'id_game'  => 'required|min_length[5]|is_natural' . $is_unique_id_game,
-            'role'     => 'required|in_list[admin,user]'
+            'no_telp' => 'required|min_length[8]|max_length[18]' . $is_unique_no_telp,
+            'id_game' => 'required|min_length[5]|is_natural' . $is_unique_id_game,
+            'role' => 'required|in_list[admin,user]'
         ];
 
         $messages = [
             'username' => ['is_unique' => 'Username sudah digunakan oleh akun lain.'],
-            'no_telp'  => ['is_unique' => 'Nomor telepon sudah terdaftar.'],
-            'id_game'  => [
+            'no_telp' => ['is_unique' => 'Nomor telepon sudah terdaftar.'],
+            'id_game' => [
                 'is_unique' => 'ID Game sudah digunakan oleh kreator lain.',
                 'is_natural' => 'ID Game hanya boleh berupa angka saja (tanpa huruf, titik, spasi, atau karakter lain).'
             ]
@@ -151,9 +151,9 @@ class ManajemenAkun extends BaseController
 
         $data = [
             'username' => $this->request->getPost('username'),
-            'no_telp'  => $this->request->getPost('no_telp'),
-            'id_game'  => $this->request->getPost('id_game'),
-            'role'     => $this->request->getPost('role')
+            'no_telp' => $this->request->getPost('no_telp'),
+            'id_game' => $this->request->getPost('id_game'),
+            'role' => $this->request->getPost('role')
         ];
 
         // Ganti password hanya jika field password diisi
@@ -171,7 +171,7 @@ class ManajemenAkun extends BaseController
         try {
             // Update users DULU (parent FK), lalu kreator (child)
             $userModel->update($id, $data);
-            
+
             if ($data['role'] == 'user') {
                 $kreatorModel = new KreatorModel();
                 // Cari kreator pakai old_id_game (sebelum user di-update)
@@ -180,7 +180,7 @@ class ManajemenAkun extends BaseController
                 $kreator = $kreatorModel->where('id_game', $data['id_game'])->first();
                 if ($kreator) {
                     $kreatorModel->update($kreator['kreator_id'], [
-                        'nama'    => $data['username'],
+                        'nama' => $data['username'],
                         'id_game' => $data['id_game']
                     ]);
                 }
@@ -204,7 +204,7 @@ class ManajemenAkun extends BaseController
             session()->setFlashdata('error', 'Data akun tidak ditemukan.');
             return redirect()->back();
         }
-        
+
         // Mencegah admin menghapus dirinya sendiri saat sedang login
         if ($id == session()->get('id')) {
             session()->setFlashdata('error', 'Otorisasi Gagal: Anda tidak dapat menghapus akun Anda sendiri.');
@@ -243,8 +243,9 @@ class ManajemenAkun extends BaseController
             // Hapus file fisik (Cloud Storage atau lokal) hanya jika transaksi database sukses commit
             if ($kreator && !empty($laporans)) {
                 $storage = new \App\Libraries\CloudStorageService();
-                $deleteFile = function(?string $foto) use ($storage) {
-                    if (empty($foto)) return;
+                $deleteFile = function (?string $foto) use ($storage) {
+                    if (empty($foto))
+                        return;
                     if (\App\Libraries\CloudStorageService::isCloudUrl($foto)) {
                         $storage->delete($foto);
                     } else {
@@ -276,25 +277,25 @@ class ManajemenAkun extends BaseController
     public function generate_code()
     {
         $redeemModel = new RedeemCodeModel();
-        
+
         $jumlah = $this->request->getPost('jumlah') ?? $this->request->getGet('jumlah') ?? 1;
-        $jumlah = max(1, min(100, (int)$jumlah));
+        $jumlah = max(1, min(100, (int) $jumlah));
 
         $codesGenerated = [];
         for ($i = 0; $i < $jumlah; $i++) {
             $code = $redeemModel->generateUniqueCode();
             $redeemModel->insert([
-                'code'       => $code,
-                'is_used'    => 0,
+                'code' => $code,
+                'is_used' => 0,
                 'created_by' => session()->get('id'),
             ]);
             $codesGenerated[] = $code;
         }
 
         if ($jumlah === 1) {
-            session()->setFlashdata('success', "Redeem Code berhasil di-generate: <strong>{$codesGenerated[0]}</strong>. Salin dan bagikan ke kreator.");
+            session()->setFlashdata('success', "Redeem Code berhasil di-generate: {$codesGenerated[0]}. Salin dan bagikan ke kreator.");
         } else {
-            session()->setFlashdata('success', "Berhasil me-generate <strong>{$jumlah}</strong> Redeem Code baru. Silakan salin dari daftar di bawah.");
+            session()->setFlashdata('success', "Berhasil me-generate {$jumlah} Redeem Code baru. Silakan salin dari daftar di bawah.");
         }
 
         return redirect()->to(base_url('admin/users'));
