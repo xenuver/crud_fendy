@@ -147,20 +147,29 @@ class Auth extends BaseController
         }
     }
 
-    // Menampilkan halaman pendaftaran kreator (hanya bisa diakses via link khusus).
+    // Menampilkan halaman pendaftaran kreator (hanya bisa diakses via link khusus dari Admin).
     public function register_view(): string|ResponseInterface
     {
         if (session()->get('isLoggedIn')) {
             return $this->redirectDashboard();
         }
-        $requested_code = $this->request->getGet('code') ?? '';
 
-        // Kunci kode ke session supaya user tidak bisa menggantinya saat submit
-        if (!empty($requested_code)) {
-            session()->set('locked_redeem_code', strtoupper(trim($requested_code)));
+        $codeFromUrl = $this->request->getGet('code');
+
+        if (!empty($codeFromUrl)) {
+            // Kode datang dari URL → simpan/perbarui session
+            $locked = strtoupper(trim($codeFromUrl));
+            session()->set('locked_redeem_code', $locked);
+        } else {
+            // Tidak ada kode di URL → coba ambil dari session
+            $locked = session()->get('locked_redeem_code');
+            if (empty($locked)) {
+                // Tidak ada kode sama sekali → tolak akses
+                return redirect()->to('/login')->with('error', 'Halaman pendaftaran hanya dapat diakses melalui link khusus dari Admin.');
+            }
         }
 
-        return view('auth/register', ['requested_code' => $requested_code]);
+        return view('auth/register', ['requested_code' => $locked]);
     }
 
     // Memproses pendaftaran kreator menggunakan redeem code.
