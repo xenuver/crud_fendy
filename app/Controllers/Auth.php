@@ -154,6 +154,12 @@ class Auth extends BaseController
             return $this->redirectDashboard();
         }
         $requested_code = $this->request->getGet('code') ?? '';
+
+        // Kunci kode ke session supaya user tidak bisa menggantinya saat submit
+        if (!empty($requested_code)) {
+            session()->set('locked_redeem_code', strtoupper(trim($requested_code)));
+        }
+
         return view('auth/register', ['requested_code' => $requested_code]);
     }
 
@@ -194,7 +200,14 @@ class Auth extends BaseController
 
         try {
             $redeemModel = new RedeemCodeModel();
-            $code = strtoupper(trim($this->request->getPost('redeem_code')));
+
+            // Jika ada kode yang dikunci di session (dari link admin), pakai itu — abaikan input POST
+            $lockedCode = session()->get('locked_redeem_code');
+            if (!empty($lockedCode)) {
+                $code = $lockedCode;
+            } else {
+                $code = strtoupper(trim($this->request->getPost('redeem_code')));
+            }
 
             // Kunci baris redeem code menggunakan FOR UPDATE untuk mencegah duplikat concurrent
             $codeRow = $db->query("SELECT * FROM redeem_codes WHERE code = ? AND is_used = 0 FOR UPDATE", [$code])->getRowArray();
@@ -236,6 +249,9 @@ class Auth extends BaseController
 
             // Tandai redeem code sebagai terpakai
             $redeemModel->markAsUsed($code, $userId);
+
+            // Hapus kode dari session setelah berhasil dipakai
+            session()->remove('locked_redeem_code');
 
             // Jika semua sukses, commit transaksi
             $db->transCommit();

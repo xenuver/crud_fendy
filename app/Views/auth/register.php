@@ -46,14 +46,22 @@
             <!-- Redeem Code -->
             <div class="redeem-box mb-4">
                 <span class="badge-label">KODE REDEEM</span>
+                <?php $isLocked = !empty($requested_code); ?>
                 <input type="text"
-                       class="form-control"
+                       class="form-control <?= $isLocked ? 'text-success fw-bold' : '' ?>"
                        name="redeem_code"
                        placeholder="BS-XXXXXX"
                        maxlength="9"
-                       value="<?= old('redeem_code') ?? esc($requested_code ?? '') ?>"
+                       value="<?= esc($requested_code ?? old('redeem_code') ?? '') ?>"
+                       <?= $isLocked ? 'readonly title="Kode sudah terkunci dari link Admin"' : '' ?>
                        required
-                       autocomplete="off">
+                       autocomplete="off"
+                       style="<?= $isLocked ? 'cursor: not-allowed; opacity: 0.85;' : '' ?>">
+                <?php if ($isLocked): ?>
+                    <small class="text-success d-block mt-1" style="font-size: 0.65rem; letter-spacing: 1px;">
+                        <i class="fas fa-lock me-1"></i> Kode terkunci — tidak dapat diubah
+                    </small>
+                <?php endif; ?>
             </div>
 
             <div class="divider-line"></div>
