@@ -68,11 +68,20 @@ class PengaturanProfil extends BaseController
         $rules = [
             'nama'         => 'required|min_length[3]',
             'alamat'       => 'required',
-            'tiktok_link'  => 'permit_empty|valid_url',
-            'youtube_link' => 'permit_empty|valid_url',
+            'tiktok_link'  => 'permit_empty|valid_url|regex_match[/tiktok\.com/i]',
+            'youtube_link' => 'permit_empty|valid_url|regex_match[/youtube\.com|youtu\.be/i]',
         ];
 
-        if (!$this->validate($rules)) {
+        $validationMessages = [
+            'tiktok_link' => [
+                'regex_match' => 'Link TikTok harus berasal dari domain tiktok.com.'
+            ],
+            'youtube_link' => [
+                'regex_match' => 'Link YouTube harus berasal dari domain youtube.com atau youtu.be.'
+            ],
+        ];
+
+        if (!$this->validate($rules, $validationMessages)) {
             return redirect()->back()->withInput()->with('error', implode('<br>', $this->validator->getErrors()));
         }
 
