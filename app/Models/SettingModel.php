@@ -33,7 +33,7 @@ class SettingModel extends Model
             }
         }
 
-        return array_key_key_exists_custom($key, self::$cache) ? self::$cache[$key] : $default;
+        return array_key_exists($key, self::$cache) ? self::$cache[$key] : $default;
     }
 
     // Mendapatkan status override pengiriman laporan.
@@ -56,11 +56,3 @@ class SettingModel extends Model
         return $updated;
     }
 }
-
-// Fungsi helper sederhana untuk pengecekan key di cache
-if (!function_exists('array_key_key_exists_custom')) {
-    function array_key_key_exists_custom($key, $array) {
-        return array_key_exists($key, $array);
-    }
-}
-

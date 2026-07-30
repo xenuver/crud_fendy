@@ -34,19 +34,7 @@ class LaporanKreator extends BaseController
             $tglSelesai = $dates[1] ?? ($dates[0] ?? null);
         }
 
-        $platform = $this->request->getGet('platform');
-        $status = $this->request->getGet('status');
-
-        // Filter: hanya data milik user yang bersangkutan
         $builder = $this->lModel->where('user_id', session()->get('id'));
-
-        if ($platform && in_array($platform, ['youtube', 'tiktok'])) {
-            $builder = $builder->where('platform', $platform);
-        }
-
-        if ($status && in_array($status, ['pending', 'valid', 'tidak_valid'])) {
-            $builder = $builder->where('status_validasi', $status);
-        }
 
         if ($tglMulai) {
             $builder = $builder->where('DATE(created_at) >=', $tglMulai);
@@ -55,44 +43,40 @@ class LaporanKreator extends BaseController
             $builder = $builder->where('DATE(created_at) <=', $tglSelesai);
         }
 
-        $laporans = $builder->orderBy('created_at', 'DESC')->paginate(20, 'laporan');
+        $laporansRaw = $builder->orderBy('created_at', 'DESC')->paginate(20, 'laporan');
         $pager = $this->lModel->pager;
-        $kreators = $this->kModel->getKreatorsWithMetrics();
-
-        $judul = "Laporan Mingguan Kreator";
-        if ($platform == 'youtube')
-            $judul = "Laporan Khusus YouTube";
-        if ($platform == 'tiktok')
-            $judul = "Laporan Khusus TikTok";
-
         $kreatorLogin = $this->kModel->where('id_game', session()->get('id_game'))->first();
 
-        // Cek apakah profil lengkap
+        $judul = "Laporan Mingguan Kreator";
+
+        // Cek apakah profil kreator sudah dilengkapi sebelum bisa mengakses halaman ini.
         if (!$kreatorLogin || empty($kreatorLogin['alamat']) || $kreatorLogin['alamat'] === '-' || (empty($kreatorLogin['tiktok_link']) && empty($kreatorLogin['youtube_link']))) {
             return redirect()->to(base_url('user/profile'))->with('error', 'Silakan lengkapi data alamat dan tautan channel (YouTube/TikTok) Anda terlebih dahulu.');
         }
 
-        $hasSubmittedYt = false;
-        $hasSubmittedTt = false;
-        if ($kreatorLogin) {
-            $mondayThisWeek = date('Y-m-d', strtotime('monday this week'));
-            $hasSubmittedYt = $this->lModel->where('kreator_id', $kreatorLogin['kreator_id'])
-                ->where('platform', 'youtube')
-                ->where('status_validasi !=', 'tidak_valid')
-                ->where('DATE(created_at) >=', $mondayThisWeek)
-                ->first() !== null;
-            $hasSubmittedTt = $this->lModel->where('kreator_id', $kreatorLogin['kreator_id'])
-                ->where('platform', 'tiktok')
-                ->where('status_validasi !=', 'tidak_valid')
-                ->where('DATE(created_at) >=', $mondayThisWeek)
-                ->first() !== null;
+        // Cek apakah kreator sudah mengirimkan laporan minggu ini untuk masing-masing platform.
+        $mondayThisWeek = date('Y-m-d', strtotime('monday this week'));
+        $hasSubmittedYt = $this->lModel->where('kreator_id', $kreatorLogin['kreator_id'])
+            ->where('platform', 'youtube')
+            ->where('status_validasi !=', 'tidak_valid')
+            ->where('DATE(created_at) >=', $mondayThisWeek)
+            ->first() !== null;
+        $hasSubmittedTt = $this->lModel->where('kreator_id', $kreatorLogin['kreator_id'])
+            ->where('platform', 'tiktok')
+            ->where('status_validasi !=', 'tidak_valid')
+            ->where('DATE(created_at) >=', $mondayThisWeek)
+            ->first() !== null;
+
+        $laporans = [];
+        foreach ($laporansRaw as $lap) {
+            $lap['periode_kinerja'] = $this->hitungPeriodeKinerja($lap['created_at']);
+            $laporans[] = $lap;
         }
 
         $data = [
             "judul" => $judul,
             "laporans" => $laporans,
             "pager" => $pager,
-            "kreators" => $kreators,
             "kreatorLogin" => $kreatorLogin,
             "tglMulai" => $tglMulai,
             "tglSelesai" => $tglSelesai,
@@ -101,26 +85,26 @@ class LaporanKreator extends BaseController
             "hasSubmittedTt" => $hasSubmittedTt
         ];
 
-        return $this->renderView("laporan/mingguan", $data);
+        return $this->renderView("user/laporan_mingguan", $data);
+    }
+
+    // Menghitung rentang tanggal periode kinerja dari tanggal pengiriman laporan.
+    // Kreator mengirimkan laporan di awal minggu untuk melaporkan kinerja minggu sebelumnya.
+    private function hitungPeriodeKinerja(string $createdAt): string
+    {
+        $lapTime = strtotime($createdAt);
+        $mondayOfSub = strtotime('monday this week', $lapTime);
+        $startPerf = date('d M', strtotime('-7 days', $mondayOfSub));
+        $endPerf = date('d M Y', strtotime('-1 day', $mondayOfSub));
+        return "{$startPerf} - {$endPerf}";
     }
 
     // Menyimpan laporan mingguan baru yang dikirim oleh kreator.
     public function save(): ResponseInterface
     {
-        $debugInfo = [
-            'upload_max_filesize' => ini_get('upload_max_filesize'),
-            'post_max_size' => ini_get('post_max_size'),
-            'upload_tmp_dir' => ini_get('upload_tmp_dir'),
-            'content_length' => $_SERVER['CONTENT_LENGTH'] ?? 'unknown',
-            'files' => $_FILES,
-        ];
-        log_message('debug', 'DEBUG UPLOAD: ' . json_encode($debugInfo));
-
         if (!$this->isSubmissionOpen()) {
             return redirect()->back()->withInput()->with('error', 'Akses Pengiriman Laporan Ditutup. Pengiriman hanya dapat dilakukan pada hari Senin s/d Rabu pukul 15:00 WIB.');
         }
-
-        $laporanModel = new LaporanMingguanModel();
 
         $rules = [
             'nama_lengkap' => 'required|min_length[3]',
@@ -205,7 +189,7 @@ class LaporanKreator extends BaseController
 
         if (!$this->validate($rules, $messages)) {
             $errors = $this->validator->getErrors();
-            $errorMessage = !empty($errors) ? implode(' ', $errors) : 'Seluruh data operasional dan bukti tangkapan layar wajib diisi dengan benar.';
+            $errorMessage = !empty($errors) ? implode(' ', $errors) : 'Seluruh data dan bukti tangkapan layar wajib diisi dengan benar.';
             return redirect()->back()->withInput()->with('error', $errorMessage);
         }
 
@@ -213,8 +197,7 @@ class LaporanKreator extends BaseController
         $fileLive = $this->request->getFile('foto_views_livestream');
         $fileCcv = $this->request->getFile('foto_penonton_puncak_live');
 
-        $db = \Config\Database::connect();
-        $db->transBegin();
+        $this->db->transBegin();
 
         $namaFotoKonten = null;
         $namaFotoLive = null;
@@ -222,7 +205,7 @@ class LaporanKreator extends BaseController
         $namaFotoShorts = null;
 
         try {
-            $kreator = $db->query("SELECT * FROM kreator WHERE id_game = ? FOR UPDATE", [session()->get('id_game')])->getRowArray();
+            $kreator = $this->db->query("SELECT * FROM kreator WHERE id_game = ? FOR UPDATE", [session()->get('id_game')])->getRowArray();
 
             if (!$kreator || empty($kreator['alamat']) || $kreator['alamat'] === '-' || (empty($kreator['tiktok_link']) && empty($kreator['youtube_link']))) {
                 throw new \RuntimeException('Silakan lengkapi data alamat dan tautan channel (YouTube/TikTok) Anda terlebih dahulu sebelum mengirimkan laporan.');
@@ -231,7 +214,7 @@ class LaporanKreator extends BaseController
             // Bersihkan laporan DITOLAK (tidak_valid) minggu ini dari database dan cloud storage
             $platform = $this->request->getPost('platform');
             $mondayThisWeek = date('Y-m-d', strtotime('monday this week'));
-            $laporanDitolak = $laporanModel->where('kreator_id', $kreator['kreator_id'])
+            $laporanDitolak = $this->lModel->where('kreator_id', $kreator['kreator_id'])
                 ->where('platform', $platform)
                 ->where('status_validasi', 'tidak_valid')
                 ->where('DATE(created_at) >=', $mondayThisWeek)
@@ -256,7 +239,7 @@ class LaporanKreator extends BaseController
                 $deleteFile($laporanDitolak['foto_penonton_puncak_live'] ?? null);
                 $deleteFile($laporanDitolak['foto_views_shorts'] ?? null);
 
-                $laporanModel->update($laporanDitolak['laporan_id'], [
+                $this->lModel->update($laporanDitolak['laporan_id'], [
                     'foto_views_konten' => null,
                     'foto_views_livestream' => null,
                     'foto_penonton_puncak_live' => null,
@@ -341,17 +324,17 @@ class LaporanKreator extends BaseController
 
             // Simpan laporan ke DB
             if ($laporanDitolak) {
-                // Jika sudah ada laporan ditolak, timpa record tersebut
-                $laporanModel->update($laporanDitolak['laporan_id'], $data);
+                // Jika sudah ada laporan ditolak, maka kreator bisa mengisi form kembali
+                $this->lModel->update($laporanDitolak['laporan_id'], $data);
             } else {
                 // Jika baru pertama minggu ini, insert baru
-                $laporanModel->insert($data);
+                $this->lModel->insert($data);
             }
 
-            $db->transCommit();
+            $this->db->transCommit();
             return redirect()->back()->with('success', 'Laporan berhasil dikirim ke MiminBS dan menunggu verifikasi.');
         } catch (\Exception $e) {
-            $db->transRollback();
+            $this->db->transRollback();
 
             $storage = new CloudStorageService();
             $deleteFile = function (?string $foto) use ($storage) {

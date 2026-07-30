@@ -27,7 +27,6 @@ class CloudStorageService
 
     public function __construct()
     {
-        // Ambil kredensial dari .env dengan fallback ke R2 prefix lama agar tidak merusak hosting
         $accountId = env('CLOUD_ACCOUNT_ID', env('R2_ACCOUNT_ID', ''));
         $accessKeyId = env('CLOUD_ACCESS_KEY_ID', env('R2_ACCESS_KEY_ID', ''));
         $secretAccessKey = env('CLOUD_SECRET_ACCESS_KEY', env('R2_SECRET_ACCESS_KEY', ''));

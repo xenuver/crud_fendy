@@ -45,10 +45,9 @@ class KreatorModel extends Model
     protected $cleanValidationRules = true;
 
     // Mengambil semua kreator beserta akumulasi metrik dan data tier.
-    // Logika dipindahkan dari controller ke model untuk pemisahan tugas yang lebih baik.
     public function getKreatorsWithMetrics()
     {
-        // 1. Ambil semua data kreator dasar (kecuali yang merupakan Admin)
+        // 1. Ambil semua data kreator dasar (kecuali Admin)
         $kreators = $this->select('kreator.*')
             ->join('users', 'users.id_game = kreator.id_game', 'left')
             ->groupStart()
@@ -72,15 +71,15 @@ class KreatorModel extends Model
                 ->orderBy('created_at', 'DESC')
                 ->findAll();
 
-            $rPeak = 0;
-            $rYtV = 0;
-            $rYtC = 0;
-            $rYtSV = 0;
-            $rYtSC = 0;
-            $rYtLV = 0;
-            $rTtV = 0;
-            $rTtC = 0;
-            $rTtLV = 0;
+            $rPeak = 0; // Peak CCV tertinggi (penonton puncak live)
+            $rYtV = 0; // Total views video YouTube
+            $rYtC = 0; // Jumlah video YouTube
+            $rYtSV = 0; // Total views YouTube Shorts
+            $rYtSC = 0; // Jumlah YouTube Shorts
+            $rYtLV = 0; // Total views live YouTube
+            $rTtV = 0; // Total views video TikTok
+            $rTtC = 0; // Jumlah video TikTok
+            $rTtLV = 0; // Total views live TikTok
             if (!empty($recentLaps)) {
                 foreach ($recentLaps as $laporan) {
                     $rPeak = max($rPeak, $laporan['penonton_puncak_live']);
@@ -132,7 +131,7 @@ class KreatorModel extends Model
             $k['projected_tier_level'] = (int) filter_var($projectedTier['name'], FILTER_SANITIZE_NUMBER_INT);
         }
 
-        // Sort by tier first (1 is best), then by total views desc
+        // Sort by tier
         usort($kreators, function ($a, $b) {
             if ($a['tier_level'] === $b['tier_level']) {
                 return $b['total_views'] <=> $a['total_views'];
@@ -187,44 +186,6 @@ class KreatorModel extends Model
         }
 
         return $distribution;
-    }
-
-    // Menganalisis aktivitas kreator dan tren pertumbuhan views.
-    public function analyzeActivity(array $k): array
-    {
-        $lModel = new LaporanMingguanModel();
-        $laps = $lModel->where('kreator_id', $k['kreator_id'])
-            ->where('status_validasi', 'valid')
-            ->orderBy('created_at', 'DESC')
-            ->limit(2)
-            ->findAll();
-
-        $k['active_status'] = 'danger';
-        $k['status_text'] = 'INAKTIF';
-        $k['trend_pct'] = 0;
-        $k['trend_dir'] = 'neutral';
-
-        if (count($laps) > 0) {
-            $days = (time() - strtotime($laps[0]['created_at'])) / 86400;
-            if ($days <= 10) {
-                $k['active_status'] = 'success';
-                $k['status_text'] = 'AKTIF';
-            } else if ($days <= 21) {
-                $k['active_status'] = 'warning';
-                $k['status_text'] = 'SIAGA';
-            }
-
-            if (count($laps) == 2) {
-                $c = $laps[0]['total_views_video'] + ($laps[0]['views_shorts'] ?? 0);
-                $p = $laps[1]['total_views_video'] + ($laps[1]['views_shorts'] ?? 0);
-                if ($p > 0) {
-                    $k['trend_pct'] = (($c - $p) / $p) * 100;
-                    $k['trend_dir'] = ($k['trend_pct'] > 1) ? 'up' : (($k['trend_pct'] < -1) ? 'down' : 'neutral');
-                }
-            }
-        }
-
-        return $k;
     }
 
     // Mendapatkan profil kreator atau membuatnya secara otomatis jika belum ada (misal untuk Admin).

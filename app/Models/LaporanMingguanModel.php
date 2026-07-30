@@ -240,7 +240,7 @@ class LaporanMingguanModel extends Model
             $mDate = strtotime($m['created_at']); // Ambil waktu kirim laporan
             $dayOfWeek = (int) date('N', $mDate); // Cari hari (Senin=1 s/d Minggu=7)
             $perfSunday = strtotime('-' . $dayOfWeek . ' days', $mDate); // Mundurkan tanggal ke hari Minggu terdekat
-            
+
             // Cek apakah tanggal Minggu tersebut masuk di bulan berjalan ini
             $isThisMonth = (date('m', $perfSunday) == $currentMonth && date('Y', $perfSunday) == $currentYear);
 
@@ -358,8 +358,6 @@ class LaporanMingguanModel extends Model
         $rYtV = 0;    // Total views gabungan YouTube (video + shorts + live)
         $rTtV = 0;    // Total views gabungan TikTok (video + live)
 
-        // --- TAHAP 1: PENJUMLAHAN AKUMULASI (Di dalam Loop) ---
-        // Ulangi untuk membaca lembar laporan mingguan ($laporan) satu per satu
         foreach ($reports as $laporan) {
             // Cari penonton puncak live (CCV) paling tinggi di antara seluruh laporan
             $rPeak = max($rPeak, $laporan['penonton_puncak_live']);

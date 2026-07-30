@@ -10,6 +10,20 @@ use CodeIgniter\HTTP\ResponseInterface;
 // Controller untuk mengelola autentikasi pengguna.
 class Auth extends BaseController
 {
+    protected UserModel $uModel;
+    protected KreatorModel $kModel;
+    protected RedeemCodeModel $rModel;
+    protected \App\Models\SettingModel $sModel;
+    protected \CodeIgniter\Database\BaseConnection $db;
+
+    public function __construct()
+    {
+        $this->uModel = new UserModel();
+        $this->kModel = new KreatorModel();
+        $this->rModel = new RedeemCodeModel();
+        $this->sModel = new \App\Models\SettingModel();
+        $this->db = \Config\Database::connect();
+    }
     // Menampilkan halaman depan (Landing Page).
     public function index(): string|ResponseInterface
     {
@@ -17,17 +31,16 @@ class Auth extends BaseController
             return $this->redirectDashboard();
         }
 
-        $sModel = new \App\Models\SettingModel();
         $settings = [
-            't1_ccv' => (int) $sModel->getSetting('tier1_ccv', 900),
-            't1_yt' => (int) $sModel->getSetting('tier1_yt', 40000),
-            't1_tt' => (int) $sModel->getSetting('tier1_tt', 80000),
-            't2_ccv' => (int) $sModel->getSetting('tier2_ccv', 300),
-            't2_yt' => (int) $sModel->getSetting('tier2_yt', 20000),
-            't2_tt' => (int) $sModel->getSetting('tier2_tt', 50000),
-            't3_ccv' => (int) $sModel->getSetting('tier3_ccv', 100),
-            't3_yt' => (int) $sModel->getSetting('tier3_yt', 10000),
-            't3_tt' => (int) $sModel->getSetting('tier3_tt', 30000),
+            't1_ccv' => (int) $this->sModel->getSetting('tier1_ccv', 900),
+            't1_yt' => (int) $this->sModel->getSetting('tier1_yt', 40000),
+            't1_tt' => (int) $this->sModel->getSetting('tier1_tt', 80000),
+            't2_ccv' => (int) $this->sModel->getSetting('tier2_ccv', 300),
+            't2_yt' => (int) $this->sModel->getSetting('tier2_yt', 20000),
+            't2_tt' => (int) $this->sModel->getSetting('tier2_tt', 50000),
+            't3_ccv' => (int) $this->sModel->getSetting('tier3_ccv', 100),
+            't3_yt' => (int) $this->sModel->getSetting('tier3_yt', 10000),
+            't3_tt' => (int) $this->sModel->getSetting('tier3_tt', 30000),
         ];
 
         return view('landing', ['settings' => $settings]);
@@ -52,19 +65,17 @@ class Auth extends BaseController
         }
 
         $session = session();
-        $model = new UserModel();
         $loginInput = $this->request->getPost('login');
         $password = $this->request->getPost('password');
 
-        $user = $model->where('username', $loginInput)
+        $user = $this->uModel->where('username', $loginInput)
             ->orWhere('no_telp', $loginInput)
             ->first();
 
         if ($user && password_verify($password, $user['password'])) {
-            $kModel = new KreatorModel();
             $idGameStr = (string) ($user['id_game'] ?? '');
             if ($user['role'] !== 'admin') {
-                $kModel->getOrCreateProfile($idGameStr, $user['username']);
+                $this->kModel->getOrCreateProfile($idGameStr, $user['username']);
             }
 
             // Regenerasi session ID untuk mencegah Session Fixation Attack
@@ -99,53 +110,6 @@ class Auth extends BaseController
         return redirect()->to(base_url('/'));
     }
 
-    // Menampilkan halaman pengaturan keamanan (Ubah Kata Sandi).
-    public function security(): string
-    {
-        $data = ['judul' => 'Keamanan Akun'];
-
-        return view('templates/v_header', $data)
-            . view('templates/v_sidebar')
-            . view('templates/v_topbar')
-            . view('auth/security', $data)
-            . view('templates/v_footer');
-    }
-
-    // Memproses pembaruan kata sandi.
-    public function update_security(): ResponseInterface
-    {
-        $session = session();
-        $model = new UserModel();
-        $userId = $session->get('id');
-
-        $rules = [
-            'old_password' => 'required',
-            'new_password' => 'required|min_length[8]',
-            'confirm_password' => 'required|matches[new_password]'
-        ];
-
-        if (!$this->validate($rules)) {
-            $session->setFlashdata('error', implode('<br>', $this->validator->getErrors()));
-            return redirect()->back();
-        }
-
-        $user = $model->find($userId);
-
-        if (!password_verify($this->request->getPost('old_password'), $user['password'])) {
-            $session->setFlashdata('error', 'Kata sandi lama salah.');
-            return redirect()->back();
-        }
-
-        $newPasswordHash = password_hash($this->request->getPost('new_password'), PASSWORD_DEFAULT);
-
-        if ($model->update($userId, ['password' => $newPasswordHash])) {
-            $session->setFlashdata('success', 'Kata sandi berhasil diperbarui.');
-            return redirect()->back();
-        } else {
-            $session->setFlashdata('error', 'Terjadi kesalahan saat memperbarui kata sandi.');
-            return redirect()->back();
-        }
-    }
 
     // Menampilkan halaman pendaftaran kreator (hanya bisa diakses via link khusus dari Admin).
     public function register_view(): string|ResponseInterface
@@ -204,12 +168,9 @@ class Auth extends BaseController
             return redirect()->to('/register')->withInput();
         }
 
-        $db = \Config\Database::connect();
-        $db->transBegin();
+        $this->db->transBegin();
 
         try {
-            $redeemModel = new RedeemCodeModel();
-
             // Jika ada kode yang dikunci di session (dari link admin), pakai itu — abaikan input POST
             $lockedCode = session()->get('locked_redeem_code');
             if (!empty($lockedCode)) {
@@ -219,14 +180,13 @@ class Auth extends BaseController
             }
 
             // Kunci baris redeem code menggunakan FOR UPDATE untuk mencegah duplikat concurrent
-            $codeRow = $db->query("SELECT * FROM redeem_codes WHERE code = ? AND is_used = 0 FOR UPDATE", [$code])->getRowArray();
+            $codeRow = $this->db->query("SELECT * FROM redeem_codes WHERE code = ? AND is_used = 0 FOR UPDATE", [$code])->getRowArray();
 
             if (!$codeRow) {
                 throw new \RuntimeException('Redeem Code tidak valid atau sudah pernah digunakan.');
             }
 
             // Buat akun user baru
-            $userModel = new UserModel();
             $userData = [
                 'username' => $this->request->getPost('username'),
                 'no_telp' => $this->request->getPost('no_telp'),
@@ -235,38 +195,37 @@ class Auth extends BaseController
                 'role' => 'user',
             ];
 
-            $userId = $userModel->insert($userData, true);
+            $userId = $this->uModel->insert($userData, true);
 
             if (!$userId) {
                 throw new \RuntimeException('Gagal membuat akun pengguna.');
             }
 
             // Buat profil kreator otomatis jika belum ada (atau update nama jika sudah pre-created oleh admin)
-            $kreatorModel = new KreatorModel();
-            $existingKreator = $kreatorModel->where('id_game', $this->request->getPost('id_game'))->first();
+            $existingKreator = $this->kModel->where('id_game', $this->request->getPost('id_game'))->first();
             if (!$existingKreator) {
-                $kreatorModel->insert([
+                $this->kModel->insert([
                     'nama' => $this->request->getPost('username'),
                     'alamat' => 'Indonesia',
                     'id_game' => $this->request->getPost('id_game'),
                 ]);
             } else {
-                $kreatorModel->update($existingKreator['kreator_id'], [
+                $this->kModel->update($existingKreator['kreator_id'], [
                     'nama' => $this->request->getPost('username')
                 ]);
             }
 
             // Tandai redeem code sebagai terpakai
-            $redeemModel->markAsUsed($code, $userId);
+            $this->rModel->markAsUsed($code, $userId);
 
             // Hapus kode dari session setelah berhasil dipakai
             session()->remove('locked_redeem_code');
 
             // Jika semua sukses, commit transaksi
-            $db->transCommit();
+            $this->db->transCommit();
         } catch (\Exception $e) {
             // Jika ada yang gagal, rollback semua perubahan database
-            $db->transRollback();
+            $this->db->transRollback();
             session()->setFlashdata('error', 'Terjadi kesalahan sistem: ' . $e->getMessage());
             return redirect()->to('/register')->withInput();
         }

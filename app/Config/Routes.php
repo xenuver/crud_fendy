@@ -12,8 +12,7 @@ $routes->post('auth/login', 'Auth::login'); // Process Login
 $routes->post('auth/register', 'Auth::register_save'); // Process Register
 $routes->get('logout', 'Auth::logout');
 $routes->get('suspended', 'Auth::suspended');
-$routes->get('keamanan-akun', 'Auth::security', ['filter' => 'auth']);
-$routes->post('keamanan-akun/update', 'Auth::update_security', ['filter' => 'auth']);
+// Route /keamanan-akun dihapus — fitur ganti password sudah dipindah ke halaman profil masing-masing role.
 
 
 // Group Admin
@@ -36,7 +35,7 @@ $routes->group('admin', ['filter' => 'auth:admin'], function ($routes) {
     $routes->get('laporan/bulanan', 'Admin\LaporanBulanan::index');
     $routes->get('laporan/export', 'Admin\LaporanBulanan::export');
     $routes->get('laporan/exportWeekly', 'Admin\LaporanMingguan::exportWeekly');
-    $routes->post('laporan/update', 'Admin\LaporanMingguan::update');
+
     $routes->post('laporan/delete/(:num)', 'Admin\LaporanMingguan::delete/$1');
     $routes->post('laporan/verify/(:num)', 'Admin\LaporanMingguan::verify/$1');
 

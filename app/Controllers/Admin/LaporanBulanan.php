@@ -38,9 +38,9 @@ class LaporanBulanan extends BaseController
         $builder->select('kreator.kreator_id, kreator.nama, kreator.id_game');
         $builder->join('users', 'users.id_game = kreator.id_game', 'left');
         $builder->groupStart()
-                ->where('users.role !=', 'admin')
-                ->orWhere('users.role', null)
-        ->groupEnd();
+            ->where('users.role !=', 'admin')
+            ->orWhere('users.role', null)
+            ->groupEnd();
         $builder->select('MAX(laporan_mingguan.penonton_puncak_live) as max_ccv');
         $builder->select('SUM(CASE WHEN platform = "youtube" THEN laporan_mingguan.total_views_video ELSE 0 END) as yt_views');
         $builder->select('SUM(CASE WHEN platform = "youtube" THEN laporan_mingguan.jumlah_video ELSE 0 END) as yt_vids');
@@ -89,13 +89,22 @@ class LaporanBulanan extends BaseController
             'bulan' => $bulan,
             'tahun' => $tahun,
             'months' => [
-                '12' => 'DESEMBER', '11' => 'NOVEMBER', '10' => 'OKTOBER', '09' => 'SEPTEMBER',
-                '08' => 'AGUSTUS', '07' => 'JULI', '06' => 'JUNI', '05' => 'MEI',
-                '04' => 'APRIL', '03' => 'MARET', '02' => 'FEBRUARI', '01' => 'JANUARI'
+                '12' => 'DESEMBER',
+                '11' => 'NOVEMBER',
+                '10' => 'OKTOBER',
+                '09' => 'SEPTEMBER',
+                '08' => 'AGUSTUS',
+                '07' => 'JULI',
+                '06' => 'JUNI',
+                '05' => 'MEI',
+                '04' => 'APRIL',
+                '03' => 'MARET',
+                '02' => 'FEBRUARI',
+                '01' => 'JANUARI'
             ]
         ];
 
-        return $this->renderView("laporan/bulanan", $data);
+        return $this->renderView("admin/laporan_bulanan", $data);
     }
 
     // Mengekspor data rekap bulanan ke format file Excel (.xlsx).
@@ -114,9 +123,9 @@ class LaporanBulanan extends BaseController
         $builder->select('kreator.nama, kreator.id_game');
         $builder->join('users', 'users.id_game = kreator.id_game', 'left');
         $builder->groupStart()
-                ->where('users.role !=', 'admin')
-                ->orWhere('users.role', null)
-        ->groupEnd();
+            ->where('users.role !=', 'admin')
+            ->orWhere('users.role', null)
+            ->groupEnd();
         $builder->select('MAX(laporan_mingguan.penonton_puncak_live) as max_ccv');
         $builder->select('SUM(CASE WHEN platform = "youtube" THEN laporan_mingguan.total_views_video ELSE 0 END) as yt_views');
         $builder->select('SUM(CASE WHEN platform = "youtube" THEN laporan_mingguan.jumlah_video ELSE 0 END) as yt_vids');
@@ -139,8 +148,8 @@ class LaporanBulanan extends BaseController
             $r['total_views'] = $r['yt_views'] + $r['yt_shorts_views'] + $r['yt_live_views'] + $r['tt_views'] + $r['tt_live_views'];
             $metrics = [
                 'peak_ccv' => $r['max_ccv'],
-                'yt_avg'   => ($r['yt_views'] + $r['yt_shorts_views'] + $r['yt_live_views']) / 4,
-                'tt_avg'   => ($r['tt_views'] + $r['tt_live_views']) / 4
+                'yt_avg' => ($r['yt_views'] + $r['yt_shorts_views'] + $r['yt_live_views']) / 4,
+                'tt_avg' => ($r['tt_views'] + $r['tt_live_views']) / 4
             ];
             $tierData = LaporanMingguanModel::calculateTier($metrics);
             $r['tier_level'] = (int) filter_var($tierData['name'], FILTER_SANITIZE_NUMBER_INT);
@@ -157,18 +166,27 @@ class LaporanBulanan extends BaseController
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        // 1. Title Styling
+
         $sheet->setCellValue('A1', 'LAPORAN BULANAN KREATOR - BLOODSTRIKE');
         $sheet->mergeCells('A1:J1');
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16)->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color('FFC00000'));
         $sheet->getStyle('A1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
 
         $monthName = date('F', mktime(0, 0, 0, $bulan, 10));
-        // Translate month name to Indonesian
+
         $monthsId = [
-            'January' => 'Januari', 'February' => 'Februari', 'March' => 'Maret', 'April' => 'April',
-            'May' => 'Mei', 'June' => 'Juni', 'July' => 'Juli', 'August' => 'Agustus',
-            'September' => 'September', 'October' => 'Oktober', 'November' => 'November', 'December' => 'Desember'
+            'January' => 'Januari',
+            'February' => 'Februari',
+            'March' => 'Maret',
+            'April' => 'April',
+            'May' => 'Mei',
+            'June' => 'Juni',
+            'July' => 'Juli',
+            'August' => 'Agustus',
+            'September' => 'September',
+            'October' => 'Oktober',
+            'November' => 'November',
+            'December' => 'Desember'
         ];
         $bulanIndo = $monthsId[$monthName] ?? $monthName;
 
@@ -177,17 +195,17 @@ class LaporanBulanan extends BaseController
         $sheet->getStyle('A2')->getFont()->setItalic(true)->setSize(11);
         $sheet->getStyle('A2')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
 
-        // 2. Header Row Styling
+
         $headers = [
-            'PERINGKAT', 
-            'NAMA KREATOR', 
-            'UID / GAME ID', 
-            'VIEWS VIDEO YT', 
-            'VIEWS SHORTS YT', 
-            'VIEWS LIVE YT', 
-            'VIEWS VIDEO TIKTOK', 
-            'VIEWS LIVE TIKTOK', 
-            'MAX CCV (PUNCAK)', 
+            'PERINGKAT',
+            'NAMA KREATOR',
+            'UID / GAME ID',
+            'VIEWS VIDEO YT',
+            'VIEWS SHORTS YT',
+            'VIEWS LIVE YT',
+            'VIEWS VIDEO TIKTOK',
+            'VIEWS LIVE TIKTOK',
+            'MAX CCV (PUNCAK)',
             'PANGKAT / TIER AKHIR'
         ];
 
@@ -216,7 +234,7 @@ class LaporanBulanan extends BaseController
         $sheet->getStyle('A4:J4')->applyFromArray($headerStyle);
         $sheet->getRowDimension('4')->setRowHeight(30);
 
-        // 3. Populate Data Rows
+
         $row = 5;
         $rank = 1;
         foreach ($results as $r) {
@@ -231,7 +249,6 @@ class LaporanBulanan extends BaseController
             $sheet->setCellValue('I' . $row, $r['max_ccv'] ?: 0);
             $sheet->setCellValue('J' . $row, $r['tier_label']);
 
-            // Zebra striping
             $rowColor = ($row % 2 == 0) ? 'FFF9F9F9' : 'FFFFFFFF';
             $rowStyle = [
                 'fill' => [
@@ -244,7 +261,7 @@ class LaporanBulanan extends BaseController
             $row++;
         }
 
-        // 4. Alignments & Formatting
+
         $lastRow = $row - 1;
         if ($lastRow >= 5) {
             $sheet->getStyle("A5:A$lastRow")->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
@@ -256,7 +273,7 @@ class LaporanBulanan extends BaseController
             $sheet->getStyle("D5:I$lastRow")->getNumberFormat()->setFormatCode('#,##0');
             $sheet->getStyle("D5:I$lastRow")->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
-            // Apply grid borders
+
             $borderStyle = [
                 'borders' => [
                     'allBorders' => [

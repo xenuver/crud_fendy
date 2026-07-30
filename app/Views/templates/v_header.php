@@ -32,7 +32,8 @@
 
 </head>
 
-<body id="page-top" data-success="<?= esc(session()->getFlashdata('success') ?? '') ?>" data-error="<?= esc(session()->getFlashdata('error') ?? '') ?>">
+<body id="page-top" data-success="<?= esc(session()->getFlashdata('success') ?? '') ?>"
+    data-error="<?= esc(session()->getFlashdata('error') ?? '') ?>">
 
     <!-- Pembungkus Halaman -->
     <div id="wrapper">

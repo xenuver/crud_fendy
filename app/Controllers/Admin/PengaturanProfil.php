@@ -10,10 +10,14 @@ use CodeIgniter\HTTP\ResponseInterface;
 class PengaturanProfil extends BaseController
 {
     protected KreatorModel $kModel;
+    protected UserModel $uModel;
+    protected \CodeIgniter\Database\BaseConnection $db;
 
     public function __construct()
     {
         $this->kModel = new KreatorModel();
+        $this->uModel = new UserModel();
+        $this->db = \Config\Database::connect();
     }
 
     // Menampilkan halaman profil dan pengaturan akun admin.
@@ -23,9 +27,9 @@ class PengaturanProfil extends BaseController
         $kreator = $this->kModel->getOrCreateProfile($id_game, session()->get('username'));
 
         $data = [
-            'judul'         => 'Pengaturan Profil Admin',
-            'kreator'       => $kreator,
-            'canUpdateUid'  => true,
+            'judul' => 'Pengaturan Profil Admin',
+            'kreator' => $kreator,
+            'canUpdateUid' => true,
             'daysRemaining' => 0,
         ];
 
@@ -53,12 +57,11 @@ class PengaturanProfil extends BaseController
         if (!empty($newIdGame) && $newIdGame !== $kreator['id_game']) {
             // Validasi format: wajib angka saja dan panjang min 5
             if (!ctype_digit($newIdGame) || strlen($newIdGame) < 5) {
-                return redirect()->back()->withInput()->with('error', 'UID Game harus berupa angka saja dengan panjang minimal 5 karakter.');
+                return redirect()->back()->withInput()->with('error', 'UID Game harus berupa angka saja dengan panjang minimal 5 angka.');
             }
 
             // Validasi keunikan UID Game agar tidak menimpa akun lain
-            $userModel = new UserModel();
-            $existing = $userModel->where('id_game', $newIdGame)->first();
+            $existing = $this->uModel->where('id_game', $newIdGame)->first();
             if ($existing) {
                 return redirect()->back()->withInput()->with('error', 'UID Game ini sudah digunakan oleh akun lain.');
             }
@@ -66,9 +69,9 @@ class PengaturanProfil extends BaseController
         }
 
         $rules = [
-            'nama'         => 'required|min_length[3]',
-            'alamat'       => 'required',
-            'tiktok_link'  => 'permit_empty|valid_url|regex_match[/tiktok\.com/i]',
+            'nama' => 'required|min_length[3]',
+            'alamat' => 'required',
+            'tiktok_link' => 'permit_empty|valid_url|regex_match[/tiktok\.com/i]',
             'youtube_link' => 'permit_empty|valid_url|regex_match[/youtube\.com|youtu\.be/i]',
         ];
 
@@ -86,9 +89,9 @@ class PengaturanProfil extends BaseController
         }
 
         $data = [
-            'nama'         => $this->request->getPost('nama'),
-            'alamat'       => $this->request->getPost('alamat'),
-            'tiktok_link'  => $this->request->getPost('tiktok_link'),
+            'nama' => $this->request->getPost('nama'),
+            'alamat' => $this->request->getPost('alamat'),
+            'tiktok_link' => $this->request->getPost('tiktok_link'),
             'youtube_link' => $this->request->getPost('youtube_link'),
         ];
 
@@ -96,15 +99,13 @@ class PengaturanProfil extends BaseController
             $data['id_game'] = $newIdGame;
         }
 
-        $db = \Config\Database::connect();
-        $db->transBegin();
+        $this->db->transBegin();
         try {
             // Jika UID berubah, update tabel users DULU (parent FK)
             if ($uidChanged) {
-                $userModel = new UserModel();
-                $user = $userModel->find($session->get('id'));
+                $user = $this->uModel->find($session->get('id'));
                 if ($user) {
-                    $userModel->update($user['user_id'], ['id_game' => $newIdGame]);
+                    $this->uModel->update($user['user_id'], ['id_game' => $newIdGame]);
                 }
                 $session->set('id_game', $newIdGame);
             }
@@ -112,11 +113,11 @@ class PengaturanProfil extends BaseController
             // Update kreator (id_game di-cascade jika berubah, field lain diupdate di sini)
             $this->kModel->update($kreator['kreator_id'], $data);
 
-            $db->transCommit();
+            $this->db->transCommit();
             $msg = $uidChanged ? 'Profil dan UID Game admin berhasil diperbarui.' : 'Profil admin berhasil diperbarui.';
             return redirect()->back()->with('success', $msg);
         } catch (\Exception $e) {
-            $db->transRollback();
+            $this->db->transRollback();
             return redirect()->back()->withInput()->with('error', 'Gagal memperbarui profil admin: ' . $e->getMessage());
         }
     }
@@ -125,8 +126,7 @@ class PengaturanProfil extends BaseController
     public function update_password()
     {
         $session = session();
-        $userModel = new UserModel();
-        $user = $userModel->where('username', $session->get('username'))->first();
+        $user = $this->uModel->where('username', $session->get('username'))->first();
 
         if (!$user) {
             return redirect()->back()->with('error', 'Akun admin tidak ditemukan.');
@@ -149,7 +149,7 @@ class PengaturanProfil extends BaseController
             return redirect()->back()->with('error', 'Kata sandi saat ini tidak cocok.');
         }
 
-        if ($userModel->update($user['user_id'], ['password' => password_hash($password_baru, PASSWORD_DEFAULT)])) {
+        if ($this->uModel->update($user['user_id'], ['password' => password_hash($password_baru, PASSWORD_DEFAULT)])) {
             return redirect()->back()->with('success', 'Kata sandi admin berhasil diperbarui.');
         } else {
             return redirect()->back()->with('error', 'Gagal mengenkripsi kata sandi baru.');

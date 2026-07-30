@@ -56,9 +56,22 @@ class LaporanMingguan extends BaseController
             $builder = $builder->where('DATE(created_at) <=', $tglSelesai);
         }
 
-        $laporans = $builder->orderBy('created_at', 'DESC')->paginate(20, 'laporan');
+        $laporansRaw = $builder->orderBy('created_at', 'DESC')->paginate(20, 'laporan');
         $pager = $this->lModel->pager;
         $kreators = $this->kModel->getKreatorsWithMetrics();
+
+        // Menghubungkan laporan dengan profil kreator dan menghitung tanggal periode mingguan untuk dikirim ke View.
+        $kreatorIndex = [];
+        foreach ($kreators as $kr) {
+            $kreatorIndex[$kr['kreator_id']] = $kr;
+        }
+
+        $laporans = [];
+        foreach ($laporansRaw as $lap) {
+            $lap['krData'] = $kreatorIndex[$lap['kreator_id']] ?? null;
+            $lap['periode_kinerja'] = $this->hitungPeriodeKinerja($lap['created_at']);
+            $laporans[] = $lap;
+        }
 
         $judul = "Laporan Mingguan Kreator";
         if ($platform == 'youtube')
@@ -70,220 +83,24 @@ class LaporanMingguan extends BaseController
             "judul" => $judul,
             "laporans" => $laporans,
             "pager" => $pager,
-            "kreators" => $kreators,
-            "kreatorLogin" => null,
             "tglMulai" => $tglMulai,
             "tglSelesai" => $tglSelesai,
-            "isOpen" => $this->isSubmissionOpen(),
-            "hasSubmittedYt" => false,
-            "hasSubmittedTt" => false
         ];
 
-        return $this->renderView("laporan/mingguan", $data);
+        return $this->renderView("admin/laporan_mingguan", $data);
     }
 
-    // Memperbarui data laporan mingguan (Edit Laporan oleh Admin).
-    public function update(): ResponseInterface
+    // Menghitung rentang tanggal periode kinerja dari tanggal pengiriman laporan.
+    // Kreator mengirimkan laporan di awal minggu untuk melaporkan kinerja minggu sebelumnya.
+    private function hitungPeriodeKinerja(string $createdAt): string
     {
-        $id = $this->request->getPost('id');
-        $laporanOld = $this->lModel->find($id);
-
-        if (!$laporanOld) {
-            session()->setFlashdata('error', 'Data tidak ditemukan.');
-            return redirect()->back();
-        }
-
-        $fileKonten = $this->request->getFile('foto_views_konten');
-        $fileLive = $this->request->getFile('foto_views_livestream');
-        $fileCcv = $this->request->getFile('foto_penonton_puncak_live');
-
-        $platform = $laporanOld['platform'];
-
-        $rules = [
-            'nama_lengkap' => 'required|min_length[3]',
-            'jumlah_video' => 'required|is_natural|less_than_equal_to[1000]',
-            'total_views_video' => 'required|is_natural|less_than_equal_to[1000000000]',
-            'jumlah_live' => 'required|is_natural|less_than_equal_to[1000]',
-            'total_views_live' => 'required|is_natural|less_than_equal_to[1000000000]',
-            'penonton_puncak_live' => 'required|is_natural|less_than_equal_to[500000]',
-        ];
-
-        if ($platform === 'youtube') {
-            $rules['jumlah_shorts'] = 'required|is_natural|less_than_equal_to[1000]';
-            $rules['views_shorts'] = 'required|is_natural|less_than_equal_to[1000000000]';
-        }
-
-        if ($fileKonten && $fileKonten->isValid() && !$fileKonten->hasMoved()) {
-            $rules['foto_views_konten'] = 'max_size[foto_views_konten,2048]|is_image[foto_views_konten]';
-        }
-
-        if ($fileLive && $fileLive->isValid() && !$fileLive->hasMoved()) {
-            $rules['foto_views_livestream'] = 'max_size[foto_views_livestream,2048]|is_image[foto_views_livestream]';
-        }
-
-        if ($fileCcv && $fileCcv->isValid() && !$fileCcv->hasMoved()) {
-            $rules['foto_penonton_puncak_live'] = 'max_size[foto_penonton_puncak_live,2048]|is_image[foto_penonton_puncak_live]';
-        }
-
-        if ($platform === 'youtube') {
-            $fileShorts = $this->request->getFile('foto_views_shorts');
-            if ($fileShorts && $fileShorts->isValid() && !$fileShorts->hasMoved()) {
-                $rules['foto_views_shorts'] = 'max_size[foto_views_shorts,2048]|is_image[foto_views_shorts]';
-            }
-        }
-
-        $messages = [
-            'nama_lengkap' => [
-                'required' => 'Nama lengkap wajib diisi.',
-                'min_length' => 'Nama lengkap minimal harus 3 karakter.'
-            ],
-            'jumlah_video' => [
-                'required' => 'Jumlah video reguler wajib diisi.',
-                'is_natural' => 'Jumlah video reguler harus berupa angka bulat positif.',
-                'less_than_equal_to' => 'Jumlah video reguler tidak boleh melebihi 1.000 video per minggu.'
-            ],
-            'total_views_video' => [
-                'required' => 'Total views video reguler wajib diisi.',
-                'is_natural' => 'Total views video reguler harus berupa angka bulat positif.',
-                'less_than_equal_to' => 'Total views video reguler tidak boleh melebihi 1.000.000.000.'
-            ],
-            'jumlah_live' => [
-                'required' => 'Jumlah livestream wajib diisi.',
-                'is_natural' => 'Jumlah livestream harus berupa angka bulat positif.',
-                'less_than_equal_to' => 'Jumlah livestream tidak boleh melebihi 1.000 livestream per minggu.'
-            ],
-            'total_views_live' => [
-                'required' => 'Total views livestream wajib diisi.',
-                'is_natural' => 'Total views livestream harus berupa angka bulat positif.',
-                'less_than_equal_to' => 'Total views livestream tidak boleh melebihi 1.000.000.000.'
-            ],
-            'penonton_puncak_live' => [
-                'required' => 'Jumlah penonton puncak (CCV) wajib diisi.',
-                'is_natural' => 'Jumlah penonton puncak (CCV) harus berupa angka bulat positif.',
-                'less_than_equal_to' => 'Jumlah penonton puncak (CCV) tidak boleh melebihi 500.000.'
-            ],
-            'jumlah_shorts' => [
-                'required' => 'Jumlah video shorts wajib diisi.',
-                'is_natural' => 'Jumlah video shorts harus berupa angka bulat positif.',
-                'less_than_equal_to' => 'Jumlah video shorts tidak boleh melebihi 1.000 shorts per minggu.'
-            ],
-            'views_shorts' => [
-                'required' => 'Total views shorts wajib diisi.',
-                'is_natural' => 'Total views shorts harus berupa angka bulat positif.',
-                'less_than_equal_to' => 'Total views shorts tidak boleh melebihi 1.000.000.000.'
-            ],
-            'foto_views_konten' => [
-                'max_size' => 'Ukuran foto views konten maksimal 2MB.',
-                'is_image' => 'File bukti views konten harus berupa gambar (format png, jpg, jpeg, webp).'
-            ],
-            'foto_views_livestream' => [
-                'max_size' => 'Ukuran foto views livestream maksimal 2MB.',
-                'is_image' => 'File bukti views livestream harus berupa gambar (format png, jpg, jpeg, webp).'
-            ],
-            'foto_penonton_puncak_live' => [
-                'max_size' => 'Ukuran foto penonton puncak (CCV) maksimal 2MB.',
-                'is_image' => 'File bukti penonton puncak (CCV) harus berupa gambar (format png, jpg, jpeg, webp).'
-            ],
-            'foto_views_shorts' => [
-                'max_size' => 'Ukuran foto views shorts maksimal 2MB.',
-                'is_image' => 'File bukti views shorts harus berupa gambar (format png, jpg, jpeg, webp).'
-            ]
-        ];
-
-        if (!$this->validate($rules, $messages)) {
-            session()->setFlashdata('error', implode('<br>', $this->validator->getErrors()));
-            return redirect()->back()->withInput();
-        }
-
-        $storage = new CloudStorageService();
-
-        $prosesGambar = function ($file, $oldFoto) use ($storage) {
-            if (!$file || !$file->isValid() || $file->hasMoved()) {
-                return $oldFoto;
-            }
-
-            $newFoto = null;
-            if ($storage->isEnabled()) {
-                $newFoto = $storage->upload($file, 'laporan');
-            }
-
-            if ($newFoto === null) {
-                if (!is_dir(FCPATH . 'uploads/laporan')) {
-                    mkdir(FCPATH . 'uploads/laporan', 0777, true);
-                }
-                $tempName = $file->getRandomName();
-                $file->move(FCPATH . 'uploads/laporan', $tempName);
-                $tempPath = FCPATH . 'uploads/laporan/' . $tempName;
-                $webpName = pathinfo($tempName, PATHINFO_FILENAME) . '.webp';
-                $webpPath = FCPATH . 'uploads/laporan/' . $webpName;
-                try {
-                    \Config\Services::image()
-                        ->withFile($tempPath)
-                        ->resize(1000, 1000, true, 'height')
-                        ->save($webpPath, 60);
-                    @unlink($tempPath);
-                    $newFoto = $webpName;
-                } catch (\Exception $e) {
-                    rename($tempPath, $webpPath);
-                    $newFoto = $webpName;
-                }
-            }
-
-            if ($newFoto !== null && !empty($oldFoto)) {
-                if (CloudStorageService::isCloudUrl($oldFoto)) {
-                    $storage->delete($oldFoto);
-                } else {
-                    $localPath = FCPATH . 'uploads/laporan/' . basename($oldFoto);
-                    if (file_exists($localPath)) {
-                        @unlink($localPath);
-                    }
-                }
-            }
-
-            return $newFoto;
-        };
-
-        $namaFotoKonten = $prosesGambar($fileKonten, $laporanOld['foto_views_konten']);
-        $namaFotoLive = $prosesGambar($fileLive, $laporanOld['foto_views_livestream']);
-        $namaFotoCcv = $prosesGambar($fileCcv, $laporanOld['foto_penonton_puncak_live'] ?? null);
-
-        $namaFotoShorts = $laporanOld['foto_views_shorts'] ?? null;
-        if ($platform == 'youtube') {
-            $fileShorts = $this->request->getFile('foto_views_shorts');
-            $namaFotoShorts = $prosesGambar($fileShorts, $namaFotoShorts);
-        }
-
-        $data = [
-            'nama_lengkap' => $this->request->getPost('nama_lengkap'),
-            'jumlah_video' => $this->request->getPost('jumlah_video') ?: 0,
-            'total_views_video' => $this->request->getPost('total_views_video') ?: 0,
-            'jumlah_live' => $this->request->getPost('jumlah_live') ?: 0,
-            'total_views_live' => $this->request->getPost('total_views_live') ?: 0,
-            'penonton_puncak_live' => $this->request->getPost('penonton_puncak_live') ?: 0,
-            'foto_views_konten' => $namaFotoKonten,
-            'foto_views_livestream' => $namaFotoLive,
-            'foto_penonton_puncak_live' => $namaFotoCcv,
-            'status_validasi' => 'pending'
-        ];
-
-        if ($platform == 'youtube') {
-            $data['jumlah_shorts'] = $this->request->getPost('jumlah_shorts') ?: 0;
-            $data['views_shorts'] = $this->request->getPost('views_shorts') ?: 0;
-            $data['foto_views_shorts'] = $namaFotoShorts;
-        } else {
-            $data['jumlah_shorts'] = 0;
-            $data['views_shorts'] = 0;
-            $data['foto_views_shorts'] = null;
-        }
-
-        if ($this->lModel->update($id, $data)) {
-            session()->setFlashdata('success', 'Laporan berhasil diperbarui.');
-        } else {
-            session()->setFlashdata('error', 'Gagal memperbarui laporan.');
-        }
-
-        return redirect()->back();
+        $lapTime = strtotime($createdAt);
+        $mondayOfSub = strtotime('monday this week', $lapTime);
+        $startPerf = date('d M', strtotime('-7 days', $mondayOfSub));
+        $endPerf = date('d M Y', strtotime('-1 day', $mondayOfSub));
+        return "{$startPerf} - {$endPerf}";
     }
+
 
     // Menghapus data laporan mingguan beserta file fisiknya.
     public function delete(int $id): ResponseInterface
@@ -309,15 +126,14 @@ class LaporanMingguan extends BaseController
             }
         };
 
-        $db = \Config\Database::connect();
-        $db->transBegin();
+        $this->db->transBegin();
 
         try {
             if (!$this->lModel->delete($id)) {
                 throw new \RuntimeException('Gagal menghapus data laporan dari database.');
             }
 
-            $db->transCommit();
+            $this->db->transCommit();
 
             $deleteFile($laporan['foto_views_konten']);
             $deleteFile($laporan['foto_views_livestream']);
@@ -326,7 +142,7 @@ class LaporanMingguan extends BaseController
 
             session()->setFlashdata('success', 'Laporan berhasil dihapus.');
         } catch (\Exception $e) {
-            $db->transRollback();
+            $this->db->transRollback();
             session()->setFlashdata('error', 'Gagal menghapus laporan: ' . $e->getMessage());
         }
 

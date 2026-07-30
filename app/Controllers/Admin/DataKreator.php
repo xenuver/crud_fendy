@@ -10,6 +10,9 @@ use CodeIgniter\HTTP\ResponseInterface;
 class DataKreator extends BaseController
 {
     protected KreatorModel $kModel;
+    protected \App\Models\UserModel $uModel;
+    protected \App\Models\LaporanMingguanModel $lModel;
+    protected \CodeIgniter\Database\BaseConnection $db;
 
     public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)
     {
@@ -24,15 +27,16 @@ class DataKreator extends BaseController
     public function __construct()
     {
         $this->kModel = new KreatorModel();
+        $this->uModel = new \App\Models\UserModel();
+        $this->lModel = new \App\Models\LaporanMingguanModel();
+        $this->db = \Config\Database::connect();
     }
 
     // Menampilkan Leaderboard Kreator di halaman utama.
     public function index(): string
     {
-        $db = \Config\Database::connect();
-
         // Ambil ID Game milik Admin untuk dikeluarkan dari daftar leaderboard
-        $adminGameIds = $db->table('users')->select('id_game')->where('role', 'admin')->get()->getResultArray();
+        $adminGameIds = $this->db->table('users')->select('id_game')->where('role', 'admin')->get()->getResultArray();
         $adminIds = array_column($adminGameIds, 'id_game');
 
         // Ambil Seluruh Kreator dengan Metrik dari Model
@@ -77,8 +81,7 @@ class DataKreator extends BaseController
             return redirect()->back()->withInput()->with('error', implode('<br>', $this->validator->getErrors()));
         }
 
-        $db   = \Config\Database::connect();
-        $user = $db->table('users')->where('id_game', $id_g)->get()->getRow();
+        $user = $this->db->table('users')->where('id_game', $id_g)->get()->getRow();
         $f_nama = ($user) ? $user->username : '';
 
         if (empty($f_nama)) {
@@ -140,16 +143,14 @@ class DataKreator extends BaseController
             'youtube_link' => $this->request->getPost('youtube_link'),
         ];
 
-        $db = \Config\Database::connect();
-        $db->transBegin();
+        $this->db->transBegin();
         try {
             // Sinkronkan UID game baru ke tabel users DULU (parent FK)
             // agar kreator.id_game bisa di-update tanpa FK violation
             if ($kreatorOld['id_game'] !== $data['id_game']) {
-                $userModel = new \App\Models\UserModel();
-                $user = $userModel->where('id_game', $kreatorOld['id_game'])->first();
+                $user = $this->uModel->where('id_game', $kreatorOld['id_game'])->first();
                 if ($user) {
-                    $userModel->update($user['user_id'], ['id_game' => $data['id_game']]);
+                    $this->uModel->update($user['user_id'], ['id_game' => $data['id_game']]);
                     // ON UPDATE CASCADE otomatis update kreator.id_game
                 }
             }
@@ -157,10 +158,10 @@ class DataKreator extends BaseController
             // Update kreator (id_game sudah di-cascade, field lain tetap di-update)
             $this->kModel->update($id, $data);
 
-            $db->transCommit();
+            $this->db->transCommit();
             return redirect()->back()->with('success', 'Berhasil memperbarui data kreator.');
         } catch (\Exception $e) {
-            $db->transRollback();
+            $this->db->transRollback();
             return redirect()->back()->withInput()->with('error', 'Gagal memperbarui data kreator: ' . $e->getMessage());
         }
     }
@@ -175,8 +176,7 @@ class DataKreator extends BaseController
         }
 
         // Hapus file fisik/R2 laporan mingguan terikat
-        $lModel = new \App\Models\LaporanMingguanModel();
-        $laporans = $lModel->where('kreator_id', $id)->findAll();
+        $laporans = $this->lModel->where('kreator_id', $id)->findAll();
         
         $storage = new \App\Libraries\CloudStorageService();
         $deleteFile = function(?string $foto) use ($storage) {
@@ -191,23 +191,21 @@ class DataKreator extends BaseController
             }
         };
 
-        $db = \Config\Database::connect();
-        $db->transBegin();
+        $this->db->transBegin();
 
         try {
             // Hapus data laporan dari database
-            $lModel->where('kreator_id', $id)->delete();
+            $this->lModel->where('kreator_id', $id)->delete();
 
             // Hapus data kreator
             $this->kModel->delete($id);
 
             // Hapus akun user terikat
             if (!empty($kreator['id_game'])) {
-                $userModel = new \App\Models\UserModel();
-                $userModel->where('id_game', $kreator['id_game'])->delete();
+                $this->uModel->where('id_game', $kreator['id_game'])->delete();
             }
 
-            $db->transCommit();
+            $this->db->transCommit();
 
             // Hapus file fisik hanya jika transaksi DB berhasil
             foreach ($laporans as $lap) {
@@ -219,7 +217,7 @@ class DataKreator extends BaseController
 
             session()->setFlashdata('success', 'Kreator beserta seluruh laporan, akun user, dan berkas fisiknya berhasil dihapus.');
         } catch (\Exception $e) {
-            $db->transRollback();
+            $this->db->transRollback();
             session()->setFlashdata('error', 'Gagal menghapus kreator: ' . $e->getMessage());
         }
 

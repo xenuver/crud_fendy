@@ -9,19 +9,31 @@ use App\Models\RedeemCodeModel;
 
 class ManajemenAkun extends BaseController
 {
+    protected UserModel $uModel;
+    protected KreatorModel $kModel;
+    protected RedeemCodeModel $rModel;
+    protected \App\Models\LaporanMingguanModel $lModel;
+    protected \CodeIgniter\Database\BaseConnection $db;
+
+    public function __construct()
+    {
+        $this->uModel = new UserModel();
+        $this->kModel = new KreatorModel();
+        $this->rModel = new RedeemCodeModel();
+        $this->lModel = new \App\Models\LaporanMingguanModel();
+        $this->db = \Config\Database::connect();
+    }
+
     public function index()
     {
-        $userModel = new UserModel();
-        $redeemModel = new RedeemCodeModel();
-
         // Ambil data redeem codes terpaginasi (server-side pagination)
-        $redeemCodes = $redeemModel->select('redeem_codes.*, users.username as used_by_username')
+        $redeemCodes = $this->rModel->select('redeem_codes.*, users.username as used_by_username')
             ->join('users', 'users.user_id = redeem_codes.used_by', 'left')
             ->orderBy('redeem_codes.created_at', 'DESC')
             ->paginate(10, 'redeem');
 
         // Ambil semua kode redeem yang tersedia (untuk fitur salin semua)
-        $allUnused = $redeemModel->where('is_used', 0)->orderBy('created_at', 'DESC')->findAll();
+        $allUnused = $this->rModel->where('is_used', 0)->orderBy('created_at', 'DESC')->findAll();
 
         $unusedLinks = [];
         foreach ($allUnused as $au) {
@@ -31,8 +43,8 @@ class ManajemenAkun extends BaseController
 
         $data = [
             'judul' => 'Manajemen Akun',
-            'users' => $userModel->orderBy('role', 'ASC')->orderBy('username', 'ASC')->paginate(10, 'user'),
-            'pager' => $userModel->pager, // Berisi pager untuk 'user' dan 'redeem'
+            'users' => $this->uModel->orderBy('role', 'ASC')->orderBy('username', 'ASC')->paginate(10, 'user'),
+            'pager' => $this->uModel->pager, // Berisi pager untuk 'user' dan 'redeem'
             'redeem_codes' => $redeemCodes,
             'unused_links_str' => $unusedLinksList,
             'unused_codes_count' => count($allUnused),
@@ -70,7 +82,6 @@ class ManajemenAkun extends BaseController
             return redirect()->back()->withInput();
         }
 
-        $userModel = new UserModel();
         $data = [
             'username' => $this->request->getPost('username'),
             'no_telp' => $this->request->getPost('no_telp'),
@@ -79,33 +90,31 @@ class ManajemenAkun extends BaseController
             'role' => $this->request->getPost('role')
         ];
 
-        $db = \Config\Database::connect();
-        $db->transBegin();
+        $this->db->transBegin();
         try {
-            if (!$userModel->insert($data)) {
+            if (!$this->uModel->insert($data)) {
                 throw new \RuntimeException('Gagal membuat baris akun pengguna.');
             }
 
             // Sinkronisasi: otomatis buat entri di tabel kreator jika role user (walau admin juga boleh buat as record)
             if ($data['role'] == 'user') {
-                $kreatorModel = new KreatorModel();
-                $existingKreator = $kreatorModel->where('id_game', $this->request->getPost('id_game'))->first();
+                $existingKreator = $this->kModel->where('id_game', $this->request->getPost('id_game'))->first();
                 if (!$existingKreator) {
-                    $kreatorModel->insert([
+                    $this->kModel->insert([
                         'nama' => $this->request->getPost('username'),
                         'alamat' => 'Indonesia',
                         'id_game' => $this->request->getPost('id_game')
                     ]);
                 } else {
-                    $kreatorModel->update($existingKreator['kreator_id'], [
+                    $this->kModel->update($existingKreator['kreator_id'], [
                         'nama' => $this->request->getPost('username')
                     ]);
                 }
             }
-            $db->transCommit();
+            $this->db->transCommit();
             session()->setFlashdata('success', 'Akun berhasil dibuat.');
         } catch (\Exception $e) {
-            $db->transRollback();
+            $this->db->transRollback();
             session()->setFlashdata('error', 'Gagal membuat akun: ' . $e->getMessage());
         }
 
@@ -115,8 +124,7 @@ class ManajemenAkun extends BaseController
     public function update()
     {
         $id = $this->request->getPost('id');
-        $userModel = new UserModel();
-        $user = $userModel->find($id);
+        $user = $this->uModel->find($id);
 
         if (!$user) {
             session()->setFlashdata('error', 'Data akun tidak ditemukan.');
@@ -166,29 +174,27 @@ class ManajemenAkun extends BaseController
             $data['password'] = password_hash($new_password, PASSWORD_DEFAULT);
         }
 
-        $db = \Config\Database::connect();
-        $db->transBegin();
+        $this->db->transBegin();
         try {
             // Update users DULU (parent FK), lalu kreator (child)
-            $userModel->update($id, $data);
+            $this->uModel->update($id, $data);
 
             if ($data['role'] == 'user') {
-                $kreatorModel = new KreatorModel();
                 // Cari kreator pakai old_id_game (sebelum user di-update)
                 // CATATAN: jika id_game berubah, ON UPDATE CASCADE sudah
                 // mengupdate kreator.id_game secara otomatis saat user di-update
-                $kreator = $kreatorModel->where('id_game', $data['id_game'])->first();
+                $kreator = $this->kModel->where('id_game', $data['id_game'])->first();
                 if ($kreator) {
-                    $kreatorModel->update($kreator['kreator_id'], [
+                    $this->kModel->update($kreator['kreator_id'], [
                         'nama' => $data['username'],
                         'id_game' => $data['id_game']
                     ]);
                 }
             }
-            $db->transCommit();
+            $this->db->transCommit();
             session()->setFlashdata('success', 'Akun berhasil diperbarui.');
         } catch (\Exception $e) {
-            $db->transRollback();
+            $this->db->transRollback();
             session()->setFlashdata('error', 'Gagal memperbarui akun: ' . $e->getMessage());
         }
 
@@ -197,8 +203,7 @@ class ManajemenAkun extends BaseController
 
     public function delete($id)
     {
-        $userModel = new UserModel();
-        $user = $userModel->find($id);
+        $user = $this->uModel->find($id);
 
         if (!$user) {
             session()->setFlashdata('error', 'Data akun tidak ditemukan.');
@@ -211,34 +216,31 @@ class ManajemenAkun extends BaseController
             return redirect()->back();
         }
 
-        $db = \Config\Database::connect();
-        $db->transBegin();
+        $this->db->transBegin();
         try {
             // Bersihkan data kreator yang terhubung dengan user ini agar tidak jadi sampah di database
             $kreator = null;
             $laporans = [];
             if (!empty($user['id_game'])) {
-                $kreatorModel = new KreatorModel();
-                $kreator = $kreatorModel->where('id_game', $user['id_game'])->first();
+                $kreator = $this->kModel->where('id_game', $user['id_game'])->first();
                 if ($kreator) {
                     // Ambil daftar laporan mingguan kreator untuk dihapus file fisiknya setelah DB commit
-                    $lModel = new \App\Models\LaporanMingguanModel();
-                    $laporans = $lModel->where('kreator_id', $kreator['kreator_id'])->findAll();
+                    $laporans = $this->lModel->where('kreator_id', $kreator['kreator_id'])->findAll();
 
                     // Hapus data laporan dari database
-                    $lModel->where('kreator_id', $kreator['kreator_id'])->delete();
+                    $this->lModel->where('kreator_id', $kreator['kreator_id'])->delete();
 
                     // Hapus data profil kreator
-                    $kreatorModel->delete($kreator['kreator_id']);
+                    $this->kModel->delete($kreator['kreator_id']);
                 }
             }
 
             // Hapus data user
-            if (!$userModel->delete($id)) {
+            if (!$this->uModel->delete($id)) {
                 throw new \RuntimeException('Gagal menghapus akun pengguna.');
             }
 
-            $db->transCommit();
+            $this->db->transCommit();
 
             // Hapus file fisik (Cloud Storage atau lokal) hanya jika transaksi database sukses commit
             if ($kreator && !empty($laporans)) {
@@ -266,7 +268,7 @@ class ManajemenAkun extends BaseController
 
             session()->setFlashdata('success', 'Akun berhasil dihapus beserta profil kreator dan seluruh berkas laporannya.');
         } catch (\Exception $e) {
-            $db->transRollback();
+            $this->db->transRollback();
             session()->setFlashdata('error', 'Gagal menghapus akun: ' . $e->getMessage());
         }
 
@@ -276,15 +278,13 @@ class ManajemenAkun extends BaseController
     // Generate kode redeem baru untuk pendaftaran kreator (bisa batch).
     public function generate_code()
     {
-        $redeemModel = new RedeemCodeModel();
-
         $jumlah = $this->request->getPost('jumlah') ?? $this->request->getGet('jumlah') ?? 1;
         $jumlah = max(1, min(100, (int) $jumlah));
 
         $codesGenerated = [];
         for ($i = 0; $i < $jumlah; $i++) {
-            $code = $redeemModel->generateUniqueCode();
-            $redeemModel->insert([
+            $code = $this->rModel->generateUniqueCode();
+            $this->rModel->insert([
                 'code' => $code,
                 'is_used' => 0,
                 'created_by' => session()->get('id'),
@@ -304,17 +304,14 @@ class ManajemenAkun extends BaseController
     // Hapus/revoke kode redeem yang belum terpakai.
     public function delete_code($id)
     {
-        $redeemModel = new RedeemCodeModel();
-        $code = $redeemModel->find($id);
+        $code = $this->rModel->find($id);
 
         if (!$code) {
             session()->setFlashdata('error', 'Kode tidak ditemukan.');
             return redirect()->back();
         }
 
-
-
-        $redeemModel->delete($id);
+        $this->rModel->delete($id);
         session()->setFlashdata('success', 'Redeem Code berhasil dihapus.');
         return redirect()->back();
     }
