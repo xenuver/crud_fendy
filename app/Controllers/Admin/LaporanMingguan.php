@@ -60,7 +60,7 @@ class LaporanMingguan extends BaseController
         $pager = $this->lModel->pager;
         $kreators = $this->kModel->getKreatorsWithMetrics();
 
-        // Menghubungkan laporan dengan profil kreator dan menghitung tanggal periode mingguan untuk dikirim ke View.
+        // Menghubungkan laporan dengan data kreator dan menghitung tanggal periode mingguan untuk dikirim ke view.
         $kreatorIndex = [];
         foreach ($kreators as $kr) {
             $kreatorIndex[$kr['kreator_id']] = $kr;
@@ -171,7 +171,7 @@ class LaporanMingguan extends BaseController
         return redirect()->back();
     }
 
-    //Mengekspor data laporan mingguan ke format Excel.
+    // Mengekspor data laporan mingguan ke format Excel
 
     public function exportWeekly()
     {
