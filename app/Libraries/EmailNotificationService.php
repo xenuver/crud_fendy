@@ -58,7 +58,9 @@ class EmailNotificationService
         $fromName  = $_ENV['SMTP_FROM_NAME'] ?? getenv('SMTP_FROM_NAME') ?: 'Bloodstrike Creator Hub';
 
         $subject = "[Pengingat] {$pendingCount} Laporan Mingguan Kreator Belum Diverifikasi";
-        $linkVerifikasi = base_url('admin/laporan');
+        // Gunakan APP_BASEURL dari environment, fallback ke domain produksi
+        $appBaseUrl = rtrim(getenv('APP_BASEURL') ?: 'https://kreatorbshub.my.id', '/');
+        $linkVerifikasi = $appBaseUrl . '/admin/laporan';
 
         $body = "
         <div style=\"font-family: Arial, sans-serif; background-color: #f4f6f9; padding: 20px;\">
