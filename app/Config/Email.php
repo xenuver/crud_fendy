@@ -28,6 +28,7 @@ class Email extends BaseConfig
         $this->SMTPPass   = $_ENV['SMTP_PASS'] ?? getenv('SMTP_PASS') ?: '';
         $this->SMTPPort   = $port;
         $this->SMTPCrypto = $_ENV['SMTP_CRYPTO'] ?? getenv('SMTP_CRYPTO') ?: $defaultCrypto;
+        $this->SMTPAuth   = true;
     }
 
     /**

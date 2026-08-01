@@ -41,6 +41,7 @@ class EmailNotificationService
             $config->SMTPPass   = $_ENV['SMTP_PASS'] ?? getenv('SMTP_PASS') ?: $config->SMTPPass;
             $config->SMTPPort   = $port;
             $config->SMTPCrypto = $_ENV['SMTP_CRYPTO'] ?? getenv('SMTP_CRYPTO') ?: $crypto;
+            $config->SMTPAuth   = true;
             $this->email->initialize((array)$config);
         }
 
