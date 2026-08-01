@@ -55,6 +55,28 @@
 
     <script src="<?= base_url('assets/js/global-admin.js') ?>"></script>
 
+    <!-- ONESIGNAL WEB PUSH SDK (Khusus Admin & Super Admin) -->
+    <?php 
+        $role = session()->get('role');
+        $oneSignalAppId = $_ENV['ONESIGNAL_APP_ID'] ?? getenv('ONESIGNAL_APP_ID') ?: '';
+        if (in_array($role, ['admin', 'super_admin']) && !empty($oneSignalAppId)): 
+    ?>
+        <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+        <script>
+            window.OneSignalDeferred = window.OneSignalDeferred || [];
+            OneSignalDeferred.push(async function(OneSignal) {
+                await OneSignal.init({
+                    appId: "<?= esc($oneSignalAppId) ?>",
+                    safari_web_id: "web.onesignal.auto",
+                    notifyButton: {
+                        enable: true,
+                        position: 'bottom-left'
+                    },
+                });
+            });
+        </script>
+    <?php endif; ?>
+
 </body>
 
 </html>

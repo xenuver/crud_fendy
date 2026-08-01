@@ -47,13 +47,25 @@ DB_ROOT_PASSWORD=root_password_db
 CI_ENVIRONMENT=production
 APP_BASEURL=https://domain-anda.com
 
-# (Opsional) Jika menggunakan R2 / S3 Storage
-R2_ACCESS_KEY_ID=masukkan_access_key_disini
-R2_SECRET_ACCESS_KEY=masukkan_secret_access_key_disini
-# ... tambahkan sisa config S3 lainnya jika perlu
+# (Opsional) Notifikasi Web Push OneSignal (Pengingat Admin 19:00 WIB)
+ONESIGNAL_APP_ID=masukkan_app_id_onesignal_disini
+ONESIGNAL_REST_KEY=masukkan_rest_api_key_onesignal_disini
 ```
 
 > **Catatan Penting**: Variabel `database.default.hostname` tidak perlu ditambahkan di Coolify karena sudah di-_hardcode_ menunjuk ke service `db` di dalam `docker-compose.yml`.
+
+---
+
+## 4. Cron Job Jam 19:00 WIB (Pengingat Laporan Admin)
+
+Untuk menjalankan pengingat otomatis jam 19:00 WIB ke HP/Laptop Admin:
+1. Masuk ke halaman Resource / Aplikasi Anda di **Coolify**.
+2. Pilih tab **Scheduled Tasks** (atau Cron Jobs).
+3. Tambahkan Cron Job baru:
+   - **Name**: `Pengingat Admin Jam 19:00`
+   - **Frequency (Cron Expression)**: `0 19 * * *`
+   - **Command**: `php spark remind:admin`
+4. Simpan. Sistem akan otomatis mengecek laporan pending setiap jam 19:00 WIB. Jika ada laporan pending > 0, notifikasi akan terkirim ke Admin. Jika 0, notifikasi dilewati (bebas spam).
 
 ---
 
