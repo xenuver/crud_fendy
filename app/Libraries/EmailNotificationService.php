@@ -41,7 +41,7 @@ class EmailNotificationService
             $this->email->initialize((array)$config);
         }
 
-        $fromEmail = !empty($config->fromEmail) ? $config->fromEmail : 'no-reply@kreatorbshub.my.id';
+        $fromEmail = !empty($config->fromEmail) ? $config->fromEmail : ((strpos($smtpHost, 'resend') !== false) ? 'onboarding@resend.dev' : 'no-reply@kreatorbshub.my.id');
         $fromName  = !empty($config->fromName) ? $config->fromName : 'Bloodstrike Creator Hub';
 
         $this->email->clear();

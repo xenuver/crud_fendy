@@ -14,13 +14,16 @@ class Email extends BaseConfig
     {
         parent::__construct();
 
-        $this->fromEmail  = $_ENV['SMTP_FROM_EMAIL'] ?? getenv('SMTP_FROM_EMAIL') ?: 'no-reply@kreatorbshub.my.id';
+        $smtpHost         = $_ENV['SMTP_HOST'] ?? getenv('SMTP_HOST') ?: '';
+        $defaultFrom      = (strpos($smtpHost, 'resend') !== false) ? 'onboarding@resend.dev' : 'no-reply@kreatorbshub.my.id';
+
+        $this->fromEmail  = $_ENV['SMTP_FROM_EMAIL'] ?? getenv('SMTP_FROM_EMAIL') ?: $defaultFrom;
         $this->fromName   = $_ENV['SMTP_FROM_NAME'] ?? getenv('SMTP_FROM_NAME') ?: 'Bloodstrike Creator Hub';
         $this->protocol   = $_ENV['SMTP_PROTOCOL'] ?? getenv('SMTP_PROTOCOL') ?: 'mail';
-        $this->SMTPHost   = $_ENV['SMTP_HOST'] ?? getenv('SMTP_HOST') ?: '';
+        $this->SMTPHost   = $smtpHost;
         $this->SMTPUser   = $_ENV['SMTP_USER'] ?? getenv('SMTP_USER') ?: '';
         $this->SMTPPass   = $_ENV['SMTP_PASS'] ?? getenv('SMTP_PASS') ?: '';
-        $this->SMTPPort   = (int)($_ENV['SMTP_PORT'] ?? getenv('SMTP_PORT') ?: 587);
+        $this->SMTPPort   = (int)($_ENV['SMTP_PORT'] ?? getenv('SMTP_PORT') ?: 465);
         $this->SMTPCrypto = $_ENV['SMTP_CRYPTO'] ?? getenv('SMTP_CRYPTO') ?: 'tls';
     }
 
