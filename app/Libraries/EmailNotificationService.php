@@ -28,25 +28,57 @@ class EmailNotificationService
             return false;
         }
 
-        $config = config('Email');
-        $smtpHost = $_ENV['SMTP_HOST'] ?? getenv('SMTP_HOST') ?: $config->SMTPHost;
+        $baseConfig = config('Email');
 
-        if (!empty($smtpHost)) {
-            $port               = (int)($_ENV['SMTP_PORT'] ?? getenv('SMTP_PORT') ?: $config->SMTPPort ?: 465);
-            $crypto             = ($port === 465) ? 'ssl' : 'tls';
+        $smtpHost = $_ENV['SMTP_HOST'] ?? getenv('SMTP_HOST') ?: $baseConfig->SMTPHost;
+        $smtpUser = $_ENV['SMTP_USER'] ?? getenv('SMTP_USER') ?: $baseConfig->SMTPUser;
+        $smtpPass = $_ENV['SMTP_PASS'] ?? getenv('SMTP_PASS') ?: $baseConfig->SMTPPass;
+        $smtpPort = (int)($_ENV['SMTP_PORT'] ?? getenv('SMTP_PORT') ?: $baseConfig->SMTPPort ?: 465);
 
-            $config->protocol   = 'smtp';
-            $config->SMTPHost   = $smtpHost;
-            $config->SMTPUser   = $_ENV['SMTP_USER'] ?? getenv('SMTP_USER') ?: $config->SMTPUser;
-            $config->SMTPPass   = $_ENV['SMTP_PASS'] ?? getenv('SMTP_PASS') ?: $config->SMTPPass;
-            $config->SMTPPort   = $port;
-            $config->SMTPCrypto = $_ENV['SMTP_CRYPTO'] ?? getenv('SMTP_CRYPTO') ?: $crypto;
-            $config->SMTPAuth   = true;
-            $this->email->initialize((array)$config);
+        // Jika menggunakan Resend, isi default SMTPUser jika belum diisi
+        if (strpos($smtpHost, 'resend') !== false && empty($smtpUser)) {
+            $smtpUser = 'resend';
         }
 
-        $fromEmail = !empty($config->fromEmail) ? $config->fromEmail : ((strpos($smtpHost, 'resend') !== false) ? 'onboarding@resend.dev' : 'no-reply@kreatorbshub.my.id');
-        $fromName  = !empty($config->fromName) ? $config->fromName : 'Bloodstrike Creator Hub';
+        if (!empty($smtpHost) && empty($smtpPass)) {
+            $this->lastError = 'Variabel SMTP_PASS (API Key Resend / Password SMTP) belum dimasukkan atau masih kosong di Environment Variables Coolify.';
+            return false;
+        }
+
+        if (!empty($smtpHost)) {
+            $crypto = ($smtpPort === 465) ? 'ssl' : 'tls';
+
+            $configArray = [
+                'userAgent'       => 'CodeIgniter',
+                'protocol'        => 'smtp',
+                'mailPath'        => '/usr/sbin/sendmail',
+                'SMTPHost'        => $smtpHost,
+                'SMTPUser'        => $smtpUser,
+                'SMTPPass'        => $smtpPass,
+                'SMTPPort'        => $smtpPort,
+                'SMTPTimeout'     => 10,
+                'SMTPKeepAlive'   => false,
+                'SMTPCrypto'      => $_ENV['SMTP_CRYPTO'] ?? getenv('SMTP_CRYPTO') ?: $crypto,
+                'wordWrap'        => true,
+                'wrapChars'       => 76,
+                'mailType'        => 'html',
+                'charset'         => 'UTF-8',
+                'validate'        => false,
+                'priority'        => 3,
+                'CRLF'            => "\r\n",
+                'newline'         => "\r\n",
+                'BCCBatchMode'    => false,
+                'BCCBatchSize'    => 200,
+                'DSN'             => false,
+                'SMTPAuth'        => true,
+                'SMTPAuthMethod'  => 'login',
+            ];
+
+            $this->email = new \CodeIgniter\Email\Email($configArray);
+        }
+
+        $fromEmail = $_ENV['SMTP_FROM_EMAIL'] ?? getenv('SMTP_FROM_EMAIL') ?: ((strpos($smtpHost, 'resend') !== false) ? 'onboarding@resend.dev' : 'no-reply@kreatorbshub.my.id');
+        $fromName  = $_ENV['SMTP_FROM_NAME'] ?? getenv('SMTP_FROM_NAME') ?: 'Bloodstrike Creator Hub';
 
         $this->email->clear();
         $this->email->setFrom($fromEmail, $fromName);
