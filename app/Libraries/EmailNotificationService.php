@@ -260,9 +260,10 @@ class EmailNotificationService
     {
         $url = 'https://api.resend.com/emails';
 
-        // Resend default sender jika belum verifikasi domain khusus
-        if (strpos($fromEmail, 'resend.dev') === false && strpos($fromEmail, '@') !== false) {
-            $fromEmail = 'onboarding@resend.dev';
+        // Jika domain kreatorbshub.my.id terdeteksi di SMTP_HOST / config, gunakan email domain terverifikasi
+        // Jika masih menggunakan default localhost/IP, fallback ke onboarding@resend.dev untuk testing
+        if (strpos($fromEmail, 'kreatorbshub.my.id') === false && strpos($fromEmail, 'resend.dev') === false) {
+            $fromEmail = 'noreply@kreatorbshub.my.id';
         }
 
         $payload = [
