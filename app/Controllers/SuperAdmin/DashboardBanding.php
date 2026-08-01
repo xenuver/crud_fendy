@@ -116,6 +116,7 @@ class DashboardBanding extends BaseController
         }
 
         if ($this->lModel->update($id, $updateData)) {
+            cache()->delete('kreators_with_metrics_list');
             $msg = ($keputusan === 'diterima')
                 ? '✅ Banding diterima. Laporan kreator telah diubah menjadi VALID.'
                 : '❌ Banding ditolak final. Laporan tetap tidak valid.';

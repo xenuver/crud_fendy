@@ -163,6 +163,7 @@ class LaporanMingguan extends BaseController
             ];
 
             if ($this->lModel->update($id, $updateData)) {
+                cache()->delete('kreators_with_metrics_list');
                 $msg = $status === 'valid' ? 'Laporan divalidasi sebagai VALID.' : 'Laporan ditandai sebagai TIDAK VALID.';
                 session()->setFlashdata('success', $msg . ' Feedback telah dikirim.');
             }

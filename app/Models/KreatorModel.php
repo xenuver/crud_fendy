@@ -44,10 +44,16 @@ class KreatorModel extends Model
     protected $skipValidation = false;
     protected $cleanValidationRules = true;
 
-    // Mengambil semua kreator beserta akumulasi metrik dan data tier.
-    public function getKreatorsWithMetrics()
+    // Mengambil semua kreator beserta akumulasi metrik dan data tier (Optimized: 2 Queries & Caching).
+    public function getKreatorsWithMetrics(bool $useCache = true)
     {
-        // 1. Ambil semua data kreator dasar (kecuali Admin)
+        $cacheKey = 'kreators_with_metrics_list';
+
+        if ($useCache && $cached = cache($cacheKey)) {
+            return $cached;
+        }
+
+        // 1. Query #1: Ambil semua data kreator dasar (kecuali Admin)
         $kreators = $this->select('kreator.*')
             ->join('users', 'users.id_game = kreator.id_game', 'left')
             ->groupStart()
@@ -55,89 +61,151 @@ class KreatorModel extends Model
             ->orWhere('users.role', null)
             ->groupEnd()
             ->findAll();
-        $lModel = new LaporanMingguanModel();
+
+        if (empty($kreators)) {
+            return [];
+        }
 
         $startOfPrevMonth = date('Y-m-01 00:00:00', strtotime('first day of last month'));
-        $endOfPrevMonth = date('Y-m-t 23:59:59', strtotime('first day of last month'));
+        $endOfPrevMonth   = date('Y-m-t 23:59:59', strtotime('first day of last month'));
         $startOfCurrMonth = date('Y-m-01 00:00:00');
-        $endOfCurrMonth = date('Y-m-t 23:59:59');
+        $endOfCurrMonth   = date('Y-m-t 23:59:59');
 
-        foreach ($kreators as &$k) {
-            // 2. Ambil semua laporan valid bulan berjalan (untuk data statistik/views)
-            $recentLaps = $lModel->where('kreator_id', $k['kreator_id'])
-                ->where('status_validasi', 'valid')
-                ->where('DATE_SUB(created_at, INTERVAL WEEKDAY(created_at) + 1 DAY) >=', $startOfCurrMonth)
-                ->where('DATE_SUB(created_at, INTERVAL WEEKDAY(created_at) + 1 DAY) <=', $endOfCurrMonth)
-                ->orderBy('created_at', 'DESC')
-                ->findAll();
+        // 2. Query #2: BULK FETCH seluruh laporan valid dari bulan lalu s/d bulan berjalan sekaligus
+        $lModel = new LaporanMingguanModel();
+        $allReports = $lModel->where('status_validasi', 'valid')
+            ->where('created_at >=', $startOfPrevMonth)
+            ->where('created_at <=', $endOfCurrMonth)
+            ->orderBy('created_at', 'DESC')
+            ->findAll();
 
-            $rPeak = 0; // Peak CCV tertinggi (penonton puncak live)
-            $rYtV = 0; // Total views video YouTube
-            $rYtC = 0; // Jumlah video YouTube
-            $rYtSV = 0; // Total views YouTube Shorts
-            $rYtSC = 0; // Jumlah YouTube Shorts
-            $rYtLV = 0; // Total views live YouTube
-            $rTtV = 0; // Total views video TikTok
-            $rTtC = 0; // Jumlah video TikTok
-            $rTtLV = 0; // Total views live TikTok
-            if (!empty($recentLaps)) {
-                foreach ($recentLaps as $laporan) {
-                    $rPeak = max($rPeak, $laporan['penonton_puncak_live']);
-                    if ($laporan['platform'] == 'youtube') {
-                        $rYtV += $laporan['total_views_video'];
-                        $rYtC += $laporan['jumlah_video'];
-                        $rYtSV += $laporan['views_shorts'];
-                        $rYtSC += $laporan['jumlah_shorts'];
-                        $rYtLV += $laporan['total_views_live'];
-                    } else {
-                        $rTtV += $laporan['total_views_video'];
-                        $rTtC += $laporan['jumlah_video'];
-                        $rTtLV += $laporan['total_views_live'];
-                    }
+        // 3. Grouping laporan berdasarkan kreator_id dan rentang periode di memori PHP
+        $currReportsByKreator = [];
+        $prevReportsByKreator = [];
+
+        foreach ($allReports as $lap) {
+            $kId = $lap['kreator_id'];
+            $cTime = $lap['created_at'];
+
+            // Cek periode laporan berdasarkan fungsi penanggalan mingguan
+            // DATE_SUB(created_at, INTERVAL WEEKDAY(created_at) + 1 DAY)
+            $lapTimestamp = strtotime($cTime);
+            $weekday = (int) date('N', $lapTimestamp); // 1 (Mon) .. 7 (Sun)
+            $sundayPrev = date('Y-m-d H:i:s', strtotime('-' . $weekday . ' days', $lapTimestamp));
+
+            if ($sundayPrev >= $startOfCurrMonth && $sundayPrev <= $endOfCurrMonth) {
+                if (!isset($currReportsByKreator[$kId])) {
+                    $currReportsByKreator[$kId] = [];
+                }
+                $currReportsByKreator[$kId][] = $lap;
+            }
+
+            if ($sundayPrev >= $startOfPrevMonth && $sundayPrev <= $endOfPrevMonth) {
+                if (!isset($prevReportsByKreator[$kId])) {
+                    $prevReportsByKreator[$kId] = [];
+                }
+                $prevReportsByKreator[$kId][] = $lap;
+            }
+        }
+
+        // Helper lokal untuk kalkulasi tier dari memori array laporan (max 4 laporan terbaru)
+        $calculateTierFromMemory = function (array $reports) {
+            if (empty($reports)) {
+                return [
+                    'name' => 'Tier 4',
+                    'label' => 'Kreator Baru',
+                    'icon' => 'fas fa-user-shield',
+                    'color' => '#94a3b8'
+                ];
+            }
+
+            $reports4 = array_slice($reports, 0, 4);
+            $rPeak = 0;
+            $rYtV  = 0;
+            $rTtV  = 0;
+
+            foreach ($reports4 as $l) {
+                $rPeak = max($rPeak, (int) ($l['penonton_puncak_live'] ?? 0));
+                if ($l['platform'] === 'youtube') {
+                    $rYtV += (int) ($l['total_views_video'] ?? 0) + (int) ($l['views_shorts'] ?? 0) + (int) ($l['total_views_live'] ?? 0);
+                } else {
+                    $rTtV += (int) ($l['total_views_video'] ?? 0) + (int) ($l['total_views_live'] ?? 0);
                 }
             }
 
-            $k['peak_ccv'] = $rPeak;
-            $k['yt_views'] = $rYtV;
-            $k['yt_vids'] = $rYtC;
+            return LaporanMingguanModel::calculateTier([
+                'peak_ccv' => $rPeak,
+                'yt_avg'   => $rYtV / 4,
+                'tt_avg'   => $rTtV / 4,
+            ]);
+        };
+
+        // 4. Proses agregasi per kreator sepenuhnya di memori PHP
+        foreach ($kreators as &$k) {
+            $kId = $k['kreator_id'];
+            $recentLaps = $currReportsByKreator[$kId] ?? [];
+
+            $rPeak = 0;
+            $rYtV = 0; $rYtC = 0; $rYtSV = 0; $rYtSC = 0; $rYtLV = 0;
+            $rTtV = 0; $rTtC = 0; $rTtLV = 0;
+
+            foreach ($recentLaps as $laporan) {
+                $rPeak = max($rPeak, (int) $laporan['penonton_puncak_live']);
+                if ($laporan['platform'] === 'youtube') {
+                    $rYtV  += (int) $laporan['total_views_video'];
+                    $rYtC  += (int) $laporan['jumlah_video'];
+                    $rYtSV += (int) ($laporan['views_shorts'] ?? 0);
+                    $rYtSC += (int) ($laporan['jumlah_shorts'] ?? 0);
+                    $rYtLV += (int) $laporan['total_views_live'];
+                } else {
+                    $rTtV  += (int) $laporan['total_views_video'];
+                    $rTtC  += (int) $laporan['jumlah_video'];
+                    $rTtLV += (int) $laporan['total_views_live'];
+                }
+            }
+
+            $k['peak_ccv']        = $rPeak;
+            $k['yt_views']        = $rYtV;
+            $k['yt_vids']         = $rYtC;
             $k['yt_shorts_views'] = $rYtSV;
-            $k['yt_shorts_vids'] = $rYtSC;
-            $k['yt_live_views'] = $rYtLV;
-            $k['tt_views'] = $rTtV;
-            $k['tt_vids'] = $rTtC;
-            $k['tt_live_views'] = $rTtLV;
-            $k['total_views'] = $rYtV + $rYtSV + $rYtLV + $rTtV + $rTtLV;
+            $k['yt_shorts_vids']  = $rYtSC;
+            $k['yt_live_views']   = $rYtLV;
+            $k['tt_views']        = $rTtV;
+            $k['tt_vids']         = $rTtC;
+            $k['tt_live_views']   = $rTtLV;
+            $k['total_views']     = $rYtV + $rYtSV + $rYtLV + $rTtV + $rTtLV;
 
-            // 3. Hitung Pangkat Aktif (Bulan Lalu) & Proyeksi Pangkat (Bulan Ini)
-            $activeTier = LaporanMingguanModel::calculateTierForPeriod($k['kreator_id'], $startOfPrevMonth, $endOfPrevMonth);
-            $projectedTier = LaporanMingguanModel::calculateTierForPeriod($k['kreator_id'], $startOfCurrMonth, $endOfCurrMonth);
+            // Hitung Pangkat Aktif (Bulan Lalu) & Proyeksi Pangkat (Bulan Ini) dari memori PHP
+            $activeTier    = $calculateTierFromMemory($prevReportsByKreator[$kId] ?? []);
+            $projectedTier = $calculateTierFromMemory($recentLaps);
 
-            // Set Pangkat Aktif sebagai pangkat utama di lists
             $k['tier_label'] = $activeTier['label'];
-            $k['tier_icon'] = $activeTier['icon'];
+            $k['tier_icon']  = $activeTier['icon'];
             $k['tier_color'] = $activeTier['color'];
-            $k['tier_glow'] = match ($activeTier['name']) {
+            $k['tier_glow']  = match ($activeTier['name']) {
                 'Tier 1' => '0 0 15px rgba(255, 215, 0, 0.5)',
                 'Tier 2' => '0 0 10px rgba(192, 192, 192, 0.4)',
                 'Tier 3' => '0 0 8px rgba(205, 127, 50, 0.3)',
-                default => 'none'
+                default  => 'none'
             };
             $k['tier_level'] = (int) filter_var($activeTier['name'], FILTER_SANITIZE_NUMBER_INT);
 
-            // Set Proyeksi Pangkat
             $k['projected_tier_label'] = $projectedTier['label'];
-            $k['projected_tier_icon'] = $projectedTier['icon'];
+            $k['projected_tier_icon']  = $projectedTier['icon'];
             $k['projected_tier_color'] = $projectedTier['color'];
             $k['projected_tier_level'] = (int) filter_var($projectedTier['name'], FILTER_SANITIZE_NUMBER_INT);
         }
 
-        // Sort by tier
+        // Sort by tier level ascending, then total views descending
         usort($kreators, function ($a, $b) {
             if ($a['tier_level'] === $b['tier_level']) {
                 return $b['total_views'] <=> $a['total_views'];
             }
             return $a['tier_level'] <=> $b['tier_level'];
         });
+
+        // Simpan di cache selama 5 menit (300 detik)
+        cache()->save($cacheKey, $kreators, 300);
 
         return $kreators;
     }
