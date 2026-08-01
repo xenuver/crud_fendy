@@ -37,7 +37,9 @@
                                 <td><?= esc($user['no_telp']); ?></td>
                                 <td><span class="badge bg-secondary"><?= esc($user['id_game']); ?></span></td>
                                 <td>
-                                    <?php if ($user['role'] == 'admin'): ?>
+                                    <?php if ($user['role'] == 'super_admin'): ?>
+                                        <span class="badge" style="background: #f59e0b; color: #000; font-weight: bold;"><i class="fas fa-crown me-1"></i> Super Admin</span>
+                                    <?php elseif ($user['role'] == 'admin'): ?>
                                         <span class="badge bg-danger"><i class="fas fa-user-shield me-1"></i> Admin</span>
                                     <?php else: ?>
                                         <span class="badge bg-primary"><i class="fas fa-user me-1"></i> User</span>
@@ -250,6 +252,7 @@
                             <select class="form-select bg-dark text-white border-secondary" name="role" required>
                                 <option value="user" selected>User / Kreator</option>
                                 <option value="admin">Admin</option>
+                                <option value="super_admin">Super Admin</option>
                             </select>
                         </div>
 
@@ -306,6 +309,7 @@
                             <select class="form-select bg-dark text-white border-secondary" name="role" required>
                                 <option value="user" <?= ($user['role'] == 'user') ? 'selected' : '' ?>>User / Kreator</option>
                                 <option value="admin" <?= ($user['role'] == 'admin') ? 'selected' : '' ?>>Admin</option>
+                                <option value="super_admin" <?= ($user['role'] == 'super_admin') ? 'selected' : '' ?>>Super Admin</option>
                             </select>
                         </div>
 

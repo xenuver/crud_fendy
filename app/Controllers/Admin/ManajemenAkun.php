@@ -59,10 +59,10 @@ class ManajemenAkun extends BaseController
     {
         $rules = [
             'username' => 'required|min_length[3]|max_length[20]|is_unique[users.username]',
-            'no_telp' => 'required|min_length[8]|max_length[18]|is_unique[users.no_telp]',
-            'id_game' => 'required|min_length[5]|is_natural|is_unique[users.id_game]',
+            'no_telp'  => 'required|min_length[8]|max_length[18]|is_unique[users.no_telp]',
+            'id_game'  => 'required|min_length[5]|is_natural|is_unique[users.id_game]',
             'password' => 'required|min_length[8]',
-            'role' => 'required|in_list[admin,user]'
+            'role'     => 'required|in_list[admin,user,super_admin]'
         ];
 
         $messages = [
@@ -137,7 +137,7 @@ class ManajemenAkun extends BaseController
             'username' => 'required|min_length[3]|max_length[20]' . $is_unique_username,
             'no_telp' => 'required|min_length[8]|max_length[18]' . $is_unique_no_telp,
             'id_game' => 'required|min_length[5]|is_natural' . $is_unique_id_game,
-            'role' => 'required|in_list[admin,user]'
+            'role'     => 'required|in_list[admin,user,super_admin]'
         ];
 
         $messages = [
