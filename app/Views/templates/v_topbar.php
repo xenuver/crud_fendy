@@ -68,57 +68,6 @@
                 }
                 ?>
 
-                <?php if (in_array(session()->get('role'), ['admin', 'super_admin'])): ?>
-                    <script>
-                        function pemicuNotifMelayang(title, body, url) {
-                            if (!('Notification' in window)) {
-                                alert('Browser HP Anda tidak mendukung Notifikasi.');
-                                return;
-                            }
-                            if (Notification.permission !== 'granted') {
-                                Notification.requestPermission().then(permission => {
-                                    if (permission === 'granted') {
-                                        pemicuNotifMelayang(title, body, url);
-                                    } else {
-                                        alert('Izin notifikasi ditolak di browser HP. Mohon izinkan notifikasi pada ikon gembok 🔒 di alamat URL browser.');
-                                    }
-                                });
-                                return;
-                            }
-
-                            const options = {
-                                body: body,
-                                icon: '<?= base_url('assets/img/bloodstrike_actual.jpg') ?>',
-                                badge: '<?= base_url('assets/img/bloodstrike_actual.jpg') ?>',
-                                vibrate: [200, 100, 200],
-                                data: { url: url || '<?= base_url('admin/laporan') ?>' }
-                            };
-
-                            if ('serviceWorker' in navigator) {
-                                navigator.serviceWorker.ready.then(function(reg) {
-                                    reg.showNotification(title, options);
-                                }).catch(function() {
-                                    new Notification(title, options);
-                                });
-                            } else {
-                                new Notification(title, options);
-                            }
-                        }
-
-                        <?php if ($bellCount > 0): ?>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            setTimeout(function() {
-                                pemicuNotifMelayang(
-                                    'Pengingat Laporan Pending',
-                                    'Terdapat <?= $bellCount ?> laporan mingguan kreator yang belum diverifikasi.',
-                                    '<?= base_url('admin/laporan') ?>'
-                                );
-                            }, 1000);
-                        });
-                        <?php endif; ?>
-                    </script>
-                <?php endif; ?>
-
                 <?php if (session()->get('role') == 'user'): ?>
                     <!-- Nav Item - Alerts -->
                     <li class="nav-item dropdown no-arrow mx-1">
@@ -209,11 +158,6 @@
                                         </div>
                                     </a>
                                 <?php endforeach; ?>
-                                <a class="dropdown-item text-center small p-2 bg-dark orbitron text-warning fw-bold border-top border-secondary"
-                                    href="javascript:void(0)"
-                                    onclick="pemicuNotifMelayang('Pengingat Laporan Pending (TES)', 'Ini adalah tes notifikasi melayang di HP Admin. Notifikasi berjalan dengan sukses!', '<?= base_url('admin/laporan') ?>')">
-                                    <i class="fas fa-bell mr-1"></i> TES NOTIFIKASI HP
-                                </a>
                                 <a class="dropdown-item text-center small text-gray-500 p-2 bg-dark orbitron text-info"
                                     href="<?= base_url('admin/laporan?status=pending') ?>">Ke Halaman Verifikasi</a>
                             <?php else: ?>

@@ -59,6 +59,7 @@ class ManajemenAkun extends BaseController
     {
         $rules = [
             'username' => 'required|min_length[3]|max_length[20]|is_unique[users.username]',
+            'email'    => 'permit_empty|valid_email|is_unique[users.email]',
             'no_telp'  => 'required|min_length[8]|max_length[18]|is_unique[users.no_telp]',
             'id_game'  => 'required|min_length[5]|is_natural|is_unique[users.id_game]',
             'password' => 'required|min_length[8]',
@@ -67,8 +68,9 @@ class ManajemenAkun extends BaseController
 
         $messages = [
             'username' => ['is_unique' => 'Username sudah digunakan oleh akun lain.'],
-            'no_telp' => ['is_unique' => 'Nomor telepon sudah terdaftar.'],
-            'id_game' => [
+            'email'    => ['is_unique' => 'Email sudah digunakan oleh akun lain.', 'valid_email' => 'Format email tidak valid.'],
+            'no_telp'   => ['is_unique' => 'Nomor telepon sudah terdaftar.'],
+            'id_game'  => [
                 'is_unique' => 'ID Game sudah digunakan oleh kreator lain.',
                 'is_natural' => 'ID Game hanya boleh berupa angka saja (tanpa huruf, titik, spasi, atau karakter lain).'
             ]
@@ -87,10 +89,11 @@ class ManajemenAkun extends BaseController
 
         $data = [
             'username' => $this->request->getPost('username'),
-            'no_telp' => $this->request->getPost('no_telp'),
-            'id_game' => $this->request->getPost('id_game'),
+            'email'    => trim($this->request->getPost('email') ?? ''),
+            'no_telp'  => $this->request->getPost('no_telp'),
+            'id_game'  => $this->request->getPost('id_game'),
             'password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
-            'role' => $this->request->getPost('role')
+            'role'     => $this->request->getPost('role')
         ];
 
         $this->db->transBegin();
@@ -148,20 +151,23 @@ class ManajemenAkun extends BaseController
 
         // Rules conditional, mengizinkan username/no_telp/id_game sama jika tidak diubah oleh user bersangkutan
         $is_unique_username = ($user['username'] == $this->request->getPost('username')) ? '' : '|is_unique[users.username]';
-        $is_unique_no_telp = ($user['no_telp'] == $this->request->getPost('no_telp')) ? '' : '|is_unique[users.no_telp]';
-        $is_unique_id_game = ($user['id_game'] == $this->request->getPost('id_game')) ? '' : '|is_unique[users.id_game]';
+        $is_unique_email    = (($user['email'] ?? '') == $this->request->getPost('email')) ? '' : '|is_unique[users.email]';
+        $is_unique_no_telp  = ($user['no_telp'] == $this->request->getPost('no_telp')) ? '' : '|is_unique[users.no_telp]';
+        $is_unique_id_game  = ($user['id_game'] == $this->request->getPost('id_game')) ? '' : '|is_unique[users.id_game]';
 
         $rules = [
             'username' => 'required|min_length[3]|max_length[20]' . $is_unique_username,
-            'no_telp' => 'required|min_length[8]|max_length[18]' . $is_unique_no_telp,
-            'id_game' => 'required|min_length[5]|is_natural' . $is_unique_id_game,
+            'email'    => 'permit_empty|valid_email' . $is_unique_email,
+            'no_telp'  => 'required|min_length[8]|max_length[18]' . $is_unique_no_telp,
+            'id_game'  => 'required|min_length[5]|is_natural' . $is_unique_id_game,
             'role'     => 'required|in_list[admin,user,super_admin]'
         ];
 
         $messages = [
             'username' => ['is_unique' => 'Username sudah digunakan oleh akun lain.'],
-            'no_telp' => ['is_unique' => 'Nomor telepon sudah terdaftar.'],
-            'id_game' => [
+            'email'    => ['is_unique' => 'Email sudah digunakan oleh akun lain.', 'valid_email' => 'Format email tidak valid.'],
+            'no_telp'   => ['is_unique' => 'Nomor telepon sudah terdaftar.'],
+            'id_game'  => [
                 'is_unique' => 'ID Game sudah digunakan oleh kreator lain.',
                 'is_natural' => 'ID Game hanya boleh berupa angka saja (tanpa huruf, titik, spasi, atau karakter lain).'
             ]
@@ -174,9 +180,10 @@ class ManajemenAkun extends BaseController
 
         $data = [
             'username' => $this->request->getPost('username'),
-            'no_telp' => $this->request->getPost('no_telp'),
-            'id_game' => $this->request->getPost('id_game'),
-            'role' => $this->request->getPost('role')
+            'email'    => trim($this->request->getPost('email') ?? ''),
+            'no_telp'  => $this->request->getPost('no_telp'),
+            'id_game'  => $this->request->getPost('id_game'),
+            'role'     => $this->request->getPost('role')
         ];
 
         // Ganti password hanya jika field password diisi

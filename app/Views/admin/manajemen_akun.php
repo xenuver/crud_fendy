@@ -20,6 +20,7 @@
                         <tr>
                             <th>No</th>
                             <th>Username</th>
+                            <th>Email</th>
                             <th>Nomor Telepon</th>
                             <th>ID Game</th>
                             <th>Role</th>
@@ -34,6 +35,7 @@
                             <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
                                 <td><?= $no++; ?></td>
                                 <td class="fw-bold text-light"><?= esc($user['username']); ?></td>
+                                <td class="text-info small"><?= esc($user['email'] ?? '—'); ?></td>
                                 <td><?= esc($user['no_telp']); ?></td>
                                 <td><span class="badge bg-secondary"><?= esc($user['id_game']); ?></span></td>
                                 <td>
@@ -242,6 +244,11 @@
                             <label for="username" class="form-label">Username</label>
                             <input type="text" class="form-control bg-dark text-white border-secondary" name="username" placeholder="Masukkan Username..." required>
                         </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Alamat Email <span class="text-secondary">(Untuk Notifikasi)</span></label>
+                            <input type="email" class="form-control bg-dark text-white border-secondary" name="email" placeholder="Contoh: admin@gmail.com">
+                        </div>
                         
                         <div class="mb-3">
                             <label for="no_telp" class="form-label">Nomor Telepon</label>
@@ -298,6 +305,11 @@
                         <div class="mb-3">
                             <label for="username" class="form-label">Username</label>
                             <input type="text" class="form-control bg-dark text-white border-secondary" name="username" value="<?= esc($user['username']) ?>" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Alamat Email <span class="text-secondary">(Untuk Notifikasi)</span></label>
+                            <input type="email" class="form-control bg-dark text-white border-secondary" name="email" value="<?= esc($user['email'] ?? '') ?>" placeholder="Contoh: admin@gmail.com">
                         </div>
                         
                         <div class="mb-3">

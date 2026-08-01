@@ -55,22 +55,6 @@
 
     <script src="<?= base_url('assets/js/global-admin.js') ?>"></script>
 
-    <!-- NATIVE WEB PUSH NOTIFICATION (0% RIBET - Khusus Admin & Super Admin) -->
-    <?php if (in_array(session()->get('role'), ['admin', 'super_admin'])): ?>
-        <script>
-            if ('serviceWorker' in navigator && 'Notification' in window) {
-                navigator.serviceWorker.register('<?= base_url('sw-admin.js') ?>')
-                    .then(function(reg) {
-                        if (Notification.permission === 'default') {
-                            Notification.requestPermission();
-                        }
-                    }).catch(function(err) {
-                        console.log('SW Registration Failed:', err);
-                    });
-            }
-        </script>
-    <?php endif; ?>
-
 </body>
 
 </html>
