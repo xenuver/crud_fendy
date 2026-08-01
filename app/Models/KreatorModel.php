@@ -53,11 +53,11 @@ class KreatorModel extends Model
             return $cached;
         }
 
-        // 1. Query #1: Ambil semua data kreator dasar (kecuali Admin)
+        // 1. Query #1: Ambil semua data kreator dasar (kecuali Admin & Super Admin)
         $kreators = $this->select('kreator.*')
             ->join('users', 'users.id_game = kreator.id_game', 'left')
             ->groupStart()
-            ->where('users.role !=', 'admin')
+            ->whereNotIn('users.role', ['admin', 'super_admin'])
             ->orWhere('users.role', null)
             ->groupEnd()
             ->findAll();

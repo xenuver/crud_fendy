@@ -35,14 +35,14 @@ class DataKreator extends BaseController
     // Menampilkan Leaderboard Kreator di halaman utama.
     public function index(): string
     {
-        // Ambil ID Game milik Admin untuk dikeluarkan dari daftar leaderboard
-        $adminGameIds = $this->db->table('users')->select('id_game')->where('role', 'admin')->get()->getResultArray();
+        // Ambil ID Game milik Admin & Super Admin untuk dikeluarkan dari daftar leaderboard
+        $adminGameIds = $this->db->table('users')->select('id_game')->whereIn('role', ['admin', 'super_admin'])->get()->getResultArray();
         $adminIds = array_column($adminGameIds, 'id_game');
 
         // Ambil Seluruh Kreator dengan Metrik dari Model
         $kreators = $this->kModel->getKreatorsWithMetrics();
 
-        // Filter: Keluarkan Admin dari list jika ada
+        // Filter: Keluarkan Admin & Super Admin dari list jika ada
         if (!empty($adminIds)) {
             $kreators = array_filter($kreators, function ($k) use ($adminIds) {
                 return !in_array($k['id_game'], $adminIds);

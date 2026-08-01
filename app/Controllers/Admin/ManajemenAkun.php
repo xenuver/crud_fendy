@@ -40,7 +40,7 @@ class ManajemenAkun extends BaseController
 
         $data = [
             'judul'              => 'Manajemen Akun',
-            'users'              => $this->uModel->orderBy('role', 'ASC')->orderBy('username', 'ASC')->paginate(10, 'user'),
+            'users'              => $this->uModel->orderBy("FIELD(role, 'super_admin', 'admin', 'user')", 'ASC', false)->orderBy('username', 'ASC')->paginate(10, 'user'),
             'pager'              => $this->uModel->pager, // Berisi pager untuk 'user' dan 'redeem'
             'redeem_codes'       => $redeemCodes,
             'unused_links_str'   => $unusedLinksList,
@@ -115,7 +115,8 @@ class ManajemenAkun extends BaseController
                 }
             }
             $this->db->transCommit();
-            session()->setFlashdata('success', 'Akun berhasil dibuat.');
+            cache()->delete('kreators_with_metrics_list');
+            session()->setFlashdata('success', 'Akun pengguna berhasil ditambahkan.');
         } catch (\Exception $e) {
             $this->db->transRollback();
             session()->setFlashdata('error', 'Gagal membuat akun: ' . $e->getMessage());
