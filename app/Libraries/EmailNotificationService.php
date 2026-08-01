@@ -4,7 +4,7 @@ namespace App\Libraries;
 
 use Config\Services;
 
-// Service pengirim Email Notifikasi resmi untuk Admin menggunakan CodeIgniter Email Library.
+// Service pengirim Email Notifikasi resmi untuk Admin menggunakan Resend API / SMTP.
 class EmailNotificationService
 {
     protected $email;
@@ -30,61 +30,37 @@ class EmailNotificationService
 
         $baseConfig = config('Email');
 
-        $smtpHost = $_ENV['SMTP_HOST'] ?? getenv('SMTP_HOST') ?: $baseConfig->SMTPHost;
-        $smtpUser = $_ENV['SMTP_USER'] ?? getenv('SMTP_USER') ?: $baseConfig->SMTPUser;
-        $smtpPass = $_ENV['SMTP_PASS'] ?? getenv('SMTP_PASS') ?: $baseConfig->SMTPPass;
-        $smtpPort = (int)($_ENV['SMTP_PORT'] ?? getenv('SMTP_PORT') ?: $baseConfig->SMTPPort ?: 465);
+        $smtpHost = $_ENV['SMTP_HOST'] ?? getenv('SMTP_HOST') ?: $_SERVER['SMTP_HOST'] ?? $baseConfig->SMTPHost;
+        $smtpUser = $_ENV['SMTP_USER'] ?? getenv('SMTP_USER') ?: $_SERVER['SMTP_USER'] ?? $baseConfig->SMTPUser;
+        $smtpPass = $_ENV['SMTP_PASS'] ?? getenv('SMTP_PASS') ?: $_SERVER['SMTP_PASS'] ?? $_ENV['RESEND_API_KEY'] ?? getenv('RESEND_API_KEY') ?: $baseConfig->SMTPPass;
+        $smtpPort = (int)($_ENV['SMTP_PORT'] ?? getenv('SMTP_PORT') ?: $_SERVER['SMTP_PORT'] ?? $baseConfig->SMTPPort ?: 465);
 
-        // Jika menggunakan Resend, isi default SMTPUser jika belum diisi
         if (strpos($smtpHost, 'resend') !== false && empty($smtpUser)) {
             $smtpUser = 'resend';
         }
 
-        if (!empty($smtpHost) && empty($smtpPass)) {
-            $this->lastError = 'Variabel SMTP_PASS (API Key Resend / Password SMTP) belum dimasukkan atau masih kosong di Environment Variables Coolify.';
-            return false;
+        // Ambil dari .env file langsung jika di CLI belum terisi
+        if (empty($smtpPass) && file_exists(ROOTPATH . '.env')) {
+            $envLines = file(ROOTPATH . '.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            foreach ($envLines as $line) {
+                if (strpos(trim($line), 'SMTP_PASS=') === 0 || strpos(trim($line), 'RESEND_API_KEY=') === 0) {
+                    $parts = explode('=', $line, 2);
+                    if (isset($parts[1])) {
+                        $smtpPass = trim($parts[1], " \"'");
+                    }
+                }
+            }
         }
 
-        if (!empty($smtpHost)) {
-            $crypto = ($smtpPort === 465) ? 'ssl' : 'tls';
-
-            $configArray = [
-                'userAgent'       => 'CodeIgniter',
-                'protocol'        => 'smtp',
-                'mailPath'        => '/usr/sbin/sendmail',
-                'SMTPHost'        => $smtpHost,
-                'SMTPUser'        => $smtpUser,
-                'SMTPPass'        => $smtpPass,
-                'SMTPPort'        => $smtpPort,
-                'SMTPTimeout'     => 10,
-                'SMTPKeepAlive'   => false,
-                'SMTPCrypto'      => $_ENV['SMTP_CRYPTO'] ?? getenv('SMTP_CRYPTO') ?: $crypto,
-                'wordWrap'        => true,
-                'wrapChars'       => 76,
-                'mailType'        => 'html',
-                'charset'         => 'UTF-8',
-                'validate'        => false,
-                'priority'        => 3,
-                'CRLF'            => "\r\n",
-                'newline'         => "\r\n",
-                'BCCBatchMode'    => false,
-                'BCCBatchSize'    => 200,
-                'DSN'             => false,
-                'SMTPAuth'        => true,
-                'SMTPAuthMethod'  => 'login',
-            ];
-
-            $this->email = new \CodeIgniter\Email\Email($configArray);
+        if (empty($smtpPass)) {
+            $this->lastError = 'Variabel SMTP_PASS (API Key Resend / Password SMTP) belum terbaca atau masih kosong di Coolify. Mohon isi SMTP_PASS lalu klik REDEPLOY di Coolify.';
+            return false;
         }
 
         $fromEmail = $_ENV['SMTP_FROM_EMAIL'] ?? getenv('SMTP_FROM_EMAIL') ?: ((strpos($smtpHost, 'resend') !== false) ? 'onboarding@resend.dev' : 'no-reply@kreatorbshub.my.id');
         $fromName  = $_ENV['SMTP_FROM_NAME'] ?? getenv('SMTP_FROM_NAME') ?: 'Bloodstrike Creator Hub';
 
-        $this->email->clear();
-        $this->email->setFrom($fromEmail, $fromName);
-        $this->email->setTo($adminEmail);
-        $this->email->setSubject("[Pengingat] {$pendingCount} Laporan Mingguan Kreator Belum Diverifikasi");
-
+        $subject = "[Pengingat] {$pendingCount} Laporan Mingguan Kreator Belum Diverifikasi";
         $linkVerifikasi = base_url('admin/laporan');
 
         $body = "
@@ -108,6 +84,44 @@ class EmailNotificationService
         </div>
         ";
 
+        // MENGGUNAKAN RESEND HTTP REST API (Super Fast & Reliable) jika API Key diawali `re_`
+        if (strpos($smtpPass, 're_') === 0 || strpos($smtpHost, 'resend') !== false) {
+            return $this->sendViaResendApi($smtpPass, $fromEmail, $fromName, $adminEmail, $subject, $body);
+        }
+
+        // FALLBACK SMTP BIASA
+        $crypto = ($smtpPort === 465) ? 'ssl' : 'tls';
+        $configArray = [
+            'userAgent'       => 'CodeIgniter',
+            'protocol'        => 'smtp',
+            'mailPath'        => '/usr/sbin/sendmail',
+            'SMTPHost'        => $smtpHost,
+            'SMTPUser'        => $smtpUser,
+            'SMTPPass'        => $smtpPass,
+            'SMTPPort'        => $smtpPort,
+            'SMTPTimeout'     => 10,
+            'SMTPKeepAlive'   => false,
+            'SMTPCrypto'      => $_ENV['SMTP_CRYPTO'] ?? getenv('SMTP_CRYPTO') ?: $crypto,
+            'wordWrap'        => true,
+            'wrapChars'       => 76,
+            'mailType'        => 'html',
+            'charset'         => 'UTF-8',
+            'validate'        => false,
+            'priority'        => 3,
+            'CRLF'            => "\r\n",
+            'newline'         => "\r\n",
+            'BCCBatchMode'    => false,
+            'BCCBatchSize'    => 200,
+            'DSN'             => false,
+            'SMTPAuth'        => true,
+            'SMTPAuthMethod'  => 'login',
+        ];
+
+        $this->email = new \CodeIgniter\Email\Email($configArray);
+        $this->email->clear();
+        $this->email->setFrom($fromEmail, $fromName);
+        $this->email->setTo($adminEmail);
+        $this->email->setSubject($subject);
         $this->email->setMessage($body);
         $this->email->setMailType('html');
 
@@ -117,5 +131,52 @@ class EmailNotificationService
         }
 
         return $sent;
+    }
+
+    // Mengirim Email langsung menggunakan Resend REST HTTP API (HTTPS Port 443)
+    protected function sendViaResendApi(string $apiKey, string $fromEmail, string $fromName, string $toEmail, string $subject, string $htmlBody): bool
+    {
+        $url = 'https://api.resend.com/emails';
+
+        // Resend default sender jika belum verifikasi domain khusus
+        if (strpos($fromEmail, 'resend.dev') === false && strpos($fromEmail, '@') !== false) {
+            $fromEmail = 'onboarding@resend.dev';
+        }
+
+        $payload = [
+            'from'    => "{$fromName} <{$fromEmail}>",
+            'to'      => [$toEmail],
+            'subject' => $subject,
+            'html'    => $htmlBody,
+        ];
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $apiKey,
+            'Content-Type: application/json',
+        ]);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $err      = curl_error($ch);
+        curl_close($ch);
+
+        if ($err) {
+            $this->lastError = 'cURL Error: ' . $err;
+            return false;
+        }
+
+        $resData = json_decode($response, true);
+
+        if ($httpCode >= 200 && $httpCode < 300 && isset($resData['id'])) {
+            return true;
+        }
+
+        $this->lastError = "Resend API Error ({$httpCode}): " . ($resData['message'] ?? $response);
+        return false;
     }
 }
