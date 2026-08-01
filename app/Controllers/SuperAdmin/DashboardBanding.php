@@ -36,10 +36,11 @@ class DashboardBanding extends BaseController
     {
         $filter = $this->request->getGet('filter') ?? 'menunggu';
 
-        $builder = $this->lModel->where('status_validasi', 'tidak_valid');
+        $builder = $this->lModel;
 
         if ($filter === 'menunggu') {
-            $builder = $builder->where('status_banding', 'menunggu');
+            $builder = $builder->where('status_validasi', 'tidak_valid')
+                               ->where('status_banding', 'menunggu');
         } elseif ($filter === 'selesai') {
             $builder = $builder->groupStart()
                 ->where('status_banding', 'diterima')
