@@ -79,6 +79,12 @@ class ManajemenAkun extends BaseController
             return redirect()->back()->withInput();
         }
 
+        // Mencegah Admin biasa membuat akun Super Admin baru
+        if ($this->request->getPost('role') === 'super_admin' && session()->get('role') !== 'super_admin') {
+            session()->setFlashdata('error', 'Otorisasi Gagal: Hanya Super Admin yang berhak membuat akun Super Admin baru.');
+            return redirect()->back()->withInput();
+        }
+
         $data = [
             'username' => $this->request->getPost('username'),
             'no_telp' => $this->request->getPost('no_telp'),
@@ -125,6 +131,17 @@ class ManajemenAkun extends BaseController
 
         if (!$user) {
             session()->setFlashdata('error', 'Data akun tidak ditemukan.');
+            return redirect()->back();
+        }
+
+        // Proteksi Otorisasi Super Admin
+        $currentSessionRole = session()->get('role');
+        if ($user['role'] === 'super_admin' && $currentSessionRole !== 'super_admin') {
+            session()->setFlashdata('error', 'Otorisasi Gagal: Admin biasa tidak memiliki wewenang untuk mengubah data akun Super Admin.');
+            return redirect()->back();
+        }
+        if ($this->request->getPost('role') === 'super_admin' && $currentSessionRole !== 'super_admin') {
+            session()->setFlashdata('error', 'Otorisasi Gagal: Hanya Super Admin yang dapat memberikan wewenang role Super Admin.');
             return redirect()->back();
         }
 
@@ -210,6 +227,12 @@ class ManajemenAkun extends BaseController
         // Mencegah admin menghapus dirinya sendiri saat sedang login
         if ($id == session()->get('id')) {
             session()->setFlashdata('error', 'Otorisasi Gagal: Anda tidak dapat menghapus akun Anda sendiri.');
+            return redirect()->back();
+        }
+
+        // Mencegah Admin biasa menghapus akun Super Admin
+        if ($user['role'] === 'super_admin' && session()->get('role') !== 'super_admin') {
+            session()->setFlashdata('error', 'Otorisasi Gagal: Admin biasa tidak memiliki wewenang untuk menghapus akun Super Admin.');
             return redirect()->back();
         }
 

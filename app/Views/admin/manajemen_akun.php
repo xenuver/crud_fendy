@@ -46,17 +46,23 @@
                                     <?php endif; ?>
                                 </td>
                                 <td class="align-middle px-4 text-center">
-                                    <div class="d-flex justify-content-center gap-2">
-                                        <button class="btn btn-outline-warning btn-sm p-1 border-0" data-toggle="modal" data-target="#editUserModal<?= $user['user_id'] ?>" title="Ubah Data">
-                                            <i class="fas fa-pen-nib"></i>
-                                        </button>
-                                        <form method="POST" action="<?= base_url('admin/users/delete/' . $user['user_id']) ?>" style="display:inline-block; margin:0;">
-                                            <?= csrf_field() ?>
-                                            <button type="button" class="btn btn-outline-danger btn-sm p-1 border-0 btn-delete-user" title="Hapus Akun">
-                                                <i class="fas fa-trash"></i>
+                                    <?php if ($user['role'] === 'super_admin' && session()->get('role') !== 'super_admin'): ?>
+                                        <span class="badge bg-dark border border-warning text-warning" style="font-size: 0.6rem; padding: 4px 8px;" title="Akun Super Admin terlindungi dari perubahan Admin biasa">
+                                            <i class="fas fa-lock me-1"></i> DIPROTEKSI
+                                        </span>
+                                    <?php else: ?>
+                                        <div class="d-flex justify-content-center gap-2">
+                                            <button class="btn btn-outline-warning btn-sm p-1 border-0" data-toggle="modal" data-target="#editUserModal<?= $user['user_id'] ?>" title="Ubah Data">
+                                                <i class="fas fa-pen-nib"></i>
                                             </button>
-                                        </form>
-                                    </div>
+                                            <form method="POST" action="<?= base_url('admin/users/delete/' . $user['user_id']) ?>" style="display:inline-block; margin:0;">
+                                                <?= csrf_field() ?>
+                                                <button type="button" class="btn btn-outline-danger btn-sm p-1 border-0 btn-delete-user" title="Hapus Akun">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

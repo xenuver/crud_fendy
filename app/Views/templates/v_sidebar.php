@@ -79,10 +79,10 @@
                 </div>
 
                 <!-- Nav Item - Dashboard Banding -->
-                <li class="nav-item <?= strpos(uri_string(), 'superadmin') === 0 ? 'active' : '' ?>"
-                    style="<?= strpos(uri_string(), 'superadmin') === 0 ? 'border-left: 3px solid #f59e0b;' : '' ?>">
+                <li class="nav-item <?= uri_string() === 'superadmin' ? 'active' : '' ?>"
+                    style="<?= uri_string() === 'superadmin' ? 'border-left: 3px solid #f59e0b;' : '' ?>">
                     <a class="nav-link" href="<?= base_url('superadmin') ?>"
-                        style="color: <?= strpos(uri_string(), 'superadmin') === 0 ? '#f59e0b' : 'rgba(255,255,255,0.8)' ?> !important;">
+                        style="color: <?= uri_string() === 'superadmin' ? '#f59e0b' : 'rgba(255,255,255,0.8)' ?> !important;">
                         <i class="fas fa-fw fa-balance-scale" style="color: #f59e0b;"></i>
                         <span>Panel Banding Kreator</span>
                         <?php
@@ -98,6 +98,16 @@
                                 <?= $jmlBanding ?>
                             </span>
                         <?php endif; ?>
+                    </a>
+                </li>
+
+                <!-- Nav Item - Profil (Super Admin) -->
+                <li class="nav-item <?= strpos(uri_string(), 'superadmin/profile') === 0 ? 'active' : '' ?>"
+                    style="<?= strpos(uri_string(), 'superadmin/profile') === 0 ? 'border-left: 3px solid #f59e0b;' : '' ?>">
+                    <a class="nav-link" href="<?= base_url('superadmin/profile') ?>"
+                        style="color: <?= strpos(uri_string(), 'superadmin/profile') === 0 ? '#f59e0b' : 'rgba(255,255,255,0.8)' ?> !important;">
+                        <i class="fas fa-fw fa-user-cog" style="color: #f59e0b;"></i>
+                        <span>Pengaturan Profil</span>
                     </a>
                 </li>
             <?php else: ?>

@@ -65,8 +65,13 @@ $routes->group('user', ['filter' => 'auth:user'], function ($routes) {
     $routes->post('password/update', 'User\ProfilKreator::update_password');
 });
 
-// Group Super Admin — Halaman Eksklusif Banding Kreator
+// Group Super Admin — Halaman Eksklusif Banding Kreator & Profil
 $routes->group('superadmin', ['filter' => 'auth:super_admin'], function ($routes) {
     $routes->get('/', 'SuperAdmin\DashboardBanding::index');
     $routes->post('banding/putuskan/(:num)', 'SuperAdmin\DashboardBanding::putuskan/$1');
+
+    // Super Admin Profile & Password
+    $routes->get('profile', 'SuperAdmin\PengaturanProfil::index');
+    $routes->post('profile/update', 'SuperAdmin\PengaturanProfil::update');
+    $routes->post('password/update', 'SuperAdmin\PengaturanProfil::update_password');
 });
