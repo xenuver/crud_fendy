@@ -108,12 +108,14 @@ class ManajemenAkun extends BaseController
                 if (!$existingKreator) {
                     $this->kModel->insert([
                         'nama' => $this->request->getPost('username'),
+                        'email' => trim($this->request->getPost('email') ?? '') ?: null,
                         'alamat' => 'Indonesia',
                         'id_game' => $this->request->getPost('id_game')
                     ]);
                 } else {
                     $this->kModel->update($existingKreator['kreator_id'], [
-                        'nama' => $this->request->getPost('username')
+                        'nama' => $this->request->getPost('username'),
+                        'email' => trim($this->request->getPost('email') ?? '') ?: null
                     ]);
                 }
             }
@@ -209,6 +211,7 @@ class ManajemenAkun extends BaseController
                 if ($kreator) {
                     $this->kModel->update($kreator['kreator_id'], [
                         'nama' => $data['username'],
+                        'email' => $data['email'] ?: null,
                         'id_game' => $data['id_game']
                     ]);
                 }

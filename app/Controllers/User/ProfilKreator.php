@@ -111,15 +111,23 @@ class ProfilKreator extends BaseController
         try {
             // Jika UID berubah, update tabel users DULU (parent FK)
             // agar kreator.id_game bisa di-update tanpa FK violation
+            // Update email & UID di tabel users agar sinkron dengan tabel kreator
+            $userUpdate = [];
             if ($uidChanged) {
-                $user = $this->uModel->find($session->get('id'));
-                if ($user) {
-                    $this->uModel->update($user['user_id'], ['id_game' => $newIdGame]);
+                $userUpdate['id_game'] = $newIdGame;
+            }
+            if (array_key_exists('email', $data)) {
+                $userUpdate['email'] = $data['email'];
+            }
+            
+            if (!empty($userUpdate)) {
+                $this->uModel->update($session->get('id'), $userUpdate);
+                if ($uidChanged) {
+                    $session->set('id_game', $newIdGame);
                 }
-                $session->set('id_game', $newIdGame);
             }
 
-            // Update kreator (id_game sudah di-cascade, field lain di-update di sini)
+            // Update kreator (id_game sudah di-cascade jika berubah, field lain di-update di sini)
             $this->kModel->update($kreator['kreator_id'], $data);
 
             $this->db->transCommit();
