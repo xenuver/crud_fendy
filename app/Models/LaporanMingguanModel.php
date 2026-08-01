@@ -31,7 +31,10 @@ class LaporanMingguanModel extends Model
         'foto_penonton_puncak_live', // Foto screenshot bukti CCV
         'status_validasi',       // Status dari admin
         'pesan_admin',           // Feedback dari admin
-        'is_read'                // NEW: Status notifikasi sudah dibaca/belum
+        'is_read',               // Status notifikasi sudah dibaca/belum
+        'status_banding',        // Status banding kreator (null/menunggu/diterima/ditolak_final)
+        'alasan_banding',        // Alasan banding yang diisi kreator
+        'catatan_superadmin'     // Catatan keputusan dari super admin
     ];
 
     protected bool $allowEmptyInserts = false;

@@ -72,6 +72,34 @@
                         <span>Manajemen Akun</span>
                     </a>
                 </li>
+            <?php elseif (session()->get('role') == 'super_admin'): ?>
+                <!-- ===== MENU SUPER ADMIN ===== -->
+                <div class="sidebar-heading mt-3 mb-2 px-3" style="color: #f59e0b; font-size: 0.6rem; letter-spacing: 2px; font-weight: bold;">
+                    <i class="fas fa-crown mr-1"></i> PANEL SUPER ADMIN
+                </div>
+
+                <!-- Nav Item - Dashboard Banding -->
+                <li class="nav-item <?= strpos(uri_string(), 'superadmin') === 0 ? 'active' : '' ?>"
+                    style="<?= strpos(uri_string(), 'superadmin') === 0 ? 'border-left: 3px solid #f59e0b;' : '' ?>">
+                    <a class="nav-link" href="<?= base_url('superadmin') ?>"
+                        style="color: <?= strpos(uri_string(), 'superadmin') === 0 ? '#f59e0b' : 'rgba(255,255,255,0.8)' ?> !important;">
+                        <i class="fas fa-fw fa-balance-scale" style="color: #f59e0b;"></i>
+                        <span>Panel Banding Kreator</span>
+                        <?php
+                        // Badge jumlah banding menunggu
+                        $db = \Config\Database::connect();
+                        $jmlBanding = $db->table('laporan_mingguan')
+                            ->where('status_banding', 'menunggu')
+                            ->where('status_validasi', 'tidak_valid')
+                            ->countAllResults();
+                        if ($jmlBanding > 0):
+                        ?>
+                            <span class="badge ml-auto" style="background: #f59e0b; color: #000; font-size: 0.6rem; border-radius: 10px; padding: 2px 6px;">
+                                <?= $jmlBanding ?>
+                            </span>
+                        <?php endif; ?>
+                    </a>
+                </li>
             <?php else: ?>
                 <!-- Nav Item - Dashboard Utama (User) -->
                 <li class="nav-item <?= uri_string() == 'user' ? 'active' : '' ?>">

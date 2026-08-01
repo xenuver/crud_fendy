@@ -74,7 +74,7 @@ class Auth extends BaseController
 
         if ($user && password_verify($password, $user['password'])) {
             $idGameStr = (string) ($user['id_game'] ?? '');
-            if ($user['role'] !== 'admin') {
+            if ($user['role'] !== 'admin' && $user['role'] !== 'super_admin') {
                 $this->kModel->getOrCreateProfile($idGameStr, $user['username']);
             }
 
@@ -90,7 +90,13 @@ class Auth extends BaseController
                 'isLoggedIn' => true,
             ]);
 
-            return $user['role'] == 'admin' ? redirect()->to('/admin') : redirect()->to('/user');
+            if ($user['role'] === 'super_admin') {
+                return redirect()->to('/superadmin');
+            } elseif ($user['role'] === 'admin') {
+                return redirect()->to('/admin');
+            } else {
+                return redirect()->to('/user');
+            }
         }
 
         $session->setFlashdata('error', 'Username atau password salah.');

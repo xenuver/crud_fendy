@@ -59,7 +59,14 @@ $routes->group('user', ['filter' => 'auth:user'], function ($routes) {
     $routes->get('laporan', 'User\LaporanKreator::index');
     $routes->post('laporan/save', 'User\LaporanKreator::save');
     $routes->get('laporan/read/(:num)', 'User\LaporanKreator::markAsRead/$1');
+    $routes->post('laporan/banding/(:num)', 'User\LaporanKreator::ajukanBanding/$1');
     $routes->get('profile', 'User\ProfilKreator::profile');
     $routes->post('profile/update', 'User\ProfilKreator::update_profile');
     $routes->post('password/update', 'User\ProfilKreator::update_password');
+});
+
+// Group Super Admin — Halaman Eksklusif Banding Kreator
+$routes->group('superadmin', ['filter' => 'auth:super_admin'], function ($routes) {
+    $routes->get('/', 'SuperAdmin\DashboardBanding::index');
+    $routes->post('banding/putuskan/(:num)', 'SuperAdmin\DashboardBanding::putuskan/$1');
 });

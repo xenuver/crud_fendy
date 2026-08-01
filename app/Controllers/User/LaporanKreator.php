@@ -373,4 +373,51 @@ class LaporanKreator extends BaseController
 
         return redirect()->to(base_url('user/laporan'));
     }
+
+    // Memproses pengajuan banding oleh kreator untuk laporan yang ditolak admin.
+    public function ajukanBanding(int $id): ResponseInterface
+    {
+        $kreator = $this->kModel->where('id_game', session()->get('id_game'))->first();
+
+        if (!$kreator) {
+            return redirect()->back()->with('error', 'Data kreator tidak ditemukan.');
+        }
+
+        // Validasi: laporan harus milik kreator yang sedang login
+        $laporan = $this->lModel
+            ->where('laporan_id', $id)
+            ->where('kreator_id', $kreator['kreator_id'])
+            ->first();
+
+        if (!$laporan) {
+            return redirect()->back()->with('error', 'Laporan tidak ditemukan atau bukan milik Anda.');
+        }
+
+        // Validasi: hanya laporan berstatus tidak_valid yang bisa dibanding
+        if ($laporan['status_validasi'] !== 'tidak_valid') {
+            return redirect()->back()->with('error', 'Hanya laporan yang ditolak yang dapat diajukan banding.');
+        }
+
+        // Validasi: belum pernah mengajukan banding sebelumnya (cegah banding ulang)
+        if (!empty($laporan['status_banding'])) {
+            return redirect()->back()->with('error', 'Anda sudah pernah mengajukan banding untuk laporan ini.');
+        }
+
+        $alasan = trim($this->request->getPost('alasan_banding') ?? '');
+
+        if (empty($alasan) || strlen($alasan) < 10) {
+            return redirect()->back()->with('error', 'Alasan banding wajib diisi (minimal 10 karakter).');
+        }
+
+        if ($this->lModel->update($id, [
+            'status_banding' => 'menunggu',
+            'alasan_banding' => $alasan,
+            'is_read'        => 1,
+        ])) {
+            return redirect()->back()->with('success', 'Banding berhasil diajukan. Mohon tunggu keputusan dari Super Admin.');
+        }
+
+        return redirect()->back()->with('error', 'Gagal mengajukan banding. Silakan coba lagi.');
+    }
 }
+

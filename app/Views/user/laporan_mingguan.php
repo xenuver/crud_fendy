@@ -477,6 +477,42 @@
                                                     </button>
                                                 </div>
                                             <?php endif; ?>
+
+                                            <!-- BADGE STATUS BANDING -->
+                                            <?php if (!empty($lap['status_banding'])): ?>
+                                                <div class="mt-1">
+                                                    <?php if ($lap['status_banding'] === 'menunggu'): ?>
+                                                        <span class="badge orbitron" style="background: rgba(245,158,11,0.2); color: #f59e0b; border: 1px solid rgba(245,158,11,0.5); font-size: 0.5rem; padding: 3px 6px;">
+                                                            <i class="fas fa-clock mr-1"></i>BANDING DITINJAU
+                                                        </span>
+                                                    <?php elseif ($lap['status_banding'] === 'diterima'): ?>
+                                                        <span class="badge orbitron" style="background: rgba(16,185,129,0.2); color: #10b981; border: 1px solid rgba(16,185,129,0.5); font-size: 0.5rem; padding: 3px 6px;">
+                                                            <i class="fas fa-check mr-1"></i>BANDING DITERIMA
+                                                        </span>
+                                                    <?php else: ?>
+                                                        <span class="badge orbitron" style="background: rgba(239,68,68,0.2); color: #ef4444; border: 1px solid rgba(239,68,68,0.5); font-size: 0.5rem; padding: 3px 6px;">
+                                                            <i class="fas fa-times mr-1"></i>BANDING DITOLAK
+                                                        </span>
+                                                        <?php if (!empty($lap['catatan_superadmin'])): ?>
+                                                            <div class="mt-1 text-secondary" style="font-size: 0.58rem; line-height: 1.3;">
+                                                                <i class="fas fa-shield-alt mr-1" style="color: #6366f1;"></i><?= esc($lap['catatan_superadmin']) ?>
+                                                            </div>
+                                                        <?php endif; ?>
+                                                    <?php endif; ?>
+                                                </div>
+                                            <?php endif; ?>
+
+                                            <!-- TOMBOL AJUKAN BANDING -->
+                                            <?php if ($lap['status_validasi'] === 'tidak_valid' && empty($lap['status_banding'])): ?>
+                                                <div class="mt-2">
+                                                    <button type="button"
+                                                        class="btn btn-sm orbitron"
+                                                        style="background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.5); font-size: 0.55rem; padding: 3px 8px; border-radius: 4px;"
+                                                        onclick="bukaModalBanding(<?= $lap['laporan_id'] ?>)">
+                                                        <i class="fas fa-balance-scale mr-1"></i>AJUKAN BANDING
+                                                    </button>
+                                                </div>
+                                            <?php endif; ?>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -543,8 +579,49 @@
     </div>
 </div>
 
+<!-- MODAL AJUKAN BANDING -->
+<div class="modal fade" id="modalAjukanBanding" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 99999;">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content" style="background: #0f172a; border: 1px solid rgba(245,158,11,0.4); border-radius: 8px; box-shadow: 0 20px 60px rgba(0,0,0,0.8);">
+            <div class="modal-header" style="border-bottom: 1px solid rgba(245,158,11,0.2);">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-balance-scale mr-2" style="color: #f59e0b;"></i>
+                    <span class="orbitron text-white fw-bold" style="font-size: 0.8rem;">AJUKAN BANDING LAPORAN</span>
+                </div>
+                <button type="button" class="close text-white" data-dismiss="modal" style="opacity: 0.5;">&times;</button>
+            </div>
+            <form id="formAjukanBanding" method="POST">
+                <?= csrf_field() ?>
+                <div class="modal-body py-4 px-4">
+                    <div class="alert border-0 mb-3" style="background: rgba(245,158,11,0.1); border-left: 3px solid #f59e0b !important;">
+                        <span class="text-white small d-block" style="font-size: 0.75rem;">
+                            Jika Anda merasa laporan ditolak secara tidak wajar atau tanpa alasan jelas, tuliskan penjelasan/alasan keberatan Anda di bawah ini untuk ditinjau oleh <strong>Super Admin</strong>.
+                        </span>
+                    </div>
+                    <div class="form-group mb-0">
+                        <label class="orbitron text-white small fw-bold mb-2">ALASAN BANDING <span class="text-danger">*</span></label>
+                        <textarea name="alasan_banding" class="form-control bg-dark text-white border-secondary" rows="4" style="font-size: 0.8rem; border-radius: 4px; resize: none;" placeholder="Jelaskan alasan banding Anda (min. 10 karakter)..." required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top: 1px solid rgba(255,255,255,0.07);">
+                    <button type="button" class="btn btn-sm btn-outline-secondary orbitron" style="font-size: 0.65rem; border-radius: 4px;" data-dismiss="modal">BATAL</button>
+                    <button type="submit" class="btn btn-sm orbitron text-dark fw-bold px-3" style="background: #f59e0b; border-radius: 4px; border: none; font-size: 0.65rem;">KIRIM BANDING</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- FLATPICKR JS -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <!-- SCRIPTS -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="<?= base_url('assets/js/laporan-mingguan.js') ?>"></script>
+<script>
+function bukaModalBanding(laporanId) {
+    const form = document.getElementById('formAjukanBanding');
+    form.action = '<?= base_url('user/laporan/banding') ?>/' + laporanId;
+    $('#modalAjukanBanding').modal('show');
+}
+</script>
+

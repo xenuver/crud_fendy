@@ -25,7 +25,10 @@ class AuthFilter implements FilterInterface
         if ($arguments && is_array($arguments)) {
             $role = session()->get('role');
             if (!in_array($role, $arguments)) {
-                if ($role == 'admin') {
+                // Redirect ke dashboard sesuai role masing-masing
+                if ($role === 'super_admin') {
+                    return redirect()->to('/superadmin');
+                } elseif ($role === 'admin') {
                     return redirect()->to('/admin');
                 } else {
                     return redirect()->to('/user');
@@ -33,8 +36,9 @@ class AuthFilter implements FilterInterface
             }
         }
 
-        // Cek status suspend (kecuali admin)
-        if (session()->get('role') != 'admin' && session()->get('id_game')) {
+        // Cek status suspend (kecuali admin dan super_admin)
+        $currentRole = session()->get('role');
+        if ($currentRole !== 'admin' && $currentRole !== 'super_admin' && session()->get('id_game')) {
             $uri = trim($request->getUri()->getPath(), '/');
             // Kecuali rute logout dan suspended itu sendiri
             if (!in_array($uri, ['logout', 'suspended'])) {
@@ -56,3 +60,4 @@ class AuthFilter implements FilterInterface
         // Logika tambahan jika diperlukan setelah request dijalankan
     }
 }
+
