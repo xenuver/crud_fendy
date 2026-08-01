@@ -29,6 +29,18 @@ class EmailNotificationService
         }
 
         $config = config('Email');
+        $smtpHost = $_ENV['SMTP_HOST'] ?? getenv('SMTP_HOST') ?: $config->SMTPHost;
+
+        if (!empty($smtpHost)) {
+            $config->protocol   = 'smtp';
+            $config->SMTPHost   = $smtpHost;
+            $config->SMTPUser   = $_ENV['SMTP_USER'] ?? getenv('SMTP_USER') ?: $config->SMTPUser;
+            $config->SMTPPass   = $_ENV['SMTP_PASS'] ?? getenv('SMTP_PASS') ?: $config->SMTPPass;
+            $config->SMTPPort   = (int)($_ENV['SMTP_PORT'] ?? getenv('SMTP_PORT') ?: $config->SMTPPort ?: 587);
+            $config->SMTPCrypto = $_ENV['SMTP_CRYPTO'] ?? getenv('SMTP_CRYPTO') ?: 'tls';
+            $this->email->initialize((array)$config);
+        }
+
         $fromEmail = !empty($config->fromEmail) ? $config->fromEmail : 'no-reply@kreatorbshub.my.id';
         $fromName  = !empty($config->fromName) ? $config->fromName : 'Bloodstrike Creator Hub';
 
