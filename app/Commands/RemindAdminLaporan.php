@@ -5,14 +5,15 @@ namespace App\Commands;
 use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
 use App\Models\LaporanMingguanModel;
-use App\Libraries\OneSignalService;
+use App\Models\UserModel;
+use App\Libraries\EmailNotificationService;
 
-// Perintah CLI untuk memeriksa laporan pending dan meng-update status pengingat Admin.
+// Perintah CLI untuk pengiriman Email Notifikasi Pengingat Laporan Pending ke Admin.
 class RemindAdminLaporan extends BaseCommand
 {
     protected $group       = 'Admin Reminder';
     protected $name        = 'remind:admin';
-    protected $description = 'Pemeriksaan otomatis status laporan pending untuk pengingat Admin.';
+    protected $description = 'Pemeriksaan otomatis & pengiriman Email Notifikasi laporan pending ke Admin.';
 
     public function run(array $params)
     {
@@ -22,34 +23,39 @@ class RemindAdminLaporan extends BaseCommand
         $pendingCount = $lModel->where('status_validasi', 'pending')->countAllResults();
 
         if ($pendingCount === 0) {
-            CLI::write('✅ Tidak ada laporan pending. Pengingat dilewati.', 'green');
+            CLI::write('✅ Tidak ada laporan pending. Pengiriman email pengingat dilewati.', 'green');
             return;
         }
 
         CLI::write("⚠️ Ditemukan {$pendingCount} laporan mingguan pending.", 'red');
+        CLI::write('Mencari alamat email Admin...', 'cyan');
 
-        // Jika variabel OneSignal terpasang, coba kirim via OneSignal
-        $appId = $_ENV['ONESIGNAL_APP_ID'] ?? getenv('ONESIGNAL_APP_ID') ?: '';
-        if (!empty($appId)) {
-            CLI::write('Mengirimkan Web Push Notification via OneSignal...', 'cyan');
-            $oneSignal = new OneSignalService();
-            $result    = $oneSignal->sendNotification(
-                'Pengingat Laporan Pending',
-                "Terdapat {$pendingCount} laporan mingguan kreator yang belum diverifikasi.",
-                base_url('admin/laporan')
-            );
+        $uModel = new UserModel();
+        $admins = $uModel->whereIn('role', ['admin', 'super_admin'])->findAll();
 
-            if ($result['success']) {
-                CLI::write("✅ Notifikasi OneSignal berhasil dikirim.", 'green');
-            } else {
-                CLI::write("⚠️ OneSignal Warning: " . ($result['message'] ?? 'Gagal'), 'yellow');
-            }
-        } else {
-            // Menggunakan Native Web Push Notification (0% Config)
-            CLI::write('✅ Peringatan Laporan Pending Aktif (Native Web Push Notification).', 'green');
-            CLI::write("ℹ️ Notifikasi melayang akan otomatis tampil di layar HP/Laptop Admin yang mengaktifkan Notifikasi.", 'white');
+        if (empty($admins)) {
+            CLI::error('❌ Tidak ditemukan akun Admin/Super Admin di database.');
+            return;
         }
 
-        CLI::write('=== PEMERIKSAAN SELESAI ===', 'yellow');
+        $emailService = new EmailNotificationService();
+        $successCount = 0;
+
+        foreach ($admins as $adm) {
+            // Jika akun admin memiliki kolom email atau menggunakan username/email
+            $email = $adm['email'] ?? $adm['username'] ?? '';
+            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                CLI::write("Mengirimkan email pengingat ke: {$email}...", 'white');
+                $sent = $emailService->sendPendingReportReminder($email, $pendingCount);
+                if ($sent) {
+                    $successCount++;
+                    CLI::write("  ✅ Email sukses terkirim ke {$email}", 'green');
+                } else {
+                    CLI::write("  ⚠️ Gagal mengirim email ke {$email}", 'yellow');
+                }
+            }
+        }
+
+        CLI::write("=== PEMERIKSAAN SELESAI: {$successCount} Email Pengingat Berhasil Terkirim ===", 'yellow');
     }
 }
