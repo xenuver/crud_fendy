@@ -463,13 +463,13 @@ function bukaModalTinjau(data) {
 
     if (data.status_banding === 'menunggu') {
         sectionForm.classList.remove('d-none');
-        footerAksi.classList.remove('d-none');
         sectionRiwayat.classList.add('d-none');
+        footerAksi.style.setProperty('display', 'flex', 'important');
         document.getElementById('catatanSuperadmin').value = '';
     } else {
         sectionForm.classList.add('d-none');
-        footerAksi.classList.add('d-none');
         sectionRiwayat.classList.remove('d-none');
+        footerAksi.style.setProperty('display', 'none', 'important');
         document.getElementById('mCatatanSuperadminSelesai').textContent = data.catatan_superadmin ? data.catatan_superadmin : '-';
     }
 
