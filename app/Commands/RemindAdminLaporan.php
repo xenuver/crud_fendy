@@ -42,8 +42,11 @@ class RemindAdminLaporan extends BaseCommand
         $successCount = 0;
 
         foreach ($admins as $adm) {
-            // Jika akun admin memiliki kolom email atau menggunakan username/email
-            $email = $adm['email'] ?? $adm['username'] ?? '';
+            $email = trim($adm['email'] ?? '');
+            if (empty($email)) {
+                $email = trim($adm['username'] ?? '');
+            }
+
             if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 CLI::write("Mengirimkan email pengingat ke: {$email}...", 'white');
                 $sent = $emailService->sendPendingReportReminder($email, $pendingCount);
@@ -52,7 +55,13 @@ class RemindAdminLaporan extends BaseCommand
                     CLI::write("  ✅ Email sukses terkirim ke {$email}", 'green');
                 } else {
                     CLI::write("  ⚠️ Gagal mengirim email ke {$email}", 'yellow');
+                    $errDetail = $emailService->getLastError();
+                    if (!empty($errDetail)) {
+                        CLI::write("  🔍 Detail Error: " . trim($errDetail), 'red');
+                    }
                 }
+            } else {
+                CLI::write("  ⚠️ Lewati {$adm['username']}: Alamat email '{$email}' tidak valid.", 'yellow');
             }
         }
 

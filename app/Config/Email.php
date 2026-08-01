@@ -6,9 +6,23 @@ use CodeIgniter\Config\BaseConfig;
 
 class Email extends BaseConfig
 {
-    public string $fromEmail  = '';
-    public string $fromName   = '';
+    public string $fromEmail  = 'no-reply@kreatorbshub.my.id';
+    public string $fromName   = 'Bloodstrike Creator Hub';
     public string $recipients = '';
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->fromEmail  = $_ENV['SMTP_FROM_EMAIL'] ?? getenv('SMTP_FROM_EMAIL') ?: 'no-reply@kreatorbshub.my.id';
+        $this->fromName   = $_ENV['SMTP_FROM_NAME'] ?? getenv('SMTP_FROM_NAME') ?: 'Bloodstrike Creator Hub';
+        $this->protocol   = $_ENV['SMTP_PROTOCOL'] ?? getenv('SMTP_PROTOCOL') ?: 'mail';
+        $this->SMTPHost   = $_ENV['SMTP_HOST'] ?? getenv('SMTP_HOST') ?: '';
+        $this->SMTPUser   = $_ENV['SMTP_USER'] ?? getenv('SMTP_USER') ?: '';
+        $this->SMTPPass   = $_ENV['SMTP_PASS'] ?? getenv('SMTP_PASS') ?: '';
+        $this->SMTPPort   = (int)($_ENV['SMTP_PORT'] ?? getenv('SMTP_PORT') ?: 587);
+        $this->SMTPCrypto = $_ENV['SMTP_CRYPTO'] ?? getenv('SMTP_CRYPTO') ?: 'tls';
+    }
 
     /**
      * The "user agent"

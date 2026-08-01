@@ -8,20 +8,32 @@ use Config\Services;
 class EmailNotificationService
 {
     protected $email;
+    protected string $lastError = '';
 
     public function __construct()
     {
         $this->email = Services::email();
     }
 
+    public function getLastError(): string
+    {
+        return $this->lastError;
+    }
+
     // Mengirimkan Email Notifikasi Pengingat Laporan Pending ke Email Admin
     public function sendPendingReportReminder(string $adminEmail, int $pendingCount): bool
     {
         if (empty($adminEmail)) {
+            $this->lastError = 'Alamat email penerima kosong.';
             return false;
         }
 
+        $config = config('Email');
+        $fromEmail = !empty($config->fromEmail) ? $config->fromEmail : 'no-reply@kreatorbshub.my.id';
+        $fromName  = !empty($config->fromName) ? $config->fromName : 'Bloodstrike Creator Hub';
+
         $this->email->clear();
+        $this->email->setFrom($fromEmail, $fromName);
         $this->email->setTo($adminEmail);
         $this->email->setSubject("[Pengingat] {$pendingCount} Laporan Mingguan Kreator Belum Diverifikasi");
 
@@ -51,6 +63,11 @@ class EmailNotificationService
         $this->email->setMessage($body);
         $this->email->setMailType('html');
 
-        return $this->email->send();
+        $sent = $this->email->send(false);
+        if (!$sent) {
+            $this->lastError = strip_tags($this->email->printDebugger(['headers', 'subject']));
+        }
+
+        return $sent;
     }
 }
