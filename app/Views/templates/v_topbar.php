@@ -68,6 +68,26 @@
                 }
                 ?>
 
+                <?php if (in_array(session()->get('role'), ['admin', 'super_admin']) && $bellCount > 0): ?>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            if ('Notification' in window && Notification.permission === 'granted') {
+                                const lastNotif = localStorage.getItem('last_admin_pending_notif');
+                                const now = new Date().getTime();
+                                if (!lastNotif || (now - parseInt(lastNotif)) > (4 * 3600 * 1000)) {
+                                    localStorage.setItem('last_admin_pending_notif', now.toString());
+                                    try {
+                                        new Notification('Pengingat Laporan Pending', {
+                                            body: 'Terdapat <?= $bellCount ?> laporan mingguan kreator yang belum diverifikasi.',
+                                            icon: '<?= base_url('assets/img/bloodstrike_actual.jpg') ?>'
+                                        });
+                                    } catch (e) {}
+                                }
+                            }
+                        });
+                    </script>
+                <?php endif; ?>
+
                 <?php if (session()->get('role') == 'user'): ?>
                     <!-- Nav Item - Alerts -->
                     <li class="nav-item dropdown no-arrow mx-1">
