@@ -75,6 +75,7 @@ class ProfilKreator extends BaseController
         $rules = [
             'nama'         => 'required|min_length[3]',
             'alamat'       => 'required',
+            'email'        => 'permit_empty|valid_email',
             'tiktok_link'  => 'permit_empty|valid_url|regex_match[/tiktok\.com/i]',
             'youtube_link' => 'permit_empty|valid_url|regex_match[/youtube\.com|youtu\.be/i]',
         ];
@@ -93,9 +94,10 @@ class ProfilKreator extends BaseController
         }
 
         $data = [
-            'nama' => $this->request->getPost('nama'),
-            'alamat' => $this->request->getPost('alamat'),
-            'tiktok_link' => $this->request->getPost('tiktok_link'),
+            'nama'         => $this->request->getPost('nama'),
+            'alamat'       => $this->request->getPost('alamat'),
+            'email'        => $this->request->getPost('email') ?: null,
+            'tiktok_link'  => $this->request->getPost('tiktok_link'),
             'youtube_link' => $this->request->getPost('youtube_link'),
         ];
 

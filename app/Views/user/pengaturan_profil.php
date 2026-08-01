@@ -78,6 +78,20 @@
 
                             <hr style="border-top: 1px dashed rgba(255,255,255,0.1);" class="my-4">
 
+                            <!-- Email Notifikasi -->
+                            <div class="row mb-4">
+                                <div class="col-md-12">
+                                    <label class="label-taktis mb-2"><i class="fas fa-envelope mr-2 text-warning"></i> EMAIL NOTIFIKASI</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-dark border-secondary text-warning"><i class="fas fa-envelope"></i></span>
+                                        <input type="email" class="form-control form-control-tactical" name="email"
+                                            value="<?= esc($kreator['email'] ?? '') ?>"
+                                            placeholder="emailkamu@gmail.com">
+                                    </div>
+                                    <div class="small text-muted mt-1">📧 Email ini dipakai untuk notifikasi otomatis status laporan mingguanmu.</div>
+                                </div>
+                            </div>
+
                             <div class="row">
                                 <div class="col-md-6 mb-4">
                                     <label class="label-taktis mb-2"><i class="fab fa-tiktok mr-2"></i> LINK CHANNEL
@@ -91,6 +105,7 @@
                                     </div>
                                     <div class="small text-muted mt-1">Contoh: https://www.tiktok.com/@nama_anda</div>
                                 </div>
+
                                 <div class="col-md-6 mb-4">
                                     <label class="label-taktis mb-2"><i class="fab fa-youtube mr-2"></i> LINK CHANNEL
                                         YOUTUBE</label>

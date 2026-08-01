@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\LaporanMingguanModel;
 use App\Models\KreatorModel;
 use App\Libraries\CloudStorageService;
+use App\Libraries\EmailNotificationService;
 use CodeIgniter\HTTP\ResponseInterface;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -153,18 +154,36 @@ class LaporanMingguan extends BaseController
     public function verify(int $id): ResponseInterface
     {
         $status = $this->request->getPost('status');
-        $pesan = $this->request->getPost('pesan');
+        $pesan  = $this->request->getPost('pesan');
 
         if (in_array($status, ['valid', 'tidak_valid', 'pending'])) {
             $updateData = [
                 'status_validasi' => $status,
-                'pesan_admin' => $pesan,
-                'is_read' => ($status !== 'pending' ? 0 : 1)
+                'pesan_admin'     => $pesan,
+                'is_read'         => ($status !== 'pending' ? 0 : 1)
             ];
 
             if ($this->lModel->update($id, $updateData)) {
                 cache()->delete('kreators_with_metrics_list');
                 $msg = $status === 'valid' ? 'Laporan divalidasi sebagai VALID.' : 'Laporan ditandai sebagai TIDAK VALID.';
+
+                // Kirim Email Notifikasi ke Kreator jika status diverifikasi (bukan pending)
+                if (in_array($status, ['valid', 'tidak_valid'])) {
+                    $laporan = $this->lModel->find($id);
+                    if ($laporan) {
+                        $kreator = $this->kModel->find($laporan['kreator_id']);
+                        if ($kreator && !empty($kreator['email'])) {
+                            $emailSvc = new EmailNotificationService();
+                            $emailSvc->sendLaporanStatusToKreator(
+                                $kreator['email'],
+                                $kreator['nama'],
+                                $status,
+                                $pesan ?? ''
+                            );
+                        }
+                    }
+                }
+
                 session()->setFlashdata('success', $msg . ' Feedback telah dikirim.');
             }
         }

@@ -20,6 +20,7 @@ class KreatorModel extends Model
     // Field yang diizinkan untuk diisi sesuai request
     protected $allowedFields = [
         'nama',
+        'email',
         'alamat',
         'id_game',
         'last_uid_update',
