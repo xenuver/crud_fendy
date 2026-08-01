@@ -32,23 +32,20 @@ class ManajemenAkun extends BaseController
             ->orderBy('redeem_codes.created_at', 'DESC')
             ->paginate(10, 'redeem');
 
-        // Ambil semua kode redeem yang tersedia (untuk fitur salin semua)
-        $allUnused = $this->rModel->where('is_used', 0)->orderBy('created_at', 'DESC')->findAll();
+        // Ambil hanya kolom code untuk redeem code yang belum terpakai (tanpa SELECT *)
+        $allUnusedCodes = $this->rModel->select('code')->where('is_used', 0)->orderBy('created_at', 'DESC')->findColumn('code') ?? [];
 
-        $unusedLinks = [];
-        foreach ($allUnused as $au) {
-            $unusedLinks[] = base_url('register?code=' . $au['code']);
-        }
-        $unusedLinksList = implode("\n", $unusedLinks);
+        $registerBaseUrl = base_url('register?code=');
+        $unusedLinksList = !empty($allUnusedCodes) ? $registerBaseUrl . implode("\n" . $registerBaseUrl, $allUnusedCodes) : '';
 
         $data = [
-            'judul' => 'Manajemen Akun',
-            'users' => $this->uModel->orderBy('role', 'ASC')->orderBy('username', 'ASC')->paginate(10, 'user'),
-            'pager' => $this->uModel->pager, // Berisi pager untuk 'user' dan 'redeem'
-            'redeem_codes' => $redeemCodes,
-            'unused_links_str' => $unusedLinksList,
-            'unused_codes_count' => count($allUnused),
-            'register_url' => base_url('register'),
+            'judul'              => 'Manajemen Akun',
+            'users'              => $this->uModel->orderBy('role', 'ASC')->orderBy('username', 'ASC')->paginate(10, 'user'),
+            'pager'              => $this->uModel->pager, // Berisi pager untuk 'user' dan 'redeem'
+            'redeem_codes'       => $redeemCodes,
+            'unused_links_str'   => $unusedLinksList,
+            'unused_codes_count' => count($allUnusedCodes),
+            'register_url'       => base_url('register'),
         ];
 
         return view('templates/v_header', $data)
