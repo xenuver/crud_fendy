@@ -70,8 +70,9 @@ $routes->group('superadmin', ['filter' => 'auth:super_admin'], function ($routes
     $routes->get('/', 'SuperAdmin\DashboardBanding::index');
     $routes->post('banding/putuskan/(:num)', 'SuperAdmin\DashboardBanding::putuskan/$1');
 
-    // Super Admin Profile & Password
+    // Super Admin Profile & Password & Resend Key
     $routes->get('profile', 'SuperAdmin\PengaturanProfil::index');
     $routes->post('profile/update', 'SuperAdmin\PengaturanProfil::update');
-    $routes->post('password/update', 'SuperAdmin\PengaturanProfil::update_password');
+    $routes->post('profile/resend-key', 'SuperAdmin\PengaturanProfil::updateResendKey');
+    $routes->post('password/update', 'SuperAdmin\PengaturanProfil::updatePassword');
 });

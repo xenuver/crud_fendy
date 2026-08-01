@@ -30,30 +30,27 @@ class EmailNotificationService
 
         $baseConfig = config('Email');
 
+        // 1. Coba baca dari Environment Variables
         $smtpHost = $_ENV['SMTP_HOST'] ?? getenv('SMTP_HOST') ?: $_SERVER['SMTP_HOST'] ?? $baseConfig->SMTPHost;
         $smtpUser = $_ENV['SMTP_USER'] ?? getenv('SMTP_USER') ?: $_SERVER['SMTP_USER'] ?? $baseConfig->SMTPUser;
         $smtpPass = $_ENV['SMTP_PASS'] ?? getenv('SMTP_PASS') ?: $_SERVER['SMTP_PASS'] ?? $_ENV['RESEND_API_KEY'] ?? getenv('RESEND_API_KEY') ?: $baseConfig->SMTPPass;
         $smtpPort = (int)($_ENV['SMTP_PORT'] ?? getenv('SMTP_PORT') ?: $_SERVER['SMTP_PORT'] ?? $baseConfig->SMTPPort ?: 465);
 
-        if (strpos($smtpHost, 'resend') !== false && empty($smtpUser)) {
-            $smtpUser = 'resend';
-        }
-
-        // Ambil dari .env file langsung jika di CLI belum terisi
+        // 2. Baca dari file .env di root project jika belum terbaca
         if (empty($smtpPass) && file_exists(ROOTPATH . '.env')) {
-            $envLines = file(ROOTPATH . '.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-            foreach ($envLines as $line) {
-                if (strpos(trim($line), 'SMTP_PASS=') === 0 || strpos(trim($line), 'RESEND_API_KEY=') === 0) {
-                    $parts = explode('=', $line, 2);
-                    if (isset($parts[1])) {
-                        $smtpPass = trim($parts[1], " \"'");
-                    }
-                }
+            $envContent = file_get_contents(ROOTPATH . '.env');
+            if (preg_match('/(?:SMTP_PASS|RESEND_API_KEY)\s*=\s*["\']?([^"\'\r\n]+)/i', $envContent, $matches)) {
+                $smtpPass = trim($matches[1]);
             }
         }
 
+        // 3. Baca dari WRITEPATH .resend_key jika ada
+        if (empty($smtpPass) && file_exists(WRITEPATH . '.resend_key')) {
+            $smtpPass = trim(file_get_contents(WRITEPATH . '.resend_key'));
+        }
+
         if (empty($smtpPass)) {
-            $this->lastError = 'Variabel SMTP_PASS (API Key Resend / Password SMTP) belum terbaca atau masih kosong di Coolify. Mohon isi SMTP_PASS lalu klik REDEPLOY di Coolify.';
+            $this->lastError = "Variabel SMTP_PASS / Resend API Key belum terbaca di server. Silakan klik tombol 'Redeploy' (oranye di kanan atas Coolify) agar variabel baru diterapkan ke kontainer aplikasi.";
             return false;
         }
 
