@@ -14,6 +14,9 @@ services:
       - "80"
     networks:
       - coolify
+    labels:
+      - "caddy_ingress_network=coolify"
+      - "caddy_0.handle_path.0_reverse_proxy={{upstreams 80}}"
     environment:
       - CI_ENVIRONMENT=${CI_ENVIRONMENT:-production}
       - DB_HOSTNAME=db
