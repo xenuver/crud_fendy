@@ -452,13 +452,13 @@
                     <div class="small text-secondary orbitron mb-4" style="letter-spacing: 1px;">(PROYEKSI PANGKAT BULAN DEPAN)</div>
                     
                     <?php if(isset($nextTier) && $nextTier): ?>
-                        <div class="row text-left orbitron small text-white-50 mb-4">
+                        <div class="row text-left orbitron small text-white mb-4">
                             <div class="col-md-4 mb-3">
                                 <div class="d-flex justify-content-between mb-1">
-                                    <span>TARGET PEAK CCV</span>
-                                    <span><?= number_format($currentMetrics['peak_ccv']) ?> / <?= number_format($nextTier['threshold_ccv']) ?></span>
+                                    <span class="text-secondary fw-bold" style="letter-spacing: 0.5px;">TARGET PEAK CCV</span>
+                                    <span class="text-white fw-bold"><?= number_format($currentMetrics['peak_ccv']) ?> / <?= number_format($nextTier['threshold_ccv']) ?></span>
                                 </div>
-                                <div class="progress bg-dark" style="height: 6px;">
+                                <div class="progress bg-dark" style="height: 8px;">
                                     <?php $ccvPerc = min(100, ($currentMetrics['peak_ccv'] / $nextTier['threshold_ccv']) * 100); ?>
                                     <div class="progress-bar <?= $ccvPerc >= 100 ? 'bg-success' : 'bg-danger' ?>" style="width: <?= $ccvPerc ?>%"></div>
                                 </div>
@@ -468,10 +468,10 @@
                                 <!-- YouTube -->
                                 <div class="col-md-8 mb-3">
                                     <div class="d-flex justify-content-between mb-1">
-                                        <span>TARGET AVG VIEWS (YOUTUBE)</span>
-                                        <span><?= number_format($currentMetrics['yt_avg']) ?> / <?= number_format($nextTier['threshold_yt']) ?></span>
+                                        <span class="text-secondary fw-bold" style="letter-spacing: 0.5px;">TARGET AVG VIEWS</span>
+                                        <span class="text-white fw-bold"><?= number_format($currentMetrics['yt_avg']) ?> / <?= number_format($nextTier['threshold_yt']) ?></span>
                                     </div>
-                                    <div class="progress bg-dark" style="height: 6px;">
+                                    <div class="progress bg-dark" style="height: 8px;">
                                         <?php $bestAvg = min(100, ($currentMetrics['yt_avg'] / $nextTier['threshold_yt']) * 100); ?>
                                         <div class="progress-bar <?= $bestAvg >= 100 ? 'bg-success' : 'bg-info' ?>" style="width: <?= $bestAvg ?>%"></div>
                                     </div>
@@ -480,10 +480,10 @@
                                 <!-- TikTok/Other -->
                                 <div class="col-md-8 mb-3">
                                     <div class="d-flex justify-content-between mb-1">
-                                        <span>TARGET AVG VIEWS (TIKTOK)</span>
-                                        <span><?= number_format($currentMetrics['tt_avg']) ?> / <?= number_format($nextTier['threshold_tt']) ?></span>
+                                        <span class="text-secondary fw-bold" style="letter-spacing: 0.5px;">TARGET AVG VIEWS</span>
+                                        <span class="text-white fw-bold"><?= number_format($currentMetrics['tt_avg']) ?> / <?= number_format($nextTier['threshold_tt']) ?></span>
                                     </div>
-                                    <div class="progress bg-dark" style="height: 6px;">
+                                    <div class="progress bg-dark" style="height: 8px;">
                                         <?php $bestAvg = min(100, ($currentMetrics['tt_avg'] / $nextTier['threshold_tt']) * 100); ?>
                                         <div class="progress-bar <?= $bestAvg >= 100 ? 'bg-success' : 'bg-info' ?>" style="width: <?= $bestAvg ?>%"></div>
                                     </div>
