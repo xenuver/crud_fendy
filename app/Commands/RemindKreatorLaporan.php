@@ -8,7 +8,7 @@ use App\Models\KreatorModel;
 use App\Libraries\EmailNotificationService;
 
 // Perintah CLI untuk pengiriman Email Pengingat Submit Laporan Mingguan ke semua Kreator aktif.
-// Jadwal: Setiap Jumat jam 17:00 WIB (10:00 UTC) → cron: 0 10 * * 5
+// Jadwal: Setiap Senin jam 00:00 WIB (Minggu 17:00 UTC) → cron: 0 17 * * 0
 class RemindKreatorLaporan extends BaseCommand
 {
     protected $group       = 'Notification';
