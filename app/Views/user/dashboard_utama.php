@@ -275,37 +275,30 @@
     <!-- TIERING ROADMAP GUIDE HEADER & SYARAT -->
     <div class="row mb-4">
         <div class="col-12">
-            <!-- Header Title Section -->
-            <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between mb-3 pb-2" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;">
-                <div class="d-flex align-items-center mb-2 mb-sm-0">
-                    <div class="bg-danger text-white px-3 py-1 orbitron small shadow-sm mr-2" style="clip-path: polygon(8% 0%, 100% 0%, 92% 100%, 0% 100%); font-size: 0.75rem; letter-spacing: 1px;">
-                        <i class="fas fa-trophy mr-1"></i> KETENTUAN PROMOSI PANGKAT
-                    </div>
+            <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center mb-3">
+                <div class="bg-danger text-white px-3 py-1 orbitron small shadow-sm" style="clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);">
+                    KETENTUAN PROMOSI PANGKAT
                 </div>
-                <div class="text-secondary small orbitron" style="opacity: 0.85; font-size: 0.7rem; letter-spacing: 0.5px;">
-                    <i class="fas fa-sliders-h mr-1 text-danger"></i> Ambang Batas Evaluasi Metrik
+                <div class="ml-0 ml-sm-3 mt-2 mt-sm-0 text-secondary small orbitron" style="opacity: 0.8; letter-spacing: 1px;">
+                    Persyaratan Ambang Batas Metrik Evaluasi
                 </div>
             </div>
             
-            <!-- Tactical Syarat Box -->
-            <div class="p-3 rounded shadow-sm d-flex align-items-start" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(234, 25, 23, 0.3); border-left: 4px solid var(--bs-red) !important;">
-                <i class="fas fa-exclamation-triangle text-danger fa-lg mr-3 mt-1" style="filter: drop-shadow(0 0 5px rgba(234, 25, 23, 0.5));"></i>
-                <div>
-                    <div class="orbitron text-white small fw-bold mb-1" style="letter-spacing: 1px; color: #f8fafc;">SYARAT KENAIKAN PANGKAT</div>
-                    <div class="small text-secondary orbitron" style="font-size: 0.75rem; line-height: 1.5; color: #cbd5e1;">
-                        Untuk mencapai Pangkat tertentu, Anda <span class="text-danger fw-bold">WAJIB</span> memenuhi <span class="text-white fw-bold">TARGET MINIMAL CCV</span> <span class="badge badge-secondary mx-1">DAN</span> <span class="text-white fw-bold">SALAH SATU</span> dari Target Views (<span class="text-danger fw-bold"><i class="fab fa-youtube mr-1"></i>YouTube</span> atau <span class="text-info fw-bold"><i class="fab fa-tiktok mr-1"></i>TikTok</span>).
-                    </div>
-                </div>
+            <div class="alert alert-dark border-0 text-white shadow-sm" style="background: rgba(255, 255, 255, 0.05); border-left: 3px solid rgba(255,255,255,0.2) !important;">
+                <i class="fas fa-info-circle text-muted mr-2"></i>
+                <span class="small orbitron" style="line-height: 1.5; color: #cbd5e1;">
+                    <strong>SYARAT KENAIKAN PANGKAT:</strong> Untuk mencapai Pangkat tertentu, Anda <strong>WAJIB</strong> memenuhi <strong>TARGET MINIMAL CCV</strong> <u>DAN</u> <strong>SALAH SATU</strong> dari Target Views (<strong>YouTube</strong> atau <strong>TikTok</strong>).
+                </span>
             </div>
         </div>
     </div>
 
     <!-- TIER CARDS FOR DESKTOP (3 Columns Side-by-Side) -->
-    <div class="row mb-5 d-none d-md-flex">
+    <div class="row mb-5 d-none d-lg-flex">
         <?php foreach ($allTiers as $t): 
             $isCurrent = ($tier['name'] == $t['name']);
         ?>
-            <div class="col-md-4 mb-4">
+            <div class="col-lg-4 mb-4">
                 <div class="hud-card h-100 <?= $isCurrent ? 'border-danger' : '' ?>" style="background: <?= $isCurrent ? 'rgba(234, 25, 23, 0.05)' : 'rgba(15, 23, 42, 0.4)' ?>; border: 1px solid <?= $isCurrent ? 'var(--bs-red)' : 'rgba(255,255,255,0.05)' ?>;">
                     <div class="p-4 text-center d-flex flex-column justify-content-between h-100">
                         <div>
@@ -351,8 +344,8 @@
         <?php endforeach; ?>
     </div>
 
-    <!-- TIER CAROUSEL SLIDER FOR MOBILE & SMARTPHONE -->
-    <div id="tierCarouselMobile" class="carousel slide d-md-none mb-5" data-ride="carousel" data-interval="false">
+    <!-- TIER CAROUSEL SLIDER FOR MOBILE, SMARTPHONE & IPAD (< 992px) -->
+    <div id="tierCarouselMobile" class="carousel slide d-lg-none mb-5" data-ride="carousel" data-interval="false">
         <!-- Indicator Dots -->
         <ol class="carousel-indicators mb-n4" style="bottom: -25px;">
             <?php foreach ($allTiers as $index => $t): ?>
