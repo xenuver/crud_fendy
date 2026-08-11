@@ -421,137 +421,25 @@ label.label-taktis {
     }
 }
 
-/* Responsive Tier Roadmap Cards (Side-by-Side Mobile Layout) */
-.tier-icon-responsive {
-    font-size: 2.8rem;
-    transition: all 0.3s ease;
+/* Tactical Tier Tab Switcher for Mobile */
+#tierTab .nav-link {
+    color: #94a3b8;
+    background: transparent;
+    transition: all 0.25s ease;
+    border: 1px solid transparent;
 }
 
-.tier-title-responsive {
-    font-size: 1.15rem;
+#tierTab .nav-link:hover {
+    color: #f8fafc;
+    background: rgba(255, 255, 255, 0.05);
 }
 
-.tier-badge-current {
-    font-size: 0.55rem;
-    letter-spacing: 1.5px;
-    white-space: nowrap;
+#tierTab .nav-link.active {
+    color: #ffffff !important;
+    background: var(--bs-red) !important;
+    border-color: var(--bs-red) !important;
+    box-shadow: 0 0 15px rgba(234, 25, 23, 0.5) !important;
+    font-weight: 700;
 }
 
-.tier-metric-box {
-    border-width: 3px !important;
-    border-color: rgba(255, 255, 255, 0.15) !important;
-}
-
-.tier-metric-label {
-    font-size: 0.58rem;
-    line-height: 1.2;
-}
-
-.tier-metric-value {
-    font-size: 0.9rem;
-}
-
-.tier-metric-unit {
-    font-size: 0.6rem;
-}
-
-.tier-divider-text {
-    font-size: 0.52rem;
-    letter-spacing: 1px;
-}
-
-@media (max-width: 767.98px) {
-    .tier-card-row {
-        margin-left: -6px !important;
-        margin-right: -6px !important;
-    }
-
-    .tier-col-responsive {
-        padding-left: 4px !important;
-        padding-right: 4px !important;
-    }
-
-    .tier-card-responsive {
-        padding: 10px 6px !important;
-    }
-
-    .tier-icon-responsive {
-        font-size: 1.4rem;
-    }
-
-    .tier-title-responsive {
-        font-size: 0.7rem;
-        margin-bottom: 0.4rem !important;
-    }
-
-    .tier-badge-current {
-        font-size: 0.4rem;
-        letter-spacing: 0.5px;
-        padding: 2px 4px !important;
-        margin-bottom: 0.3rem !important;
-    }
-
-    .tier-metric-box {
-        padding: 4px 4px !important;
-        border-width: 2px !important;
-    }
-
-    .tier-metric-label {
-        font-size: 0.42rem;
-        letter-spacing: 0px;
-    }
-
-    .tier-metric-value {
-        font-size: 0.68rem;
-    }
-
-    .tier-metric-unit {
-        font-size: 0.42rem;
-    }
-
-    .tier-divider-text {
-        font-size: 0.4rem;
-        letter-spacing: 0px;
-    }
-
-    .tier-divider-col {
-        margin-top: 0.1rem !important;
-        margin-bottom: 0.1rem !important;
-    }
-}
-
-@media (max-width: 420px) {
-    .tier-icon-responsive {
-        font-size: 1.15rem;
-    }
-
-    .tier-title-responsive {
-        font-size: 0.6rem;
-    }
-
-    .tier-badge-current {
-        font-size: 0.35rem;
-        padding: 1px 2px !important;
-    }
-
-    .tier-metric-box {
-        padding: 3px 3px !important;
-    }
-
-    .tier-metric-label {
-        font-size: 0.38rem;
-    }
-
-    .tier-metric-value {
-        font-size: 0.6rem;
-    }
-
-    .tier-metric-unit {
-        font-size: 0.38rem;
-    }
-
-    .tier-divider-text {
-        font-size: 0.35rem;
-    }
-}
 
