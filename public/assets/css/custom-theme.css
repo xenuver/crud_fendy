@@ -420,3 +420,35 @@ label.label-taktis {
         margin-bottom: 20px !important;
     }
 }
+
+/* Tier Carousel Slider for Mobile & Smartphone */
+#tierCarouselMobile .carousel-control-prev,
+#tierCarouselMobile .carousel-control-next {
+    width: 38px;
+    opacity: 0.95;
+}
+
+#tierCarouselMobile .carousel-control-prev {
+    left: -5px;
+}
+
+#tierCarouselMobile .carousel-control-next {
+    right: -5px;
+}
+
+#tierCarouselMobile .carousel-indicators li {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.3);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+#tierCarouselMobile .carousel-indicators li.active {
+    width: 20px;
+    border-radius: 10px;
+    background-color: var(--bs-red);
+    box-shadow: 0 0 10px rgba(234, 25, 23, 0.8);
+}
+

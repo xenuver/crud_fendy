@@ -272,40 +272,52 @@
         </div>
     </div>
 
-    <!-- TIERING ROADMAP GUIDE -->
-    <div class="row mb-5">
-        <div class="col-12 mb-3">
-            <div class="d-flex align-items-center mb-3">
-                <div class="bg-danger text-white px-3 py-1 orbitron small shadow-sm" style="clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);">
-                    KETENTUAN PROMOSI PANGKAT
+    <!-- TIERING ROADMAP GUIDE HEADER & SYARAT -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <!-- Header Title Section -->
+            <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between mb-3 pb-2" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;">
+                <div class="d-flex align-items-center mb-2 mb-sm-0">
+                    <div class="bg-danger text-white px-3 py-1 orbitron small shadow-sm mr-2" style="clip-path: polygon(8% 0%, 100% 0%, 92% 100%, 0% 100%); font-size: 0.75rem; letter-spacing: 1px;">
+                        <i class="fas fa-trophy mr-1"></i> KETENTUAN PROMOSI PANGKAT
+                    </div>
                 </div>
-                <div class="ml-3 text-secondary small orbitron" style="opacity: 0.8; letter-spacing: 1px;">
-                    Persyaratan Ambang Batas Metrik Evaluasi
+                <div class="text-secondary small orbitron" style="opacity: 0.85; font-size: 0.7rem; letter-spacing: 0.5px;">
+                    <i class="fas fa-sliders-h mr-1 text-danger"></i> Ambang Batas Evaluasi Metrik
                 </div>
             </div>
             
-            <div class="alert alert-dark border-0 text-white shadow-sm" style="background: rgba(255, 255, 255, 0.05); border-left: 3px solid rgba(255,255,255,0.2) !important;">
-                <i class="fas fa-info-circle text-muted mr-2"></i>
-                <span class="small orbitron" style="line-height: 1.5; color: #cbd5e1;">
-                    <strong>SYARAT KENAIKAN PANGKAT:</strong> Untuk mencapai Pangkat tertentu, Anda <strong>WAJIB</strong> memenuhi <strong>TARGET MINIMAL CCV</strong> <u>DAN</u> <strong>SALAH SATU</strong> dari Target Views (<strong>YouTube</strong> atau <strong>TikTok</strong>).
-                </span>
+            <!-- Tactical Syarat Box -->
+            <div class="p-3 rounded shadow-sm d-flex align-items-start" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(234, 25, 23, 0.3); border-left: 4px solid var(--bs-red) !important;">
+                <i class="fas fa-exclamation-triangle text-danger fa-lg mr-3 mt-1" style="filter: drop-shadow(0 0 5px rgba(234, 25, 23, 0.5));"></i>
+                <div>
+                    <div class="orbitron text-white small fw-bold mb-1" style="letter-spacing: 1px; color: #f8fafc;">SYARAT KENAIKAN PANGKAT</div>
+                    <div class="small text-secondary orbitron" style="font-size: 0.75rem; line-height: 1.5; color: #cbd5e1;">
+                        Untuk mencapai Pangkat tertentu, Anda <span class="text-danger fw-bold">WAJIB</span> memenuhi <span class="text-white fw-bold">TARGET MINIMAL CCV</span> <span class="badge badge-secondary mx-1">DAN</span> <span class="text-white fw-bold">SALAH SATU</span> dari Target Views (<span class="text-danger fw-bold"><i class="fab fa-youtube mr-1"></i>YouTube</span> atau <span class="text-info fw-bold"><i class="fab fa-tiktok mr-1"></i>TikTok</span>).
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
 
+    <!-- TIER CARDS FOR DESKTOP (3 Columns Side-by-Side) -->
+    <div class="row mb-5 d-none d-md-flex">
         <?php foreach ($allTiers as $t): 
             $isCurrent = ($tier['name'] == $t['name']);
         ?>
-            <div class="col-lg-4 mb-4">
+            <div class="col-md-4 mb-4">
                 <div class="hud-card h-100 <?= $isCurrent ? 'border-danger' : '' ?>" style="background: <?= $isCurrent ? 'rgba(234, 25, 23, 0.05)' : 'rgba(15, 23, 42, 0.4)' ?>; border: 1px solid <?= $isCurrent ? 'var(--bs-red)' : 'rgba(255,255,255,0.05)' ?>;">
-                    <div class="p-4 text-center">
-                        <?php if($isCurrent): ?>
-                            <div class="badge bg-danger orbitron mb-3 py-2 px-3" style="font-size: 0.6rem; letter-spacing: 2px;">PANGKAT SAAT INI</div>
-                        <?php endif; ?>
-                        
-                        <div class="mb-3">
-                            <i class="fas <?= $t['icon_style'] ?> fa-3x" style="color: <?= $t['color_style'] ?>; text-shadow: 0 0 15px <?= $t['color_style'] ?>80;"></i>
+                    <div class="p-4 text-center d-flex flex-column justify-content-between h-100">
+                        <div>
+                            <?php if($isCurrent): ?>
+                                <div class="badge bg-danger orbitron mb-3 py-2 px-3" style="font-size: 0.6rem; letter-spacing: 2px;">PANGKAT SAAT INI</div>
+                            <?php endif; ?>
+                            
+                            <div class="mb-3">
+                                <i class="fas <?= $t['icon_style'] ?> fa-3x" style="color: <?= $t['color_style'] ?>; text-shadow: 0 0 15px <?= $t['color_style'] ?>80;"></i>
+                            </div>
+                            <h4 class="orbitron fw-bold text-white mb-4"><?= strtoupper($t['display_name'] ?? $t['name']) ?></h4>
                         </div>
-                        <h4 class="orbitron fw-bold text-white mb-4"><?= strtoupper($t['display_name'] ?? $t['name']) ?></h4>
                         
                         <div class="row text-start g-2">
                             <div class="col-12 mb-2">
@@ -338,6 +350,106 @@
             </div>
         <?php endforeach; ?>
     </div>
+
+    <!-- TIER CAROUSEL SLIDER FOR MOBILE & SMARTPHONE -->
+    <div id="tierCarouselMobile" class="carousel slide d-md-none mb-5" data-ride="carousel" data-interval="false">
+        <!-- Indicator Dots -->
+        <ol class="carousel-indicators mb-n4" style="bottom: -25px;">
+            <?php foreach ($allTiers as $index => $t): ?>
+                <li data-target="#tierCarouselMobile" data-slide-to="<?= $index ?>" class="<?= $index === 0 ? 'active' : '' ?>"></li>
+            <?php endforeach; ?>
+        </ol>
+
+        <!-- Carousel Inner (Order: Tier 1 -> Tier 2 -> Tier 3) -->
+        <div class="carousel-inner">
+            <?php foreach ($allTiers as $index => $t): 
+                $isCurrent = ($tier['name'] == $t['name']);
+            ?>
+                <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+                    <div class="px-4">
+                        <div class="hud-card <?= $isCurrent ? 'border-danger' : '' ?>" style="background: <?= $isCurrent ? 'rgba(234, 25, 23, 0.05)' : 'rgba(15, 23, 42, 0.4)' ?>; border: 1px solid <?= $isCurrent ? 'var(--bs-red)' : 'rgba(255,255,255,0.05)' ?>;">
+                            <div class="p-4 text-center">
+                                <?php if($isCurrent): ?>
+                                    <div class="badge bg-danger orbitron mb-3 py-2 px-3" style="font-size: 0.65rem; letter-spacing: 2px;">PANGKAT SAAT INI</div>
+                                <?php endif; ?>
+                                
+                                <div class="mb-3">
+                                    <i class="fas <?= $t['icon_style'] ?> fa-3x" style="color: <?= $t['color_style'] ?>; text-shadow: 0 0 15px <?= $t['color_style'] ?>80;"></i>
+                                </div>
+                                <h4 class="orbitron fw-bold text-white mb-4"><?= strtoupper($t['display_name'] ?? $t['name']) ?></h4>
+                                
+                                <div class="row text-start g-2">
+                                    <div class="col-12 mb-2">
+                                        <div class="p-3 rounded bg-dark border-start border-warning" style="border-width: 3px !important; border-color: rgba(255,255,255,0.15) !important;">
+                                            <div class="small text-secondary orbitron mb-1" style="font-size: 0.65rem;">TARGET MINIMAL CCV</div>
+                                            <div class="orbitron text-white fw-bold h5 mb-0"><?= number_format($t['threshold_ccv']) ?> <span class="small text-muted" style="font-size: 0.75rem;">VIEWERS</span></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-12 mb-2 mt-1 text-center">
+                                        <span class="orbitron text-muted small" style="font-size: 0.65rem; letter-spacing: 1px;">- DAN SALAH SATU DARI -</span>
+                                    </div>
+                                    
+                                    <div class="col-12 mb-2">
+                                        <div class="p-3 rounded bg-dark border-start border-danger" style="border-width: 3px !important; border-color: rgba(255,255,255,0.15) !important;">
+                                            <div class="small text-secondary orbitron mb-1" style="font-size: 0.65rem;">VIEWS (YOUTUBE)</div>
+                                            <div class="orbitron text-white fw-bold h5 mb-0"><?= number_format($t['threshold_yt']) ?> <span class="small text-muted" style="font-size: 0.75rem;">VIEWS</span></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <div class="p-3 rounded bg-dark border-start border-info" style="border-width: 3px !important; border-color: rgba(255,255,255,0.15) !important;">
+                                            <div class="small text-secondary orbitron mb-1" style="font-size: 0.65rem;">VIEWS (TIKTOK)</div>
+                                            <div class="orbitron text-white fw-bold h5 mb-0"><?= number_format($t['threshold_tt']) ?> <span class="small text-muted" style="font-size: 0.75rem;">VIEWS</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+
+        <!-- Left / Right Controls -->
+        <a class="carousel-control-prev" href="#tierCarouselMobile" role="button" data-slide="prev">
+            <span class="p-2 rounded-circle bg-dark border border-danger text-danger shadow" style="box-shadow: 0 0 10px rgba(234, 25, 23, 0.4) !important;">
+                <i class="fas fa-chevron-left"></i>
+            </span>
+            <span class="sr-only">Sebelumnya</span>
+        </a>
+        <a class="carousel-control-next" href="#tierCarouselMobile" role="button" data-slide="next">
+            <span class="p-2 rounded-circle bg-dark border border-danger text-danger shadow" style="box-shadow: 0 0 10px rgba(234, 25, 23, 0.4) !important;">
+                <i class="fas fa-chevron-right"></i>
+            </span>
+            <span class="sr-only">Selanjutnya</span>
+        </a>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var carouselEl = document.getElementById('tierCarouselMobile');
+        if (carouselEl && typeof $ !== 'undefined') {
+            var startX = 0;
+            carouselEl.addEventListener('touchstart', function (e) {
+                if (e.changedTouches && e.changedTouches.length > 0) {
+                    startX = e.changedTouches[0].screenX;
+                }
+            }, { passive: true });
+
+            carouselEl.addEventListener('touchend', function (e) {
+                if (e.changedTouches && e.changedTouches.length > 0) {
+                    var endX = e.changedTouches[0].screenX;
+                    if (startX - endX > 40) {
+                        $(carouselEl).carousel('next');
+                    } else if (endX - startX > 40) {
+                        $(carouselEl).carousel('prev');
+                    }
+                }
+            }, { passive: true });
+        }
+    });
+    </script>
 
     <!-- TIER PROGRESS -->
     <div class="row">
