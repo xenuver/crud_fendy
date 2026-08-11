@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if ($.fn.DataTable) {
         $('#kreatorTable').DataTable({
             "pageLength": 10,
+            "autoWidth": false,
             "language": {
                 "search": "Cari Kreator:",
                 "searchPlaceholder": "Ketik nama kreator...",

@@ -5,7 +5,7 @@
         <div class="bg-danger text-white px-3 py-1 orbitron small shadow-sm" style="clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);">
             MANAJEMEN KREATOR
         </div>
-        <div class="ms-3 text-secondary small orbitron" style="opacity: 0.8; letter-spacing: 1px;">
+        <div class="ml-3 text-secondary small orbitron" style="opacity: 0.8; letter-spacing: 1px;">
             Daftar Lengkap dan Pengelolaan Data Kreator
         </div>
     </div>
@@ -13,56 +13,55 @@
     <!-- KARTU UTAMA DATA KREATOR -->
     <div class="hud-card border-0 shadow-lg">
         <div class="hud-header d-flex justify-content-between align-items-center bg-dark text-white border-bottom-0 py-3">
-            <div class="orbitron" style="font-size: 0.9rem; color: var(--bs-red); letter-spacing: 1px;"><i class="fas fa-database me-2"></i> DATA KREATOR</div>
+            <div class="orbitron" style="font-size: 0.9rem; color: var(--bs-red); letter-spacing: 1px;"><i class="fas fa-database mr-2"></i> DATA KREATOR</div>
         </div>
         <div class="hud-body p-0" style="background: rgba(15, 23, 42, 0.4);">
             <div class="table-responsive">
-                <table id="kreatorTable" class="table table-tactical table-hover mb-0">
+                <table id="kreatorTable" class="table table-tactical table-hover mb-0" style="min-width: 950px;">
                     <thead style="background: rgba(234, 25, 23, 0.08);">
                         <tr>
-                            <th class="py-3 px-4">NO</th>
-                            <th class="py-3 px-4">PROFIL</th>
-                            <th class="py-3 px-4">NAMA KREATOR</th>
-                            <th class="py-3 px-4">ALAMAT / DOMISILI</th>
-                            <th class="py-3 px-4">MEDIA SOSIAL</th>
-                            <th class="py-3 px-4">IDENTITAS GAME (UID)</th>
-                            <th class="py-3 px-4 text-center">AKSI</th>
+                            <th class="py-3 px-3 text-center" style="width: 50px;">NO</th>
+                            <th class="py-3 px-3 text-center" style="width: 70px;">PROFIL</th>
+                            <th class="py-3 px-3">NAMA KREATOR</th>
+                            <th class="py-3 px-3">ALAMAT / DOMISILI</th>
+                            <th class="py-3 px-3 text-nowrap">MEDIA SOSIAL</th>
+                            <th class="py-3 px-3 text-nowrap">IDENTITAS GAME (UID)</th>
+                            <th class="py-3 px-3 text-center text-nowrap">AKSI</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php if(!empty($kreators)) : ?>
                             <?php $no = 1; foreach ($kreators as $k) : ?>
                                 <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03); <?= $k['status'] == 'suspended' ? 'opacity: 0.5; background: rgba(0,0,0,0.2);' : '' ?>">
-                                    <td class="align-middle px-4 text-muted"><?= $no++ ?></td>
-                                    <td class="align-middle px-4">
-                                        <div class="position-relative d-inline-block" style="width: 45px; height: 45px;">
-                                        <img src="<?= base_url('assets/img/profile/blood-strike.jpg') ?>" alt="Avatar" width="45" height="45" class="rounded-circle border border-secondary shadow-sm" style="object-fit: cover;">
-                                        
-                                        <?php if($k['status'] == 'suspended'): ?>
-                                                <div class="position-absolute bg-danger rounded-circle border border-dark d-flex align-items-center justify-content-center" style="width: 16px; height: 16px; bottom: 0; right: 0; z-index: 10;">
-                                                    <i class="fas fa-ban text-white" style="font-size: 0.5rem;"></i>
+                                    <td class="align-middle px-3 text-center text-muted"><?= $no++ ?></td>
+                                    <td class="align-middle px-3 text-center">
+                                        <div class="position-relative d-inline-block" style="width: 40px; height: 40px;">
+                                            <img src="<?= base_url('assets/img/profile/blood-strike.jpg') ?>" alt="Avatar" width="40" height="40" class="rounded-circle border border-secondary shadow-sm" style="object-fit: cover;">
+                                            <?php if($k['status'] == 'suspended'): ?>
+                                                <div class="position-absolute bg-danger rounded-circle border border-dark d-flex align-items-center justify-content-center" style="width: 14px; height: 14px; bottom: 0; right: 0; z-index: 10;">
+                                                    <i class="fas fa-ban text-white" style="font-size: 0.45rem;"></i>
                                                 </div>
                                             <?php endif; ?>
                                         </div>
                                     </td>
-                                    <td class="align-middle px-4">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="fw-bold text-white mb-0 d-flex align-items-center" style="font-size: 0.95rem;">
-                                                <i class="<?= $k['tier_icon'] ?>" style="color: <?= $k['tier_color'] ?>; font-size: 0.8rem; margin-right: 12px;" title="<?= $k['tier_label'] ?>"></i>
+                                    <td class="align-middle px-3">
+                                        <div class="d-flex align-items-center">
+                                            <div class="fw-bold text-white mb-0 d-flex align-items-center" style="font-size: 0.9rem;">
+                                                <i class="<?= $k['tier_icon'] ?> mr-2" style="color: <?= $k['tier_color'] ?>; font-size: 0.8rem;" title="<?= $k['tier_label'] ?>"></i>
                                                 <span><?= esc($k['nama']) ?></span>
                                             </div>
                                             <?php if($k['status'] == 'suspended'): ?>
-                                                <span class="badge bg-danger orbitron" style="font-size: 0.45rem; letter-spacing: 1px; padding: 3px 7px; margin-left: 10px;">SUSPENDED</span>
+                                                <span class="badge bg-danger orbitron ml-2" style="font-size: 0.45rem; letter-spacing: 1px; padding: 3px 6px;">SUSPENDED</span>
                                             <?php endif; ?>
                                         </div>
                                     </td>
-                                    <td class="align-middle px-4">
+                                    <td class="align-middle px-3">
                                         <div class="text-secondary small d-flex align-items-center">
-                                            <i class="fas fa-map-marker-alt me-2 text-danger opacity-50"></i>
+                                            <i class="fas fa-map-marker-alt mr-2 text-danger opacity-50"></i>
                                             <?= esc($k['alamat']) ?>
                                         </div>
                                     </td>
-                                    <td class="align-middle px-4">
+                                    <td class="align-middle px-3 text-nowrap">
                                         <div class="d-flex flex-column gap-1">
                                             <?php if(!empty($k['tiktok_link'])) : ?>
                                                 <?php 
@@ -70,7 +69,7 @@
                                                     $tiktok_user = isset($tiktok_user[1]) ? '@' . explode('?', $tiktok_user[1])[0] : 'TikTok';
                                                 ?>
                                                 <a href="<?= esc($k['tiktok_link']) ?>" target="_blank" class="text-white opacity-75 hover-red text-decoration-none" style="font-size: 0.75rem;">
-                                                    <i class="fab fa-tiktok me-1"></i> <span class="small"><?= esc($tiktok_user) ?></span>
+                                                    <i class="fab fa-tiktok mr-1"></i> <span class="small"><?= esc($tiktok_user) ?></span>
                                                 </a>
                                             <?php endif; ?>
                                             <?php if(!empty($k['youtube_link'])) : ?>
@@ -79,7 +78,7 @@
                                                     $yt_user = isset($yt_user[1]) ? '@' . explode('?', $yt_user[1])[0] : 'YouTube';
                                                 ?>
                                                 <a href="<?= esc($k['youtube_link']) ?>" target="_blank" class="text-danger opacity-75 hover-white text-decoration-none" style="font-size: 0.75rem;">
-                                                    <i class="fab fa-youtube me-1"></i> <span class="small"><?= esc($yt_user) ?></span>
+                                                    <i class="fab fa-youtube mr-1"></i> <span class="small"><?= esc($yt_user) ?></span>
                                                 </a>
                                             <?php endif; ?>
                                             <?php if(empty($k['tiktok_link']) && empty($k['youtube_link'])): ?>
@@ -87,12 +86,12 @@
                                             <?php endif; ?>
                                         </div>
                                     </td>
-                                    <td class="align-middle px-4">
+                                    <td class="align-middle px-3 text-nowrap">
                                         <div class="fw-bold orbitron text-white mb-0" style="font-size: 0.85rem;"><?= esc($k['id_game']) ?></div>
                                         <div class="text-muted" style="font-size: 0.6rem;">UID GAME</div>
                                     </td>
-                                    <td class="align-middle px-4 text-center">
-                                        <div class="d-flex justify-content-center gap-2">
+                                    <td class="align-middle px-3 text-center text-nowrap">
+                                        <div class="d-flex justify-content-center align-items-center" style="gap: 6px;">
                                             <form method="POST" action="<?= base_url('admin/kreator/toggle_status/' . $k['kreator_id']) ?>" style="display:inline-block; margin:0;">
                                                 <?= csrf_field() ?>
                                                 <button type="button" class="btn btn-outline-<?= $k['status'] == 'active' ? 'secondary' : 'success' ?> btn-sm p-1 border-0 btn-toggle-status-kreator" title="<?= $k['status'] == 'active' ? 'Suspend Kreator' : 'Aktifkan Kreator' ?>" data-status="<?= $k['status'] ?>" data-nama="<?= esc($k['nama']) ?>">
@@ -114,7 +113,7 @@
                             <?php endforeach; ?>
                         <?php else : ?>
                             <tr>
-                                <td colspan="6" class="text-center py-5 text-muted small orbitron">Belum ada data kreator yang terdaftar.</td>
+                                <td colspan="7" class="text-center py-5 text-muted small orbitron">Belum ada data kreator yang terdaftar.</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>

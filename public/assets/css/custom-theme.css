@@ -473,6 +473,11 @@ label.label-taktis {
     width: 100% !important;
 }
 
+#kreatorTable {
+    min-width: 950px !important;
+    width: 100% !important;
+}
+
 #tieringTable {
     min-width: 750px !important;
     width: 100% !important;
