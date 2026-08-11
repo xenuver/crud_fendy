@@ -275,20 +275,15 @@
     <!-- TIERING ROADMAP GUIDE HEADER & SYARAT -->
     <div class="row mb-4">
         <div class="col-12">
-            <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center mb-3">
-                <div class="bg-danger text-white px-3 py-1 orbitron small shadow-sm" style="clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);">
-                    KETENTUAN PROMOSI PANGKAT
-                </div>
-                <div class="ml-0 ml-sm-3 mt-2 mt-sm-0 text-secondary small orbitron" style="opacity: 0.8; letter-spacing: 1px;">
-                    Persyaratan Ambang Batas Metrik Evaluasi
-                </div>
+            <div class="border-bottom border-secondary pb-2 mb-3" style="border-bottom-color: rgba(255, 255, 255, 0.1) !important;">
+                <h5 class="orbitron text-white font-weight-bold mb-1" style="letter-spacing: 1px;">KETENTUAN PROMOSI PANGKAT</h5>
+                <div class="small text-secondary orbitron" style="opacity: 0.8; letter-spacing: 0.5px;">Persyaratan Ambang Batas Metrik Evaluasi</div>
             </div>
             
-            <div class="alert alert-dark border-0 text-white shadow-sm" style="background: rgba(255, 255, 255, 0.05); border-left: 3px solid rgba(255,255,255,0.2) !important;">
-                <i class="fas fa-info-circle text-muted mr-2"></i>
-                <span class="small orbitron" style="line-height: 1.5; color: #cbd5e1;">
-                    <strong>SYARAT KENAIKAN PANGKAT:</strong> Untuk mencapai Pangkat tertentu, Anda <strong>WAJIB</strong> memenuhi <strong>TARGET MINIMAL CCV</strong> <u>DAN</u> <strong>SALAH SATU</strong> dari Target Views (<strong>YouTube</strong> atau <strong>TikTok</strong>).
-                </span>
+            <div class="alert alert-dark border-0 text-white shadow-sm p-3" style="background: rgba(15, 23, 42, 0.6); border-left: 4px solid var(--bs-red) !important;">
+                <div class="small orbitron" style="line-height: 1.6; color: #cbd5e1;">
+                    <strong class="text-white">SYARAT KENAIKAN PANGKAT:</strong> Untuk mencapai Pangkat tertentu, Anda <strong class="text-white">WAJIB</strong> memenuhi <strong>TARGET MINIMAL CCV</strong> <u>DAN</u> <strong>SALAH SATU</strong> dari Target Views (<strong>YouTube</strong> atau <strong>TikTok</strong>).
+                </div>
             </div>
         </div>
     </div>
@@ -404,16 +399,16 @@
             <?php endforeach; ?>
         </div>
 
-        <!-- Left / Right Controls -->
+        <!-- Left / Right Controls (White Icon) -->
         <a class="carousel-control-prev" href="#tierCarouselMobile" role="button" data-slide="prev">
-            <span class="p-2 rounded-circle bg-dark border border-danger text-danger shadow" style="box-shadow: 0 0 10px rgba(234, 25, 23, 0.4) !important;">
-                <i class="fas fa-chevron-left"></i>
+            <span class="p-2 rounded-circle bg-dark border border-secondary text-white shadow" style="box-shadow: 0 0 10px rgba(255, 255, 255, 0.3) !important;">
+                <i class="fas fa-chevron-left text-white"></i>
             </span>
             <span class="sr-only">Sebelumnya</span>
         </a>
         <a class="carousel-control-next" href="#tierCarouselMobile" role="button" data-slide="next">
-            <span class="p-2 rounded-circle bg-dark border border-danger text-danger shadow" style="box-shadow: 0 0 10px rgba(234, 25, 23, 0.4) !important;">
-                <i class="fas fa-chevron-right"></i>
+            <span class="p-2 rounded-circle bg-dark border border-secondary text-white shadow" style="box-shadow: 0 0 10px rgba(255, 255, 255, 0.3) !important;">
+                <i class="fas fa-chevron-right text-white"></i>
             </span>
             <span class="sr-only">Selanjutnya</span>
         </a>
