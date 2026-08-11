@@ -10,7 +10,7 @@
             <?= date('F', mktime(0, 0, 0, $bulan, 10)) ?> <?= $tahun ?>
         </div>
     </div>
-    <link rel="stylesheet" href="<?= base_url('assets/css/bulanan.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/bulanan.css?v=' . time()) ?>">
 
     <!-- FILTER BAR TERUNIFIKASI -->
     <div class="hud-card mb-4" style="border-left: 3px solid var(--bs-red);">

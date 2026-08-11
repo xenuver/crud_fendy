@@ -28,7 +28,7 @@
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
-    <link rel="stylesheet" href="<?= base_url('assets/css/custom-theme.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/custom-theme.css?v=' . time()) ?>">
 
 </head>
 

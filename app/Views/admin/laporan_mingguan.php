@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <link rel="stylesheet" href="<?= base_url('assets/css/mingguan.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/mingguan.css?v=' . time()) ?>">
 
     <!-- TABEL REKAP SELURUH LAPORAN KREATOR (ADMIN) -->
     <div class="row">
