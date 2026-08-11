@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
         $('#dataTable').DataTable({
             "paging": false,
             "info": false,
+            "autoWidth": false,
             "language": {
                 "search": "CARI AKUN:",
                 "zeroRecords": "Akun tidak ditemukan."

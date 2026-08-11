@@ -473,7 +473,8 @@ label.label-taktis {
     width: 100% !important;
 }
 
-#kreatorTable {
+#kreatorTable,
+#dataTable {
     min-width: 950px !important;
     width: 100% !important;
 }
