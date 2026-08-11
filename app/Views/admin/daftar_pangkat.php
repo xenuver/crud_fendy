@@ -70,19 +70,8 @@
                 </form>
             </div>
 
-            <div class="d-flex align-items-center flex-wrap" style="gap: 12px;">
-                <div class="small orbitron text-secondary d-none d-md-block" style="font-size: 0.65rem;">
-                    Berdasarkan Laporan Valid
-                </div>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-outline-danger px-3 orbitron" onclick="scrollTable('tieringTable', 'left')" style="font-size: 0.65rem; border-radius: 4px 0 0 4px;">
-                        <i class="fas fa-chevron-left mr-1"></i> KIRI
-                    </button>
-                    <button type="button" class="btn btn-sm btn-danger px-3 orbitron" onclick="scrollTable('tieringTable', 'right')" style="font-size: 0.65rem; background: var(--bs-red); border-radius: 0 4px 4px 0;">
-                        KANAN <i class="fas fa-chevron-right ml-1"></i>
-                    </button>
-                </div>
-            </div>
+            <div class="small orbitron text-secondary d-none d-md-block" style="font-size: 0.6rem;">Berdasarkan Seluruh
+                Laporan Valid</div>
         </div>
         <div class="hud-body p-0" style="background: rgba(15, 23, 42, 0.4);">
             <div class="table-responsive">
