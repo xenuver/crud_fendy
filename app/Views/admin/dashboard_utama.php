@@ -13,52 +13,62 @@
     <!-- STATISTIK RINGKAS PRESTASI & OPERASIONAL -->
     <div class="row mb-4">
         <!-- TIKTOK STATS -->
-        <div class="col-md-3">
-            <div class="hud-card h-100 shadow-lg" style="border-left: 4px solid #000; background: linear-gradient(135deg, rgba(0,0,0,0.85) 0%, rgba(20,20,20,0.9) 100%); padding: 22px;">
-                <div class="d-flex justify-content-between align-items-start mb-3">
-                    <div class="text-white-50 small fw-bold"><i class="fab fa-tiktok mr-2"></i> TIKTOK</div>
-                    <?php if ($stats_tt['trend'] != 0): ?>
-                        <div class="orbitron fw-bold <?= $stats_tt['trend'] > 0 ? 'text-success' : 'text-danger' ?>" style="font-size: 0.6rem;">
+        <div class="col-6 col-lg-3 mb-3 mb-lg-0">
+            <div class="hud-card h-100 shadow-lg" style="border-left: 4px solid #00f2fe; background: linear-gradient(135deg, rgba(15,23,42,0.9) 0%, rgba(15,23,42,0.7) 100%); padding: 18px 20px;">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="text-white-50 small fw-bold orbitron" style="font-size: 0.7rem; letter-spacing: 1px;"><i class="fab fa-tiktok mr-2" style="color: #00f2fe;"></i> TIKTOK</div>
+                    <?php if (isset($stats_tt['trend']) && $stats_tt['trend'] != 0): ?>
+                        <div class="orbitron fw-bold <?= $stats_tt['trend'] > 0 ? 'text-success' : 'text-danger' ?>" style="font-size: 0.65rem;">
                             <i class="fas fa-caret-<?= $stats_tt['trend'] > 0 ? 'up' : 'down' ?> mr-1"></i><?= number_format(abs($stats_tt['trend']), 1) ?>%
                         </div>
+                    <?php else: ?>
+                        <div class="badge badge-dark border border-secondary orbitron" style="font-size: 0.55rem; color: #94a3b8;">BULAN INI</div>
                     <?php endif; ?>
                 </div>
-                <div class="orbitron h3 text-white mb-1" style="letter-spacing: 1px;"><?= number_format($stats_tt['total']) ?></div>
-                <div class="text-secondary small fw-bold" style="font-size: 0.6rem; letter-spacing: 2px;">TAYANGAN BULAN INI</div>
+                <div class="orbitron h3 text-white font-weight-bold mb-1" style="letter-spacing: 1px;"><?= number_format($stats_tt['total'] ?? 0) ?></div>
+                <div class="text-secondary small orbitron" style="font-size: 0.6rem; letter-spacing: 1.5px;">TAYANGAN BULAN INI</div>
             </div>
         </div>
 
         <!-- YOUTUBE STATS -->
-        <div class="col-md-3">
-            <div class="hud-card h-100 shadow-lg" style="border-left: 4px solid var(--bs-red); background: linear-gradient(135deg, rgba(45,18,18,0.85) 0%, rgba(15,23,42,0.9) 100%); padding: 22px;">
-                <div class="d-flex justify-content-between align-items-start mb-3">
-                    <div class="text-white-50 small fw-bold"><i class="fab fa-youtube mr-2"></i> YOUTUBE</div>
-                    <?php if ($stats_yt['trend'] != 0): ?>
-                        <div class="orbitron fw-bold <?= $stats_yt['trend'] > 0 ? 'text-success' : 'text-danger' ?>" style="font-size: 0.6rem;">
+        <div class="col-6 col-lg-3 mb-3 mb-lg-0">
+            <div class="hud-card h-100 shadow-lg" style="border-left: 4px solid var(--bs-red); background: linear-gradient(135deg, rgba(45,18,18,0.7) 0%, rgba(15,23,42,0.7) 100%); padding: 18px 20px;">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="text-white-50 small fw-bold orbitron" style="font-size: 0.7rem; letter-spacing: 1px;"><i class="fab fa-youtube mr-2" style="color: #ea1917;"></i> YOUTUBE</div>
+                    <?php if (isset($stats_yt['trend']) && $stats_yt['trend'] != 0): ?>
+                        <div class="orbitron fw-bold <?= $stats_yt['trend'] > 0 ? 'text-success' : 'text-danger' ?>" style="font-size: 0.65rem;">
                             <i class="fas fa-caret-<?= $stats_yt['trend'] > 0 ? 'up' : 'down' ?> mr-1"></i><?= number_format(abs($stats_yt['trend']), 1) ?>%
                         </div>
+                    <?php else: ?>
+                        <div class="badge badge-dark border border-secondary orbitron" style="font-size: 0.55rem; color: #94a3b8;">BULAN INI</div>
                     <?php endif; ?>
                 </div>
-                <div class="orbitron h3 text-white mb-1" style="letter-spacing: 1px;"><?= number_format($stats_yt['total']) ?></div>
-                <div class="text-secondary small fw-bold" style="font-size: 0.6rem; letter-spacing: 2px;">TAYANGAN BULAN INI</div>
+                <div class="orbitron h3 text-white font-weight-bold mb-1" style="letter-spacing: 1px;"><?= number_format($stats_yt['total'] ?? 0) ?></div>
+                <div class="text-secondary small orbitron" style="font-size: 0.6rem; letter-spacing: 1.5px;">TAYANGAN BULAN INI</div>
             </div>
         </div>
 
         <!-- ANTRIAN VERIFIKASI -->
-        <div class="col-md-3">
-            <div class="hud-card h-100 shadow-lg" style="border-left: 4px solid #ffba08; background: linear-gradient(135deg, rgba(43,36,0,0.85) 0%, rgba(15,23,42,0.9) 100%); padding: 22px;">
-                <div class="text-white-50 small fw-bold mb-3"><i class="fas fa-tasks mr-2"></i> VERIFIKASI</div>
-                <div class="orbitron h3 mb-1 <?= $total_pending > 0 ? 'text-warning' : 'text-success' ?>" style="letter-spacing: 1px;"><?= $total_pending ?></div>
-                <div class="text-secondary small fw-bold" style="font-size: 0.6rem; letter-spacing: 2px;">ANTRIAN VERIFIKASI</div>
+        <div class="col-6 col-lg-3 mb-3 mb-lg-0">
+            <div class="hud-card h-100 shadow-lg" style="border-left: 4px solid #ffba08; background: linear-gradient(135deg, rgba(43,36,0,0.7) 0%, rgba(15,23,42,0.7) 100%); padding: 18px 20px;">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="text-white-50 small fw-bold orbitron" style="font-size: 0.7rem; letter-spacing: 1px;"><i class="fas fa-tasks mr-2 text-warning"></i> VERIFIKASI</div>
+                    <div class="badge <?= $total_pending > 0 ? 'badge-warning text-dark' : 'badge-success' ?> orbitron" style="font-size: 0.55rem;"><?= $total_pending > 0 ? 'PENDING' : 'BERSIH' ?></div>
+                </div>
+                <div class="orbitron h3 mb-1 font-weight-bold <?= $total_pending > 0 ? 'text-warning' : 'text-success' ?>" style="letter-spacing: 1px;"><?= number_format($total_pending) ?></div>
+                <div class="text-secondary small orbitron" style="font-size: 0.6rem; letter-spacing: 1.5px;">ANTRIAN VERIFIKASI</div>
             </div>
         </div>
 
         <!-- TOTAL KREATOR -->
-        <div class="col-md-3">
-            <div class="hud-card h-100 shadow-lg" style="border-left: 4px solid #ffffff; background: linear-gradient(135deg, rgba(30,30,30,0.85) 0%, rgba(15,23,42,0.9) 100%); padding: 22px;">
-                <div class="text-white-50 small fw-bold mb-3"><i class="fas fa-user-shield mr-2"></i> TOTAL USER</div>
-                <div class="orbitron h3 text-white mb-1" style="letter-spacing: 1px;"><?= $total_kreators ?></div>
-                <div class="text-secondary small fw-bold" style="font-size: 0.6rem; letter-spacing: 2px;">KREATOR TERDAFTAR</div>
+        <div class="col-6 col-lg-3 mb-3 mb-lg-0">
+            <div class="hud-card h-100 shadow-lg" style="border-left: 4px solid #38bdf8; background: linear-gradient(135deg, rgba(15,23,42,0.9) 0%, rgba(15,23,42,0.7) 100%); padding: 18px 20px;">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="text-white-50 small fw-bold orbitron" style="font-size: 0.7rem; letter-spacing: 1px;"><i class="fas fa-users mr-2" style="color: #38bdf8;"></i> TOTAL USER</div>
+                    <div class="badge badge-dark border border-secondary orbitron" style="font-size: 0.55rem; color: #38bdf8;">AKTIF</div>
+                </div>
+                <div class="orbitron h3 text-white font-weight-bold mb-1" style="letter-spacing: 1px;"><?= number_format($total_kreators) ?></div>
+                <div class="text-secondary small orbitron" style="font-size: 0.6rem; letter-spacing: 1.5px;">KREATOR TERDAFTAR</div>
             </div>
         </div>
     </div>
