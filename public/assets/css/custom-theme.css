@@ -420,26 +420,3 @@ label.label-taktis {
         margin-bottom: 20px !important;
     }
 }
-
-/* Tactical Tier Tab Switcher for Mobile */
-#tierTab .nav-link {
-    color: #94a3b8;
-    background: transparent;
-    transition: all 0.25s ease;
-    border: 1px solid transparent;
-}
-
-#tierTab .nav-link:hover {
-    color: #f8fafc;
-    background: rgba(255, 255, 255, 0.05);
-}
-
-#tierTab .nav-link.active {
-    color: #ffffff !important;
-    background: var(--bs-red) !important;
-    border-color: var(--bs-red) !important;
-    box-shadow: 0 0 15px rgba(234, 25, 23, 0.5) !important;
-    font-weight: 700;
-}
-
-

@@ -273,8 +273,8 @@
     </div>
 
     <!-- TIERING ROADMAP GUIDE -->
-    <div class="row mb-4">
-        <div class="col-12">
+    <div class="row mb-5">
+        <div class="col-12 mb-3">
             <div class="d-flex align-items-center mb-3">
                 <div class="bg-danger text-white px-3 py-1 orbitron small shadow-sm" style="clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);">
                     KETENTUAN PROMOSI PANGKAT
@@ -291,26 +291,21 @@
                 </span>
             </div>
         </div>
-    </div>
 
-    <!-- TIER CARDS FOR DESKTOP (3 Columns Side-by-Side) -->
-    <div class="row mb-5 d-none d-md-flex">
         <?php foreach ($allTiers as $t): 
             $isCurrent = ($tier['name'] == $t['name']);
         ?>
-            <div class="col-md-4 mb-4">
+            <div class="col-lg-4 mb-4">
                 <div class="hud-card h-100 <?= $isCurrent ? 'border-danger' : '' ?>" style="background: <?= $isCurrent ? 'rgba(234, 25, 23, 0.05)' : 'rgba(15, 23, 42, 0.4)' ?>; border: 1px solid <?= $isCurrent ? 'var(--bs-red)' : 'rgba(255,255,255,0.05)' ?>;">
-                    <div class="p-4 text-center d-flex flex-column justify-content-between h-100">
-                        <div>
-                            <?php if($isCurrent): ?>
-                                <div class="badge bg-danger orbitron mb-3 py-2 px-3" style="font-size: 0.6rem; letter-spacing: 2px;">PANGKAT SAAT INI</div>
-                            <?php endif; ?>
-                            
-                            <div class="mb-3">
-                                <i class="fas <?= $t['icon_style'] ?> fa-3x" style="color: <?= $t['color_style'] ?>; text-shadow: 0 0 15px <?= $t['color_style'] ?>80;"></i>
-                            </div>
-                            <h4 class="orbitron fw-bold text-white mb-4"><?= strtoupper($t['display_name'] ?? $t['name']) ?></h4>
+                    <div class="p-4 text-center">
+                        <?php if($isCurrent): ?>
+                            <div class="badge bg-danger orbitron mb-3 py-2 px-3" style="font-size: 0.6rem; letter-spacing: 2px;">PANGKAT SAAT INI</div>
+                        <?php endif; ?>
+                        
+                        <div class="mb-3">
+                            <i class="fas <?= $t['icon_style'] ?> fa-3x" style="color: <?= $t['color_style'] ?>; text-shadow: 0 0 15px <?= $t['color_style'] ?>80;"></i>
                         </div>
+                        <h4 class="orbitron fw-bold text-white mb-4"><?= strtoupper($t['display_name'] ?? $t['name']) ?></h4>
                         
                         <div class="row text-start g-2">
                             <div class="col-12 mb-2">
@@ -342,85 +337,6 @@
                 </div>
             </div>
         <?php endforeach; ?>
-    </div>
-
-    <!-- TIER TAB SWITCHER FOR MOBILE (Sleek Tactical Tabs) -->
-    <?php 
-        $activeTierName = $tier['name'] ?? ($allTiers[0]['name'] ?? '');
-    ?>
-    <div class="d-md-none mb-5">
-        <!-- TAB BUTTONS -->
-        <div class="nav nav-pills nav-justified mb-3 p-1 rounded bg-dark border border-secondary" style="border-color: rgba(255,255,255,0.1) !important;" id="tierTab" role="tablist">
-            <?php foreach ($allTiers as $t): 
-                $isCurrent = ($tier['name'] == $t['name']);
-                $isActiveTab = ($t['name'] == $activeTierName);
-            ?>
-                <a class="nav-link orbitron small py-2 px-1 text-uppercase <?= $isActiveTab ? 'active' : '' ?>" 
-                   id="tab-tier-<?= $t['name'] ?>" 
-                   data-toggle="pill" 
-                   href="#content-tier-<?= $t['name'] ?>" 
-                   role="tab" 
-                   aria-controls="content-tier-<?= $t['name'] ?>" 
-                   aria-selected="<?= $isActiveTab ? 'true' : 'false' ?>"
-                   style="font-size: 0.7rem; letter-spacing: 0.5px; border-radius: 4px;">
-                    <i class="fas <?= $t['icon_style'] ?> mr-1" style="color: <?= $t['color_style'] ?>;"></i>
-                    <?= strtoupper($t['display_name'] ?? $t['name']) ?>
-                    <?php if($isCurrent): ?>
-                        <span class="badge badge-danger ml-1" style="font-size: 0.45rem;">ANDA</span>
-                    <?php endif; ?>
-                </a>
-            <?php endforeach; ?>
-        </div>
-
-        <!-- TAB CONTENT -->
-        <div class="tab-content" id="tierTabContent">
-            <?php foreach ($allTiers as $t): 
-                $isCurrent = ($tier['name'] == $t['name']);
-                $isActiveTab = ($t['name'] == $activeTierName);
-            ?>
-                <div class="tab-pane fade <?= $isActiveTab ? 'show active' : '' ?>" id="content-tier-<?= $t['name'] ?>" role="tabpanel" aria-labelledby="tab-tier-<?= $t['name'] ?>">
-                    <div class="hud-card <?= $isCurrent ? 'border-danger' : '' ?>" style="background: <?= $isCurrent ? 'rgba(234, 25, 23, 0.05)' : 'rgba(15, 23, 42, 0.4)' ?>; border: 1px solid <?= $isCurrent ? 'var(--bs-red)' : 'rgba(255,255,255,0.05)' ?>;">
-                        <div class="p-4 text-center">
-                            <?php if($isCurrent): ?>
-                                <div class="badge bg-danger orbitron mb-3 py-2 px-3" style="font-size: 0.65rem; letter-spacing: 2px;">PANGKAT SAAT INI</div>
-                            <?php endif; ?>
-                            
-                            <div class="mb-3">
-                                <i class="fas <?= $t['icon_style'] ?> fa-3x" style="color: <?= $t['color_style'] ?>; text-shadow: 0 0 15px <?= $t['color_style'] ?>80;"></i>
-                            </div>
-                            <h4 class="orbitron fw-bold text-white mb-4"><?= strtoupper($t['display_name'] ?? $t['name']) ?></h4>
-                            
-                            <div class="row text-start g-2">
-                                <div class="col-12 mb-2">
-                                    <div class="p-3 rounded bg-dark border-start border-warning" style="border-width: 3px !important; border-color: rgba(255,255,255,0.15) !important;">
-                                        <div class="small text-secondary orbitron mb-1" style="font-size: 0.65rem;">TARGET MINIMAL CCV</div>
-                                        <div class="orbitron text-white fw-bold h5 mb-0"><?= number_format($t['threshold_ccv']) ?> <span class="small text-muted" style="font-size: 0.75rem;">VIEWERS</span></div>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-12 mb-2 mt-1 text-center">
-                                    <span class="orbitron text-muted small" style="font-size: 0.65rem; letter-spacing: 1px;">- DAN SALAH SATU DARI -</span>
-                                </div>
-                                
-                                <div class="col-12 mb-2">
-                                    <div class="p-3 rounded bg-dark border-start border-danger" style="border-width: 3px !important; border-color: rgba(255,255,255,0.15) !important;">
-                                        <div class="small text-secondary orbitron mb-1" style="font-size: 0.65rem;">VIEWS (YOUTUBE)</div>
-                                        <div class="orbitron text-white fw-bold h5 mb-0"><?= number_format($t['threshold_yt']) ?> <span class="small text-muted" style="font-size: 0.75rem;">VIEWS</span></div>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-12">
-                                    <div class="p-3 rounded bg-dark border-start border-info" style="border-width: 3px !important; border-color: rgba(255,255,255,0.15) !important;">
-                                        <div class="small text-secondary orbitron mb-1" style="font-size: 0.65rem;">VIEWS (TIKTOK)</div>
-                                        <div class="orbitron text-white fw-bold h5 mb-0"><?= number_format($t['threshold_tt']) ?> <span class="small text-muted" style="font-size: 0.75rem;">VIEWS</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <?php endforeach; ?>
-        </div>
     </div>
 
     <!-- TIER PROGRESS -->
