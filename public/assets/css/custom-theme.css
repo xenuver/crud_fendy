@@ -497,6 +497,56 @@ label.label-taktis {
     border: 2px solid rgba(15, 23, 42, 0.9) !important;
 }
 
+/* Tier Settings Carousel Controls & Indicators (Admin iPad & Mobile) */
+#tierSettingsCarouselMobile .carousel-control-prev,
+#tierSettingsCarouselMobile .carousel-control-next {
+    width: 40px;
+    opacity: 0.85;
+}
+
+#tierSettingsCarouselMobile .carousel-control-prev-icon,
+#tierSettingsCarouselMobile .carousel-control-next-icon {
+    background-image: none !important;
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    background-color: rgba(234, 25, 23, 0.8);
+    border-radius: 50%;
+    color: #ffffff;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(234, 25, 23, 0.5);
+}
+
+#tierSettingsCarouselMobile .carousel-control-prev-icon::before {
+    content: '\f053';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
+#tierSettingsCarouselMobile .carousel-control-next-icon::before {
+    content: '\f054';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
+#tierSettingsCarouselMobile .carousel-indicators li {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.3);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+#tierSettingsCarouselMobile .carousel-indicators li.active {
+    width: 20px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+
 
 
 
