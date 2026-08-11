@@ -79,10 +79,10 @@
                 <table class="table table-tactical table-hover mb-0" id="tieringTable" style="min-width: 650px;">
                     <thead style="background: rgba(234, 25, 23, 0.08);">
                         <tr>
-                            <th class="py-3 px-4 text-center">PERINGKAT</th>
-                            <th class="py-3 px-4">PROFIL KREATOR</th>
-                            <th class="py-3 px-4 text-center">IDENTITAS GAME (UID)</th>
-                            <th class="py-3 px-4">PANGKAT (TIER)</th>
+                            <th class="py-3 px-3 text-center" style="width: 90px;">PERINGKAT</th>
+                            <th class="py-3 px-3">PROFIL KREATOR</th>
+                            <th class="py-3 px-3 text-center" style="width: 170px;">IDENTITAS GAME (UID)</th>
+                            <th class="py-3 px-3 text-nowrap" style="width: 170px;">PANGKAT (TIER)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -90,7 +90,7 @@
                             <?php $no = 1;
                             foreach ($kreators as $k): ?>
                                 <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
-                                    <td class="align-middle px-4 text-center">
+                                    <td class="align-middle px-3 text-center">
                                         <?php if ($no <= 3): ?>
                                             <div class="bg-danger text-white rounded-circle d-flex align-items-center justify-content-center orbitron mx-auto"
                                                 style="width: 30px; height: 30px; font-size: 0.8rem;"><?= $no++ ?></div>
@@ -98,7 +98,7 @@
                                             <span class="text-muted orbitron"><?= $no++ ?></span>
                                         <?php endif; ?>
                                     </td>
-                                    <td class="align-middle px-4 py-3">
+                                    <td class="align-middle px-3 py-3">
                                         <div style="display: flex; align-items: center; gap: 15px;">
                                             <div style="flex-shrink: 0;">
                                                 <img src="<?= base_url('assets/img/profile/blood-strike.jpg') ?>"
@@ -114,13 +114,13 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="align-middle px-4 text-center">
+                                    <td class="align-middle px-3 text-center">
                                         <span class="badge bg-dark border border-secondary text-secondary p-2 orbitron"
                                             style="font-size: 0.7rem; min-width: 90px; letter-spacing: 0.5px;"><?= esc($k['id_game']) ?></span>
                                     </td>
-                                    <td class="align-middle px-4">
+                                    <td class="align-middle px-3 text-nowrap">
                                         <div class="d-flex align-items-center">
-                                            <i class="<?= $k['tier_icon'] ?> me-2"
+                                            <i class="<?= $k['tier_icon'] ?> mr-2"
                                                 style="color: <?= $k['tier_color'] ?>; text-shadow: <?= $k['tier_glow'] ?>; font-size: 1.1rem;"></i>
                                             <span class="fw-bold orbitron"
                                                 style="color: <?= $k['tier_color'] ?>; text-shadow: <?= $k['tier_glow'] ?>; font-size: 0.85rem;"><?= esc($k['tier_label']) ?></span>
