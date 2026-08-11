@@ -137,6 +137,7 @@ document.addEventListener('DOMContentLoaded', function () {
         $('#laporanTable').DataTable({
             "paging": false, // Matikan paging DataTables karena pakai CI Pager
             "info": false,   // Matikan info DataTables
+            "autoWidth": false,
             "order": [[0, "asc"]],
             "language": {
                 "search": "CARI DATA:",

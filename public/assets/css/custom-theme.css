@@ -452,27 +452,44 @@ label.label-taktis {
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
 }
 
-/* Global Table Touch Scroll for iPad & Mobile */
-.table-responsive {
+/* Global Table Touch Scroll & DataTables Fix for iPad & Mobile */
+.table-responsive,
+.dataTables_wrapper {
     overflow-x: auto !important;
-    overflow-y: auto !important;
     -webkit-overflow-scrolling: touch !important;
     touch-action: pan-x pan-y !important;
+    display: block !important;
+    width: 100% !important;
 }
 
-.table-responsive::-webkit-scrollbar {
-    height: 6px;
-    width: 6px;
+.table-responsive > table,
+.dataTables_wrapper > table,
+#laporanTable,
+#bulananTable,
+#tieringTable {
+    width: max-content !important;
+    max-width: none !important;
 }
 
-.table-responsive::-webkit-scrollbar-track {
-    background: rgba(15, 23, 42, 0.8);
+.table-responsive::-webkit-scrollbar,
+.dataTables_wrapper::-webkit-scrollbar {
+    height: 8px !important;
+    width: 8px !important;
 }
 
-.table-responsive::-webkit-scrollbar-thumb {
-    background: var(--bs-red);
-    border-radius: 3px;
+.table-responsive::-webkit-scrollbar-track,
+.dataTables_wrapper::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.9) !important;
+    border-radius: 4px;
 }
+
+.table-responsive::-webkit-scrollbar-thumb,
+.dataTables_wrapper::-webkit-scrollbar-thumb {
+    background: var(--bs-red) !important;
+    border-radius: 4px;
+    box-shadow: 0 0 6px rgba(234, 25, 23, 0.6);
+}
+
 
 
 

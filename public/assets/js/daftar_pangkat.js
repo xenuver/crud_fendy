@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     $('#tieringTable').DataTable({
         "pageLength": 25,
+        "autoWidth": false,
         "language": {
             "search": "Cari Kreator:",
             "lengthMenu": "Tampilkan _MENU_ data",

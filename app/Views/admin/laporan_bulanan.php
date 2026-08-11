@@ -56,10 +56,18 @@
 
     <!-- TABEL UTAMA -->
     <div class="hud-card border-0">
-        <div class="hud-header d-flex justify-content-between align-items-center"
-            style="background: linear-gradient(90deg, #1a1a1a 0%, #2d1212 100%); border-bottom: 1px solid rgba(234, 25, 23, 0.3);">
+        <div class="hud-header d-flex justify-content-between align-items-center flex-wrap py-2 px-3"
+            style="background: linear-gradient(90deg, #1a1a1a 0%, #2d1212 100%); border-bottom: 1px solid rgba(234, 25, 23, 0.3); gap: 10px;">
             <div class="orbitron text-white small fw-bold">
-                <i class="fas fa-database me-2 text-danger"></i> DETIL PERFORMA BULANAN
+                <i class="fas fa-database mr-2 text-danger"></i> DETIL PERFORMA BULANAN
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-danger px-3 orbitron" onclick="scrollTable('bulananTable', 'left')" style="font-size: 0.65rem; border-radius: 4px 0 0 4px;">
+                    <i class="fas fa-chevron-left mr-1"></i> KIRI
+                </button>
+                <button type="button" class="btn btn-sm btn-danger px-3 orbitron" onclick="scrollTable('bulananTable', 'right')" style="font-size: 0.65rem; background: var(--bs-red); border-radius: 0 4px 4px 0;">
+                    KANAN <i class="fas fa-chevron-right ml-1"></i>
+                </button>
             </div>
         </div>
         <div class="hud-body p-0">

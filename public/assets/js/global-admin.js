@@ -93,3 +93,15 @@ $(document).ready(function() {
         });
     }
 });
+
+// Helper Navigasi Scroll Tabel Horizontal (iPad & Mobile)
+window.scrollTable = function(tableId, direction) {
+    var table = document.getElementById(tableId);
+    if (!table) return;
+    var container = table.closest('.table-responsive') || table.closest('.dataTables_wrapper') || table.parentElement;
+    if (container) {
+        var amount = direction === 'left' ? -350 : 350;
+        container.scrollBy({ left: amount, behavior: 'smooth' });
+    }
+};
+
