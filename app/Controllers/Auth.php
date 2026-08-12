@@ -104,8 +104,16 @@ class Auth extends BaseController
     }
 
     // Menampilkan halaman akun ditangguhkan.
-    public function suspended(): string
+    public function suspended()
     {
+        if (session()->get('id_game')) {
+            $db = \Config\Database::connect();
+            $kreator = $db->table('kreator')->where('id_game', session()->get('id_game'))->get()->getRow();
+            if ($kreator && $kreator->status === 'active') {
+                session()->set('status', 'active');
+                return redirect()->to('/user');
+            }
+        }
         return view('auth/suspended');
     }
 

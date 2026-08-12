@@ -103,6 +103,7 @@ class DataKreator extends BaseController
         ];
 
         if ($this->kModel->insert($data)) {
+            cache()->delete('kreators_with_metrics_list');
             return redirect()->back()->with('success', 'Berhasil menambahkan kreator baru.');
         }
 
@@ -159,6 +160,7 @@ class DataKreator extends BaseController
             $this->kModel->update($id, $data);
 
             $this->db->transCommit();
+            cache()->delete('kreators_with_metrics_list');
             return redirect()->back()->with('success', 'Berhasil memperbarui data kreator.');
         } catch (\Exception $e) {
             $this->db->transRollback();
@@ -206,6 +208,7 @@ class DataKreator extends BaseController
             }
 
             $this->db->transCommit();
+            cache()->delete('kreators_with_metrics_list');
 
             // Hapus file fisik hanya jika transaksi DB berhasil
             foreach ($laporans as $lap) {
@@ -232,6 +235,7 @@ class DataKreator extends BaseController
         if ($kreator) {
             $newStatus = ($kreator['status'] == 'active') ? 'suspended' : 'active';
             $this->kModel->update($id, ['status' => $newStatus]);
+            cache()->delete('kreators_with_metrics_list');
 
             $msg = ($newStatus == 'suspended') ? 'Kreator telah ditangguhkan (SUSPENDED).' : 'Kreator telah diaktifkan kembali.';
             return redirect()->back()->with('success', $msg);
