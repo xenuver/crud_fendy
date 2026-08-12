@@ -417,6 +417,11 @@
                                 style="font-size: 0.85rem; border-radius: 4px; resize: none; line-height: 1.5; transition: border-color 0.2s, box-shadow 0.2s;"
                                 placeholder="Tuliskan catatan atau alasan keputusan Anda secara jelas..."
                                 required></textarea>
+                            <!-- PESAN WAJIB DIISI (muncul saat validasi gagal) -->
+                            <div id="pesanWajibDiisi" class="d-none mt-1 font-sans d-flex align-items-center" style="font-size: 0.75rem; color: #ef4444;">
+                                <i class="fas fa-exclamation-circle mr-1"></i>
+                                <span>Catatan keputusan <strong>wajib diisi</strong> sebelum mengambil keputusan!</span>
+                            </div>
                             <div class="text-secondary mt-1 font-sans" style="font-size: 0.7rem;">
                                 <i class="fas fa-info-circle mr-1"></i>Catatan ini akan dikirimkan dan dapat dibaca langsung oleh kreator.
                             </div>
@@ -515,7 +520,13 @@ function bukaModalTinjau(data) {
         sectionForm.classList.remove('d-none');
         sectionRiwayat.classList.add('d-none');
         footerAksi.style.setProperty('display', 'flex', 'important');
-        document.getElementById('catatanSuperadmin').value = '';
+        const ta = document.getElementById('catatanSuperadmin');
+        ta.value = '';
+        ta.classList.remove('shake-error');
+        ta.style.borderColor = '';
+        ta.style.boxShadow = '';
+        const pw = document.getElementById('pesanWajibDiisi');
+        if (pw) { pw.classList.add('d-none'); pw.style.display = ''; }
     } else {
         sectionForm.classList.add('d-none');
         sectionRiwayat.classList.remove('d-none');
@@ -530,7 +541,15 @@ function kirimKeputusan(keputusan) {
     const catatanInput = document.getElementById('catatanSuperadmin');
     const catatan = catatanInput.value.trim();
 
+    const pesanWajib = document.getElementById('pesanWajibDiisi');
+
     if (!catatan) {
+        // Tampilkan pesan inline wajib diisi
+        if (pesanWajib) {
+            pesanWajib.classList.remove('d-none');
+            pesanWajib.style.display = 'flex';
+        }
+
         // Efek shake + border merah pada textarea
         catatanInput.classList.remove('shake-error');
         void catatanInput.offsetWidth; // reflow agar animasi ulang
@@ -538,6 +557,17 @@ function kirimKeputusan(keputusan) {
         catatanInput.addEventListener('animationend', () => {
             catatanInput.classList.remove('shake-error');
         }, { once: true });
+
+        // Sembunyikan pesan saat user mulai mengetik
+        catatanInput.addEventListener('input', function hidePesan() {
+            if (this.value.trim()) {
+                if (pesanWajib) {
+                    pesanWajib.classList.add('d-none');
+                    pesanWajib.style.display = '';
+                }
+                catatanInput.removeEventListener('input', hidePesan);
+            }
+        });
 
         if (typeof Swal !== 'undefined') {
             Swal.fire({
@@ -565,6 +595,12 @@ function kirimKeputusan(keputusan) {
             catatanInput.focus();
         }
         return;
+    }
+
+    // Sembunyikan pesan jika catatan sudah terisi
+    if (pesanWajib) {
+        pesanWajib.classList.add('d-none');
+        pesanWajib.style.display = '';
     }
 
     // Popup konfirmasi sebelum submit
