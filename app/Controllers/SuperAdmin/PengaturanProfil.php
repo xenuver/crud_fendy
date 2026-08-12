@@ -127,7 +127,7 @@ class PengaturanProfil extends BaseController
         }
 
         if ($passwordBaru !== $konfirmasi) {
-            return redirect()->back()->with('error', 'Konfirmasi kata sandi baru tidak cocok.');
+            return redirect()->back()->with('error', 'Konfirmasi kata sandi baru tidak cocok dengan kata sandi baru.');
         }
 
         $newHash = password_hash($passwordBaru, PASSWORD_DEFAULT);

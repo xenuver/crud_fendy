@@ -60,7 +60,7 @@ $(document).ready(function() {
     if (successMsg) {
         Swal.fire({
             title: 'BERHASIL',
-            text: successMsg,
+            html: successMsg,
             icon: 'success',
             background: '#0f172a',
             color: '#fff',
@@ -78,7 +78,7 @@ $(document).ready(function() {
     if (errorMsg) {
         Swal.fire({
             title: 'GAGAL',
-            text: errorMsg,
+            html: errorMsg,
             icon: 'error',
             background: '#0f172a',
             color: '#fff',

@@ -202,9 +202,9 @@ class Database extends Config
         }
 
         // Apply docker OS environment variables safely
-        $this->default['hostname'] = $_SERVER['DB_HOSTNAME'] ?? $_ENV['DB_HOSTNAME'] ?? getenv('DB_HOSTNAME') ?: 'db';
-        $this->default['username'] = $_SERVER['DB_USERNAME'] ?? $_ENV['DB_USERNAME'] ?? getenv('DB_USERNAME') ?: '';
-        $this->default['password'] = $_SERVER['DB_PASSWORD'] ?? $_ENV['DB_PASSWORD'] ?? getenv('DB_PASSWORD') ?: '';
-        $this->default['database'] = $_SERVER['DB_DATABASE'] ?? $_ENV['DB_DATABASE'] ?? getenv('DB_DATABASE') ?: '';
+        $this->default['hostname'] = $_SERVER['DB_HOSTNAME'] ?? $_ENV['DB_HOSTNAME'] ?? getenv('DB_HOSTNAME') ?: ($_ENV['database.default.hostname'] ?? 'localhost');
+        $this->default['username'] = $_SERVER['DB_USERNAME'] ?? $_ENV['DB_USERNAME'] ?? getenv('DB_USERNAME') ?: ($_ENV['database.default.username'] ?? 'root');
+        $this->default['password'] = $_SERVER['DB_PASSWORD'] ?? $_ENV['DB_PASSWORD'] ?? getenv('DB_PASSWORD') ?: ($_ENV['database.default.password'] ?? '');
+        $this->default['database'] = $_SERVER['DB_DATABASE'] ?? $_ENV['DB_DATABASE'] ?? getenv('DB_DATABASE') ?: ($_ENV['database.default.database'] ?? 'rw_ci4');
     }
 }

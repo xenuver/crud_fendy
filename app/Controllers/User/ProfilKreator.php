@@ -154,7 +154,21 @@ class ProfilKreator extends BaseController
             'konfirmasi_password' => 'required|matches[password_baru]',
         ];
 
-        if (!$this->validate($rules)) {
+        $messages = [
+            'password_lama' => [
+                'required' => 'Kata sandi saat ini wajib diisi.',
+            ],
+            'password_baru' => [
+                'required' => 'Kata sandi baru wajib diisi.',
+                'min_length' => 'Kata sandi baru minimal 8 karakter.',
+            ],
+            'konfirmasi_password' => [
+                'required' => 'Konfirmasi kata sandi baru wajib diisi.',
+                'matches' => 'Konfirmasi kata sandi baru tidak cocok dengan kata sandi baru.',
+            ],
+        ];
+
+        if (!$this->validate($rules, $messages)) {
             return redirect()->back()->with('error', implode('<br>', $this->validator->getErrors()));
         }
 

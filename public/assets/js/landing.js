@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
         Swal.fire({
             icon: 'success',
             title: 'BERHASIL',
-            text: successMsg,
+            html: successMsg,
             confirmButtonText: 'OK'
         });
     }
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
         Swal.fire({
             icon: 'error',
             title: 'Gagal',
-            text: errorMsg,
+            html: errorMsg,
             confirmButtonText: 'COBA LAGI'
         });
     }
