@@ -506,7 +506,49 @@ function kirimKeputusan(keputusan) {
         return;
     }
 
-    document.getElementById('inputKeputusan').value = keputusan;
-    document.getElementById('formKeputusan').submit();
+    // Popup konfirmasi sebelum submit
+    if (typeof Swal !== 'undefined') {
+        const isDiterima = keputusan === 'diterima';
+        Swal.fire({
+            title: isDiterima ? '⚖️ TERIMA BANDING?' : '⚖️ TOLAK BANDING FINAL?',
+            html: isDiterima
+                ? `<div style="font-size:0.88rem; line-height:1.6; color:#d1d5db;">
+                        Anda akan <strong style="color:#10b981;">MENERIMA</strong> pengajuan banding kreator ini.<br>
+                        <span style="color:#6b7280; font-size:0.8rem;">Laporan akan disetujui dan kreator akan mendapat notifikasi.</span>
+                   </div>`
+                : `<div style="font-size:0.88rem; line-height:1.6; color:#d1d5db;">
+                        Anda akan <strong style="color:#ef4444;">MENOLAK SECARA FINAL</strong> pengajuan banding kreator ini.<br>
+                        <span style="color:#6b7280; font-size:0.8rem;">Keputusan bersifat final dan tidak dapat dibatalkan.</span>
+                   </div>`,
+            icon: isDiterima ? 'question' : 'warning',
+            background: '#0f172a',
+            color: '#fff',
+            showCancelButton: true,
+            confirmButtonText: isDiterima
+                ? '<i class="fas fa-check mr-1"></i> YA, TERIMA BANDING'
+                : '<i class="fas fa-times mr-1"></i> YA, TOLAK FINAL',
+            cancelButtonText: '<i class="fas fa-arrow-left mr-1"></i> BATAL',
+            customClass: {
+                popup: 'swal-tactical',
+                title: 'swal-tactical-title',
+                htmlContainer: 'swal-tactical-text',
+                confirmButton: isDiterima ? 'swal-tactical-btn-success' : 'swal-tactical-btn-confirm',
+                cancelButton: 'swal-tactical-btn-cancel'
+            },
+            buttonsStyling: false,
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('inputKeputusan').value = keputusan;
+                document.getElementById('formKeputusan').submit();
+            }
+        });
+    } else {
+        const label = keputusan === 'diterima' ? 'TERIMA' : 'TOLAK FINAL';
+        if (confirm(`Apakah Anda yakin ingin ${label} banding ini? Keputusan bersifat final.`)) {
+            document.getElementById('inputKeputusan').value = keputusan;
+            document.getElementById('formKeputusan').submit();
+        }
+    }
 }
 </script>
