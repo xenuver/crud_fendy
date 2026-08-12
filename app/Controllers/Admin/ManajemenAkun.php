@@ -332,7 +332,7 @@ class ManajemenAkun extends BaseController
         return redirect()->to(base_url('admin/users'));
     }
 
-    // Hapus/revoke kode redeem yang belum terpakai.
+    // Hapus/revoke kode redeem.
     public function delete_code($id)
     {
         $code = $this->rModel->find($id);
@@ -342,8 +342,15 @@ class ManajemenAkun extends BaseController
             return redirect()->back();
         }
 
+        $isUsed = (int)($code['is_used'] ?? 0) === 1;
         $this->rModel->delete($id);
-        session()->setFlashdata('success', 'Redeem Code berhasil dihapus.');
+
+        if ($isUsed) {
+            session()->setFlashdata('success', 'Kode yang sudah terpakai telah dihapus oleh admin.');
+        } else {
+            session()->setFlashdata('success', 'Redeem Code berhasil dihapus.');
+        }
+
         return redirect()->back();
     }
 }
