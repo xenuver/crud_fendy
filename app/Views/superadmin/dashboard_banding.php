@@ -7,6 +7,46 @@
         .modal-tinjau-content {
             font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
         }
+        @keyframes shakeField {
+            0%, 100% { transform: translateX(0); }
+            15%       { transform: translateX(-7px); }
+            30%       { transform: translateX(7px); }
+            45%       { transform: translateX(-5px); }
+            60%       { transform: translateX(5px); }
+            75%       { transform: translateX(-3px); }
+            90%       { transform: translateX(3px); }
+        }
+        .shake-error {
+            animation: shakeField 0.45s ease-in-out;
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 0 2px rgba(239,68,68,0.35) !important;
+        }
+        .banner-wajib-review {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: rgba(245,158,11,0.1);
+            border: 1px solid rgba(245,158,11,0.4);
+            border-left: 3px solid #f59e0b;
+            border-radius: 4px;
+            padding: 10px 14px;
+            margin-bottom: 14px;
+        }
+        .banner-wajib-review .bwr-icon {
+            color: #f59e0b;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .banner-wajib-review .bwr-text {
+            font-size: 0.78rem;
+            line-height: 1.55;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+        }
+        .banner-wajib-review .bwr-text strong {
+            color: #f59e0b;
+        }
         @media (max-width: 576px) {
             .modal-tinjau-dialog {
                 margin: 0.5rem;
@@ -358,13 +398,23 @@
 
                     <!-- FORM CATATAN SUPER ADMIN (JIKA STATUS MENUNGGU) -->
                     <div id="sectionFormKeputusan">
+
+                        <!-- BANNER PERINGATAN WAJIB ISI REVIEW -->
+                        <div class="banner-wajib-review">
+                            <i class="fas fa-exclamation-triangle bwr-icon"></i>
+                            <div class="bwr-text">
+                                <strong>Wajib diisi sebelum mengambil keputusan.</strong><br>
+                                Isi kolom <strong>Catatan Keputusan</strong> di bawah ini terlebih dahulu sebelum menekan tombol Terima atau Tolak Banding.
+                            </div>
+                        </div>
+
                         <div class="form-group mb-2">
                             <label class="text-white small fw-bold mb-1 font-sans">
                                 Catatan Keputusan Super Admin <span class="text-danger">*</span>
                             </label>
                             <textarea name="catatan_superadmin" id="catatanSuperadmin" rows="3"
                                 class="form-control bg-dark text-white border-secondary font-sans"
-                                style="font-size: 0.85rem; border-radius: 4px; resize: none; line-height: 1.5;"
+                                style="font-size: 0.85rem; border-radius: 4px; resize: none; line-height: 1.5; transition: border-color 0.2s, box-shadow 0.2s;"
                                 placeholder="Tuliskan catatan atau alasan keputusan Anda secara jelas..."
                                 required></textarea>
                             <div class="text-secondary mt-1 font-sans" style="font-size: 0.7rem;">
@@ -481,14 +531,25 @@ function kirimKeputusan(keputusan) {
     const catatan = catatanInput.value.trim();
 
     if (!catatan) {
+        // Efek shake + border merah pada textarea
+        catatanInput.classList.remove('shake-error');
+        void catatanInput.offsetWidth; // reflow agar animasi ulang
+        catatanInput.classList.add('shake-error');
+        catatanInput.addEventListener('animationend', () => {
+            catatanInput.classList.remove('shake-error');
+        }, { once: true });
+
         if (typeof Swal !== 'undefined') {
             Swal.fire({
                 title: 'CATATAN KEPUTUSAN KOSONG',
-                text: 'Mohon isi Catatan Keputusan Super Admin (Review) terlebih dahulu.',
+                html: `<div style="font-size:0.85rem; color:#d1d5db; line-height:1.6;">
+                            Kolom <strong style="color:#f59e0b;">Catatan Keputusan Super Admin</strong> wajib diisi sebelum mengambil keputusan.<br>
+                            <span style="color:#6b7280; font-size:0.78rem;">Tuliskan alasan atau catatan keputusan Anda secara jelas.</span>
+                       </div>`,
                 icon: 'warning',
                 background: '#0f172a',
                 color: '#fff',
-                confirmButtonColor: '#ea1917',
+                confirmButtonText: '<i class="fas fa-pen mr-1"></i> ISI SEKARANG',
                 customClass: {
                     popup: 'swal-tactical',
                     title: 'swal-tactical-title',
