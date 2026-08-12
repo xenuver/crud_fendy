@@ -477,10 +477,32 @@ function bukaModalTinjau(data) {
 }
 
 function kirimKeputusan(keputusan) {
-    const catatan = document.getElementById('catatanSuperadmin').value.trim();
+    const catatanInput = document.getElementById('catatanSuperadmin');
+    const catatan = catatanInput.value.trim();
+
     if (!catatan) {
-        alert('Mohon isi Catatan Keputusan Super Admin terlebih dahulu.');
-        document.getElementById('catatanSuperadmin').focus();
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: 'CATATAN KEPUTUSAN KOSONG',
+                text: 'Mohon isi Catatan Keputusan Super Admin (Review) terlebih dahulu.',
+                icon: 'warning',
+                background: '#0f172a',
+                color: '#fff',
+                confirmButtonColor: '#ea1917',
+                customClass: {
+                    popup: 'swal-tactical',
+                    title: 'swal-tactical-title',
+                    htmlContainer: 'swal-tactical-text',
+                    confirmButton: 'swal-tactical-btn-confirm'
+                },
+                buttonsStyling: false
+            }).then(() => {
+                catatanInput.focus();
+            });
+        } else {
+            alert('Mohon isi Catatan Keputusan Super Admin (Review) terlebih dahulu.');
+            catatanInput.focus();
+        }
         return;
     }
 
